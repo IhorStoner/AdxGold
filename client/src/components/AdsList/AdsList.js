@@ -6,9 +6,10 @@ import { getAds, getGoldAds, getSilverAds, getCommonAds } from '../../redux/sele
 import './AdsList.scss'
 import config from '../../config/deafult.json'
 import logo from '../../assets/png/logo.png'
-import {SliderImg} from '../SliderImg/SliderImg'
-import { Slide } from 'react-slideshow-image'
-import 'react-slideshow-image/dist/styles.css'
+import { Carousel } from 'react-responsive-carousel';
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Popup from 'reactjs-popup';
+import 'reactjs-popup/dist/index.css';
 
 export default function AdsList() {
   const dispatch = useDispatch();
@@ -17,7 +18,7 @@ export default function AdsList() {
   const goldAds = useSelector(getGoldAds)
   const silverAds = useSelector(getSilverAds)
   const commonAds = useSelector(getCommonAds)
-
+  const [imgId, setImgId] = useState('')
   useEffect(() => {
     dispatch(fetchAds())
   }, []);
@@ -42,17 +43,24 @@ export default function AdsList() {
               </div>
               <div className="adsList__photoContainer">
                 <h3>Фото:</h3>
-                <div className="slide-container">
-                  <Slide className='slider'>
+                <div className="adsList__sliderContainer">
+                  <Carousel >
                     {ad.img.map(img => (
-                      // <img src={`${config.serverUrl}/api/images/${img}`} width='500' height='500' />
-                      <div className="each-fade">
-                        <div className="image-container">
-                          <img src={`${config.serverUrl}/api/images/${img}`} width='500' height='500' />
-                        </div>
+                      <div onClick={() => setImgId(img)}>
+                        <img src={`${config.serverUrl}/api/images/${img}`} />
                       </div>
                     ))}
-                  </Slide>
+                  </Carousel>
+                  {
+                    imgId &&
+                    <div className="fixed-overlay" onClick={() => setImgId('')}>
+                      <div className='modal'>
+                        <div className="modal_container">
+                          <img className='adsList__popupImg' src={`${config.serverUrl}/api/images/${imgId}`} width='500'/>
+                        </div>
+                      </div>
+                    </div>
+                  }
                 </div>
               </div>
             </div>
@@ -81,11 +89,11 @@ export default function AdsList() {
             <span>{ad.city} </span>
             <span>
               {!ad.img[0] ?
-              <img src={logo} width='50' height='50'></img>
-              :
-              <img src={`${config.serverUrl}/api/images/${ad.img[0]}`} width='50' height='50' />
+                <img src={logo} width='50' height='50'></img>
+                :
+                <img src={`${config.serverUrl}/api/images/${ad.img[0]}`} width='50' height='50' />
               }
-              
+
             </span>
             <span>{ad.title} </span>
             <span>{ad.type} </span>
@@ -100,9 +108,25 @@ export default function AdsList() {
               </div>
               <div className="adsList__photoContainer">
                 <h3>Фото:</h3>
-                {ad.img.map(img => (
-                  <img src={`${config.serverUrl}/api/images/${img}`} width='200' height='200' />
-                ))}
+                <div className="adsList__sliderContainer">
+                  <Carousel >
+                    {ad.img.map(img => (
+                      <div onClick={() => setImgId(img)}>
+                        <img src={`${config.serverUrl}/api/images/${img}`} />
+                      </div>
+                    ))}
+                  </Carousel>
+                  {
+                    imgId &&
+                    <div className="fixed-overlay" onClick={() => setImgId('')}>
+                      <div className='modal'>
+                        <div className="modal_container">
+                          <img className='adsList__popupImg' src={`${config.serverUrl}/api/images/${imgId}`} width='500'/>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
               </div>
             </div>
             <div className="adsList__infoContainer">
@@ -142,9 +166,25 @@ export default function AdsList() {
               </div>
               <div className="adsList__photoContainer">
                 <h3>Фото:</h3>
-                {ad.img.map(img => (
-                  <img src={`${config.serverUrl}/api/images/${img}`} width='200' height='200' />
-                ))}
+                <div className="adsList__sliderContainer">
+                  <Carousel >
+                    {ad.img.map(img => (
+                      <div onClick={() => setImgId(img)}>
+                        <img src={`${config.serverUrl}/api/images/${img}`} />
+                      </div>
+                    ))}
+                  </Carousel>
+                  {
+                    imgId &&
+                    <div className="fixed-overlay" onClick={() => setImgId('')}>
+                      <div className='modal'>
+                        <div className="modal_container">
+                          <img className='adsList__popupImg' src={`${config.serverUrl}/api/images/${imgId}`} width='500'/>
+                        </div>
+                      </div>
+                    </div>
+                  }
+                </div>
               </div>
             </div>
             <div className="adsList__infoContainer">
@@ -164,7 +204,7 @@ export default function AdsList() {
               </div>
             </div>
           </div>
-       </div>
+        </div>
       ))}
     </ul>
   )

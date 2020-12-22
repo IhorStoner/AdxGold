@@ -15,6 +15,7 @@ export default function AccountPage() {
     return (
       <div className='container'>
         <Header as='h2'>Вы авторизованы</Header>
+        
         <Button onClick={() => logout()}>Выйти</Button>
       </div>
       

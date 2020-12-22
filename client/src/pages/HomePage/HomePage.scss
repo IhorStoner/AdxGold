@@ -33,6 +33,7 @@
 .ads {
   display: flex;
   justify-content: space-between;
+  position: relative;
   &__shares {
     width: 250px;
     background-color: #ccc;
