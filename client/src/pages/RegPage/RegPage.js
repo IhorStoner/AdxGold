@@ -3,12 +3,13 @@ import { Header, Message } from 'semantic-ui-react'
 import RegForm from '../../components/RegForm/RegForm'
 import axios from 'axios'
 import { Link } from 'react-router-dom'
+import config from '../../config/default.json'
 
 export default function RegPage() {
   const [ signUpSuccess, setSignUpSuccess ] = useState(false);
 
   const onSubmit = useCallback(async values => {
-    await axios.post('http://localhost:5000/api/registration', values)
+    await axios.post(`${config.serverUrl}/api/registration`, values)
     setSignUpSuccess(true)
   },[])
   

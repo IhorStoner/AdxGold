@@ -20,6 +20,13 @@
 
   &__info {
     border: 1px solid black;
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &__hots {
+    margin-left: 5px;
+    background-color: #ccc;
   }
 
   &__sliderContainer {

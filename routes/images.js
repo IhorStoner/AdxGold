@@ -11,17 +11,17 @@ const upload = multer({
 })
 
 // upload image
-ImgRouter.post('/', upload.array('image', 5), (req, res, next) => {
-     const images = req.files.map((file) => {
-       return {
-         filename: file.filename,
-         originalname: file.originalname
-       }
-     })
-      ImageModel.insertMany(images, (err, result) => {
-       if (err) return res.sendStatus(404)
-       res.json(result)
-     })
+ImgRouter.post('/', upload.array('image', 5),async (req, res, next) => {
+  const images = req.files.map((file) => {
+    return {
+      filename: file.filename,
+      originalname: file.originalname
+    }
+  })
+  ImageModel.insertMany(images, (err, result) => {
+    if (err) return res.sendStatus(404)
+    res.json(result)
+  })
 })
 
 // get image with id

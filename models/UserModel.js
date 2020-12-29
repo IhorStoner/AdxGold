@@ -28,6 +28,9 @@ const UserSchema = new Schema({
     required: true,
     unique: false,
     set: rawPassword => bcrypt.hashSync(rawPassword, SALT_FACTOR)
+  },
+  ads: {
+    type: Array
   }
 });
 

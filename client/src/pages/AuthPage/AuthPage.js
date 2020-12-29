@@ -4,7 +4,7 @@ import AuthForm from '../../components/AuthForm/AuthForm'
 import axios from 'axios'
 import { AuthContext } from '../../context/AuthContext';
 import { useHistory } from 'react-router-dom'
-
+import config from '../../config/default.json'
 
 export default function AuthPage() {
   const [ signInSuccess, setSignInSuccess ] = useState(false);
@@ -13,7 +13,7 @@ export default function AuthPage() {
   const history = useHistory();
 
   const onSubmit = useCallback(async values => {
-    const result = await axios.post('http://localhost:5000/api/auth', values)
+    const result = await axios.post(`${config.serverUrl}/api/auth`, values)
     .then(res => {
       auth.login(res.data.token,res.data.id)
       setSignInSuccess(true)     

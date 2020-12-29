@@ -1,0 +1,17 @@
+.shares-list {
+  max-width: 100%;
+
+  &__item {
+    max-width: 100%;
+    background: #F5752C;
+    color: #fff;
+    list-style-type: none;
+    margin-bottom: 10px;
+    cursor: pointer;
+    padding: 5px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}

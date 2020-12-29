@@ -17,7 +17,9 @@ usersRouter.post('/', userValidator, async(req,res) => {
   res.status(201).send(newUser);
 })
 
-// getStudentById
+
+
+// getUserById
 usersRouter.get('/:userId', async (req,res) => {
   const selectedUser = await UserModel.findById(req.params.userId);
 
@@ -32,6 +34,12 @@ usersRouter.get('/:userId', async (req,res) => {
 //changeUserById
 usersRouter.put('/:userId',userValidator, async (req,res) => {
   const updateUser = await UserModel.findByIdAndUpdate(req.params.userId, req.body)
+  res.status(200).send(updateUser)
+})
+
+//new AD
+usersRouter.put('/newAd/:userId', async(req,res) => {
+  const updateUser = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {ads: req.body}})
   res.status(200).send(updateUser)
 })
 

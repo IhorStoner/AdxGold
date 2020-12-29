@@ -5,6 +5,7 @@ import AccountPage from './pages/AccountPage/AccountPage'
 import AuthPage from './pages/AuthPage/AuthPage'
 import RegPage from './pages/RegPage/RegPage'
 import NewAdPage from './pages/NewAdPage/NewAdPage'
+import DetailsAdPage from './pages/DetailsAdPage/DetailsAdPage'
 
 export default function Routes() {
   return (
@@ -18,6 +19,7 @@ export default function Routes() {
       <Route path='/newAd'>
         <NewAdPage/>
       </Route>
+      <Route path='/detailsAd/:adId' component={DetailsAdPage}/>
       <Route path='/auth' component={AuthPage} />
       <Route path='/registration' component={RegPage} />
       <Redirect to='/home' />

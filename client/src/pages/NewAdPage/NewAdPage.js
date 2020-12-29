@@ -5,8 +5,9 @@ import { Input, Dropdown,Form,TextArea,Button } from 'semantic-ui-react'
 import * as category from '../../assets/json/category.json'
 import * as cityData from '../../assets/json/russian-cities.json'
 import { useHistory } from 'react-router-dom'
-import config from '../../config/deafult.json'
-
+import config from '../../config/default.json'
+import { useAuth } from '../../hooks/useAuth'
+import _ from 'lodash'
 export default function NewAdPage() {
   //раздел
   const [section, setSection] = useState('')
@@ -45,6 +46,8 @@ export default function NewAdPage() {
   const [ serviceArr, setServiceArr ] = useState([])
   const [ images, setImages ] = useState([])
   const [ imgId,setImgId ] = useState([])
+  const { userId } = useAuth();
+  const [ ads,setAds ] = useState([])
   const history = useHistory();
 
   const typeAdConfig = [
@@ -56,6 +59,7 @@ export default function NewAdPage() {
   const optionsSection = Object.keys(stateSection).map((item, i) => {
     return { key: i, text: item, value: item }
   })
+
   
   // Область
   useEffect(() => {
@@ -76,7 +80,7 @@ export default function NewAdPage() {
   // подготовка данных формы для отправки
   useEffect(() => {
     setResult({
-      // date: new Date(Date.now()),
+      img: imgId.map(img => img._id),
       section: section,
       subsection: selectedSubsection,
       type: type,
@@ -91,23 +95,20 @@ export default function NewAdPage() {
       mail: mail,
       status: status,
       services: serviceArr,
-      img: [...imgId],
     })
-    console.log(images)
   }, [section,selectedSubsection,type,selectedRegion,city,price,title,description,name,phone,mail,status,serviceArr,productPrice,imgId])
 
-  const uploadImage = useCallback(async (e) => {
+  const uploadImage = async () => {
     const imgArr = [...images]
-    e.preventDefault()
+    const formData = new FormData()
 
-    imgArr.forEach(async item => {
-      const formData = new FormData()
-      formData.append('image', item)
-      const result = await axios.post(`${config.serverUrl}/api/images`,formData)
-      .then(res => setImgId([...imgId, res.data[0]._id]))
+    imgArr.map(img => {
+      formData.append('image', img)
     })
-    console.log(result)
-  })
+
+    const result = await Promise.resolve(axios.post(`${config.serverUrl}/api/images`,formData))
+    setImgId(result.data)
+  }
 
   const onChangeGold = () => {
 
@@ -155,10 +156,15 @@ export default function NewAdPage() {
   }
 
   const onSubmit = useCallback(async values => {
+    const user = JSON.parse(localStorage.getItem('userData')).userId
+    const userAds = await Promise.resolve(axios.get(`${config.serverUrl}/api/users/${user}`))
     
-    console.log(values)
-    const sendData = await axios.post(`${config.serverUrl}/api/ads`,values)
-    history.push('/home')
+    const adId = await axios.post(`${config.serverUrl}/api/ads`, values)
+    .then(res => res.data._id)
+
+    const adsArr = [...userAds.data.ads,adId]
+    const saveInUser = await axios.put(`${config.serverUrl}/api/users/newAd/${user}`, adsArr).then(res => history.push('/home'))
+
   }, [])
 
   return (
@@ -182,7 +188,7 @@ export default function NewAdPage() {
                 <img src={URL.createObjectURL(file)} width='100' height='100'></img>
               </div>
             ))}
-            <Button onClick={(e) => uploadImage(e)}>Загрузить фото</Button>
+            <Button onClick={() => uploadImage()}>Загрузить фото</Button>
           </div>
         </div>
         <div className="ad__content">
