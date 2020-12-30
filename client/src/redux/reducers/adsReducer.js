@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { fetchAds,fetchSharesAds,fetchSalesAds,fetchRecommendedAds,fetchHotsAds } from '../actions/adsAction';
+import { fetchAds,fetchSharesAds,fetchSalesAds,fetchRecommendedAds,fetchHotsAds,fetchRunAds } from '../actions/adsAction';
 
 
 const initialState = {
@@ -9,6 +9,7 @@ const initialState = {
   salesAds: [],
   recommendedAds: [],
   hotsAds: [],
+  runAds: [],
   error: null
 };
 
@@ -70,6 +71,18 @@ const adsReducer = createReducer(initialState, {
     state.loading = false;
   },
   [fetchHotsAds.rejected]: (state, action) => {
+    state.loading = false;
+    state.error = action.payload.error;
+  },
+  [fetchRunAds.pending]: (state) => {
+    state.loading = true;
+    state.error = null
+  },
+  [fetchRunAds.fulfilled]: (state, action) => {
+    state.runAds = action.payload;
+    state.loading = false;
+  },
+  [fetchRunAds.rejected]: (state, action) => {
     state.loading = false;
     state.error = action.payload.error;
   }

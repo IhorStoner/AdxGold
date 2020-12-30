@@ -1,6 +1,20 @@
 .adsList {
   width: 100%;
 
+  &__openAd {
+    display: block;
+    width: 40px;
+    height: 40px;
+    background-image: url('../../assets/png/openAd.png');
+    background-position: center;
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+  }
+
   &__popup {
     position: fixed;
     top: 50%;

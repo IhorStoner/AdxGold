@@ -25,6 +25,11 @@ export const getHotsAds = createSelector(
   ads => ads
 );
 
+export const getRunsAds = createSelector(
+  state => state.ads.runAds,
+  ads => ads
+);
+
 export const getGoldAds = createSelector(
   getAds,
   ads => ads.filter(ad => ad.status === 'gold').reverse()

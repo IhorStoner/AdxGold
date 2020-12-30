@@ -3,27 +3,28 @@ require('express-async-errors')
 const AdModel = require('../models/AdModel')
 const adsRouter = Router();
 const multer  = require("multer");
+const _ = require('lodash')
 
 //get all sort by status and date
 adsRouter.get('/', async (req,res) => {
-  const ads = await AdModel.find({});
-  ads.sort((a,b) => {
-    let aStatus = getStatus(a.status);
-    let bStatus = getStatus(b.status);
-    return aStatus - bStatus === 0? new Date(a.date) - new Date(b.date): aStatus - bStatus;;
-  });
-  
-  function getStatus(status) {
-   switch (status) { 
-      case "gold" : return 0;
-      case "silver": return 1; 
-      case "common": return 2; 
-      default: return 3;
-    }
-  }
-
-  res.json(ads)
+  const adsGold = await AdModel.find({status:'gold'});
+  const adsSilver = await AdModel.find({status:'silver'});
+  const adsCommon = await AdModel.find({status:'common'});
+  const goldRev = adsGold.reverse()
+  const silverRev = adsSilver.reverse()
+  const commonRev = adsCommon.reverse()
+  const sortedArr = [...goldRev,...silverRev, ...commonRev]
+  const page = req.query.page - 1;
+  const result = _.chunk(sortedArr, 10)
+  res.json(result[page])
 })
+
+adsRouter.get('/countAds', async (req,res) => {
+  const result = await AdModel.find({})
+
+  res.json(result.length)
+})
+
 // get shares adverts
 adsRouter.get('/sharesAdverts', async (req,res) => {
   const ads = await AdModel.find({services: 'shares'})
@@ -46,7 +47,12 @@ adsRouter.get('/hotsAdverts', async (req,res) => {
   res.json(ads)
 })
 
-// getArrAdverts
+adsRouter.get('/runAdverts', async (req,res) => {
+  const ads = await AdModel.find({services: 'runStroke'})
+  res.json(ads)
+})
+
+// getArrAdverts For user
 adsRouter.post('/getAdverts', async (req,res) => {
   const adsIdArr = req.body;
  

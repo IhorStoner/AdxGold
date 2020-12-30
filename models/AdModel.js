@@ -1,5 +1,4 @@
 const mongoose = require('mongoose');
-const nodemon = require('nodemon');
 const moment = require('moment')
 
 const { Schema } = mongoose;
@@ -20,7 +19,7 @@ const AdSchema = new Schema({
   },
   date: {
     type: String,
-    default: moment().format('L'),
+    default: moment().locale("ru").format('L'),
   },
   status: {
     type: String,
@@ -35,9 +34,6 @@ const AdSchema = new Schema({
     type: String,
   },
   productPrice: {
-    type: String,
-  },
-  region: {
     type: String,
   },
   section: {

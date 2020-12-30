@@ -10,7 +10,7 @@ import { useAuth } from '../../hooks/useAuth'
 import _ from 'lodash'
 export default function NewAdPage() {
   //раздел
-  const [section, setSection] = useState('')
+  const [section, setSection] = useState('Аудио,Видео,ТВ,Фото')
   const [ stateSection, setStateSection ] = useState(() => JSON.parse(JSON.stringify(category.default)))
   const [ cityDataArr, setCityDataArr ] = useState(() => JSON.parse(JSON.stringify(cityData.default)))
   const [ uniqueSubject, setUniqueSubject ] = useState(() => {
@@ -60,8 +60,6 @@ export default function NewAdPage() {
     return { key: i, text: item, value: item }
   })
 
-  
-  // Область
   useEffect(() => {
     section && setSubsection(stateSection[section].map((item, i) => {
       return { key: i, text: item, value: item }
@@ -70,7 +68,7 @@ export default function NewAdPage() {
 
   //Город
   useEffect(() => {
-    const filteredCity = cityDataArr.filter(item => item.subject === selectedRegion && item.population > 500000)
+    const filteredCity = cityDataArr.filter(item => item.population > 500000)
     const optionsCity = filteredCity.map((item, i) => {
       return { key: i, text: item.name, value: item.name }
     })
@@ -84,7 +82,7 @@ export default function NewAdPage() {
       section: section,
       subsection: selectedSubsection,
       type: type,
-      region: selectedRegion,
+      // region: selectedRegion,
       city: city,
       productPrice: productPrice,
       priceAd: price,
@@ -108,6 +106,7 @@ export default function NewAdPage() {
 
     const result = await Promise.resolve(axios.post(`${config.serverUrl}/api/images`,formData))
     setImgId(result.data)
+    console.log(result)
   }
 
   const onChangeGold = () => {
@@ -156,6 +155,7 @@ export default function NewAdPage() {
   }
 
   const onSubmit = useCallback(async values => {
+    await uploadImage()
     const user = JSON.parse(localStorage.getItem('userData')).userId
     const userAds = await Promise.resolve(axios.get(`${config.serverUrl}/api/users/${user}`))
     
@@ -173,10 +173,10 @@ export default function NewAdPage() {
         <div className="ad__content">
           <div className="ad__info">
             <h2 className='ad__title'>Добавить новое объявление</h2>
-            <Dropdown clearable className='ad__input' options={optionsSection} selection placeholder='Раздел' onChange={(e) => setSection(e.target.innerText)} />
+            <Dropdown clearable className='ad__input' search options={optionsSection} selection placeholder='Раздел' onChange={(e) => setSection(e.target.innerText)} />
             <Dropdown clearable className='ad__input' placeholder='Подраздел' search selection options={subsection} onChange={(e) => setSelectedSubsection(e.target.innerText)}/>
             <Dropdown clearable className='ad__input' placeholder='Тип' search selection  options={typeAdConfig} onChange={(e) => setType(e.target.innerText)}/>
-            <Dropdown clearable className='ad__input' placeholder='Область' search selection options={uniqueSubject} onChange={(e) => setSelectedRegion(e.target.innerText)}/>
+            {/* <Dropdown clearable className='ad__input' placeholder='Область' search selection options={uniqueSubject} onChange={(e) => setSelectedRegion(e.target.innerText)}/> */}
             <Dropdown clearable className='ad__input' placeholder='Город' search selection options={cityArr} onChange={(e) => setCity(e.target.innerText)}/>
             <Input className='ad__input' placeholder='Цена $' onChange={(e) => setProductPrice(e.target.value)}/>
           </div>

@@ -1,8 +1,7 @@
 import './App.css'
 import { useAuth } from './hooks/useAuth'
 import { AuthContext } from './context/AuthContext';
-import { Container } from "semantic-ui-react";
-import { BrowserRouter as Router, NavLink } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import Routes from './Routes'
 import createStore from './redux/createStore'
 import { Provider } from 'react-redux'
