@@ -7,22 +7,29 @@ const _ = require('lodash')
 
 //get all sort by status and date
 adsRouter.get('/', async (req,res) => {
-  const adsGold = await AdModel.find({status:'gold'});
-  const adsSilver = await AdModel.find({status:'silver'});
-  const adsCommon = await AdModel.find({status:'common'});
-  const goldRev = adsGold.reverse()
+  const city = req.query.city;
+  let adsGold = [];
+  let adsSilver = [];
+  let adsCommon = [];
+
+  if(city) {
+     adsGold = await AdModel.find({status:'gold',city: city});
+     adsSilver = await AdModel.find({status:'silver',city: city});
+     adsCommon = await AdModel.find({status:'common',city: city});
+  } else {
+     adsGold = await AdModel.find({status:'gold'});
+     adsSilver = await AdModel.find({status:'silver'});
+     adsCommon = await AdModel.find({status:'common'});
+  }
+
+  const goldRev = adsGold.reverse() // реверс для того чтобы показывать новые обьявления сверху
   const silverRev = adsSilver.reverse()
   const commonRev = adsCommon.reverse()
-  const sortedArr = [...goldRev,...silverRev, ...commonRev]
+  const sortedArr = [...goldRev,...silverRev, ...commonRev] // выстраиваем в порядке голд сильвер обычные
+  
   const page = req.query.page - 1;
-  const result = _.chunk(sortedArr, 10)
-  res.json(result[page])
-})
-
-adsRouter.get('/countAds', async (req,res) => {
-  const result = await AdModel.find({})
-
-  res.json(result.length)
+  const result = _.chunk(sortedArr, 10) // сортируем в массивы по 10 элементов и отдаем взависимости от страницы
+  res.json([result[page],result.length - 1]) // отдаю результат первым агрументом, вторым кол-во страниц
 })
 
 // get shares adverts

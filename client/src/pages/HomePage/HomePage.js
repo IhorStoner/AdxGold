@@ -4,20 +4,19 @@ import HeaderNav from '../../components/Header/Header'
 import { Button, Pagination, Header, Dropdown } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
-import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds } from '../../redux/selectors/adsSelector';
+import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds,getPages } from '../../redux/selectors/adsSelector';
 import { useDispatch, useSelector } from 'react-redux'
 import AdvertList from '../../components/AdvertList/AdvertList'
 import { fetchAds, fetchSharesAds, fetchSalesAds, fetchRecommendedAds, fetchHotsAds, fetchRunAds } from '../../redux/actions/adsAction'
 import SharesList from '../../components/SharesList/SharesList'
 import SalesAds from '../../components/SalesAds/SalesAds'
 import * as cityData from '../../assets/json/russian-cities.json'
-import Axios from 'axios'
-import config from '../../config/default.json'
 
 export default function HomePage() {
   const { token, userId } = useAuth()
   const isAuth = !!token;
   const ads = useSelector(getAds);
+  const pages = useSelector(getPages)
   const sharesAds = useSelector(getSharesAds)
   const salesAds = useSelector(getSalesAds)
   const recommendedAds = useSelector(getRecommendedAds)
@@ -32,11 +31,11 @@ export default function HomePage() {
     })
     return optionsCity
   }) // options for city filter
-  const [selectedCity, setSelectedCity] = useState('') // dropdown city
-  const [selectedFilteredPrice, setSelectedFilteredPrice] = useState('');
-  const [filteredAds, setFilteredAds] = useState([])
+  const [ selectedCity, setSelectedCity ] = useState('') // dropdown city
+  const [ selectedFilteredPrice, setSelectedFilteredPrice ] = useState(null);
+  const [ filteredAds, setFilteredAds ] = useState([])
   const [ page, setPage ] = useState(1)
-  const [ countPage, setCountPage ] = useState(3)
+  // const [ countPage, setCountPage ] = useState(3)
   const optionFilterPrice = [
     { key: 1, text: 'По возрастанию', value: 'По возрастанию' },
     { key: 2, text: 'По убыванию', value: 'По убыванию' },
@@ -44,13 +43,10 @@ export default function HomePage() {
   ]
 
   useEffect(async () => {
-    dispatch(fetchAds(page))
-    await Axios.get(`${config.serverUrl}/api/ads/countAds`).then(res => setCountPage(Math.ceil(res.data/10)))
-    console.log(countPage)
-  }, [page])
+    dispatch(fetchAds({page: page, city: selectedCity}))
+  }, [page,selectedCity])
 
   useEffect(() => {
-    
     dispatch(fetchSharesAds())
     dispatch(fetchSalesAds())
     dispatch(fetchRecommendedAds())
@@ -58,14 +54,6 @@ export default function HomePage() {
     dispatch(fetchRunAds())
   }, []);
 
-  // filter by city
-  useEffect(() => {
-    let prepareFilteredAds = ads;
-    if (selectedCity) {
-      selectedCity ? prepareFilteredAds = ads.filter(ad => ad.city === selectedCity) : prepareFilteredAds = ads.filter(ad => ad.city === selectedCity)
-    }
-    setFilteredAds(prepareFilteredAds)
-  }, [ads, selectedCity])
 
   //filter by product price
   useEffect(() => {
@@ -124,10 +112,10 @@ export default function HomePage() {
           <div className="ads__list">
             <div className='filter'>
               <Header as='h3'>Фильтр</Header>
-              <Dropdown placeholder='Город' search selection options={cityDataArr} onChange={(e) => setSelectedCity(e.target.innerText)} />
+              <Dropdown placeholder='Город' clearable search selection options={cityDataArr} onChange={(e) => setSelectedCity(e.target.innerText)} />
               <Dropdown placeholder='Цена' search selection options={optionFilterPrice} onChange={(e) => setSelectedFilteredPrice(e.target.innerText)} />
             </div>
-            <AdvertList advertArr={filteredAds} recommendedAds={recommendedAds} hotsAds={hotsAds} runAds={runAds} />
+            <AdvertList advertArr={ads} recommendedAds={recommendedAds} hotsAds={hotsAds} runAds={runAds} />
             <Pagination
               boundaryRange={0}
               defaultActivePage={1}
@@ -135,7 +123,7 @@ export default function HomePage() {
               firstItem={null}
               lastItem={null}
               siblingRange={1}
-              totalPages={countPage}
+              totalPages={pages}
               onPageChange={(event) => setPage(event.target.getAttribute('value'))}
             />
             {/* <AdvertList advertArr={silverAds}/>

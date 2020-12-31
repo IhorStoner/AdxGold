@@ -2,8 +2,9 @@ import { createAsyncThunk,createAction  } from "@reduxjs/toolkit";
 import axios from 'axios'
 import config from '../../config/default.json'
 
-export const fetchAds = createAsyncThunk('ads/fetchAds', async (page) => {
-  const data = axios.get(`${config.serverUrl}/api/ads?page=${page}`).then(
+export const fetchAds = createAsyncThunk('ads/fetchAds', async ({page,city}) => {
+
+  const data = axios.get(`${config.serverUrl}/api/ads?page=${page}&city=${city}`).then(
     res => res.data)
   return data;
 });

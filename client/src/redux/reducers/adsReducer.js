@@ -5,6 +5,7 @@ import { fetchAds,fetchSharesAds,fetchSalesAds,fetchRecommendedAds,fetchHotsAds,
 const initialState = {
   loading: false,
   data: [],
+  pages: [],
   sharesAds: [],
   salesAds: [],
   recommendedAds: [],
@@ -19,7 +20,8 @@ const adsReducer = createReducer(initialState, {
     state.error = null
   },
   [fetchAds.fulfilled]: (state, action) => {
-    state.data = action.payload;
+    state.data = action.payload[0];
+    state.pages = action.payload[1];
     state.loading = false;
   },
   [fetchAds.rejected]: (state, action) => {

@@ -8,6 +8,8 @@ import { useHistory } from 'react-router-dom'
 import config from '../../config/default.json'
 import { useAuth } from '../../hooks/useAuth'
 import _ from 'lodash'
+
+
 export default function NewAdPage() {
   //раздел
   const [section, setSection] = useState('Аудио,Видео,ТВ,Фото')
