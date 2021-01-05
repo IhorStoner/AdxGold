@@ -17,13 +17,17 @@ export default function AccountPage() {
   const [ads, setAds ] = useState([])
 
   useEffect( () => {
-     dispatch(fetchUser())
-  }, [])
+    if(isAuth) {
+      dispatch(fetchUser())
+    }
+  }, [isAuth])
 
 
   // обьявления
   useEffect(()  => {
-    const result = user.ads && axios.post(`${config.serverUrl}/api/ads/getAdverts`,user.ads).then(res => setAds(res.data))
+    if(isAuth) {
+      const result = user.ads && axios.post(`${config.serverUrl}/api/ads/getAdverts`,user.ads).then(res => setAds(res.data))
+    }
   }, [user])
 
   if (isAuth) {

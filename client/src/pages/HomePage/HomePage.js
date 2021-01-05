@@ -33,18 +33,22 @@ export default function HomePage() {
   }) // options for city filter
   const [ selectedCity, setSelectedCity ] = useState('') // dropdown city
   const [ selectedFilteredPrice, setSelectedFilteredPrice ] = useState(null);
-  const [ filteredAds, setFilteredAds ] = useState([])
+  const [ selectedFilteredDate, setSelectedFilteredDate ] = useState(null)
   const [ page, setPage ] = useState(1)
-  // const [ countPage, setCountPage ] = useState(3)
   const optionFilterPrice = [
-    { key: 1, text: 'По возрастанию', value: 'По возрастанию' },
-    { key: 2, text: 'По убыванию', value: 'По убыванию' },
+    { key: 1, text: 'По возрастанию', value: 'high' },
+    { key: 2, text: 'По убыванию', value: 'low' },
+    { key: 3, text: 'Сбросить', value: '' }
+  ]
+  const optionFilterDate = [
+    { key: 1, text: 'Сначала новые', value: 'high' },
+    { key: 2, text: 'Сначала старые', value: 'low' },
     { key: 3, text: 'Сбросить', value: '' }
   ]
 
   useEffect(async () => {
-    dispatch(fetchAds({page: page, city: selectedCity}))
-  }, [page,selectedCity])
+    dispatch(fetchAds({page: page, city: selectedCity, price: selectedFilteredPrice, date: selectedFilteredDate}))
+  }, [page,selectedCity,selectedFilteredPrice,selectedFilteredDate])
 
   useEffect(() => {
     dispatch(fetchSharesAds())
@@ -55,33 +59,6 @@ export default function HomePage() {
   }, []);
 
 
-  //filter by product price
-  useEffect(() => {
-    let prepareFilteredAds = ads;
-
-    if (selectedFilteredPrice) {
-      if (selectedFilteredPrice === 'По возрастанию') {
-        prepareFilteredAds = [...ads].sort((ad1, ad2) => compareAdPrice(Number(ad1.productPrice), Number(ad2.productPrice)));
-      } else if (selectedFilteredPrice === 'По убыванию') {
-        prepareFilteredAds = [...ads].sort((ad1, ad2) => compareAdPrice(Number(ad1.productPrice), Number(ad2.productPrice)))
-        prepareFilteredAds.reverse()
-      }
-    }
-
-    setFilteredAds(prepareFilteredAds)
-  }, [ads, selectedFilteredPrice])
-
-  const compareAdPrice = (ad1, ad2) => {
-    if (ad1 < ad2) {
-      return -1;
-    }
-    if (ad1 > ad2) {
-      return 1;
-    }
-    // a должно быть равным b
-    return 0;
-  }
-
   return (
     <div className='homePage'>
       <HeaderNav/>
@@ -89,12 +66,12 @@ export default function HomePage() {
         <div className='mainContent'>
           <aside className='mainContent__btns'>
             <div className="mainContent__newAd">
-              <NavLink to={isAuth ? '/newAd' : '/auth'}>
-                <Button>Дать объявление</Button>
+              <NavLink to={isAuth ? '/newAd' : '/account'}>
+                <Button color='teal' className='mainConent__btnAd'>Дать объявление</Button>
               </NavLink>
             </div>
             <div className="mainContent__account">
-              <NavLink to={isAuth ? '/account' : '/auth'}>
+              <NavLink to={'/account'}>
                 <Button>Личный кабинет</Button>
               </NavLink>
             </div>
@@ -114,8 +91,9 @@ export default function HomePage() {
               <Header as='h3'>Фильтр</Header>
               <Dropdown placeholder='Город' clearable search selection options={cityDataArr} onChange={(e) => setSelectedCity(e.target.innerText)} />
               <Dropdown placeholder='Цена' search selection options={optionFilterPrice} onChange={(e) => setSelectedFilteredPrice(e.target.innerText)} />
+              <Dropdown placeholder='По дате' search selection options={optionFilterDate} onChange={(e) => setSelectedFilteredDate(e.target.innerText)} />
             </div>
-            <AdvertList advertArr={ads} recommendedAds={recommendedAds} hotsAds={hotsAds} runAds={runAds} />
+            {ads && <AdvertList advertArr={ads} recommendedAds={recommendedAds} hotsAds={hotsAds} runAds={runAds} />}
             <Pagination
               boundaryRange={0}
               defaultActivePage={1}
@@ -126,8 +104,6 @@ export default function HomePage() {
               totalPages={pages}
               onPageChange={(event) => setPage(event.target.getAttribute('value'))}
             />
-            {/* <AdvertList advertArr={silverAds}/>
-            <AdvertList advertArr={commonAds}/> */}
           </div>
         </div>
       </div>

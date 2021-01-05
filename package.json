@@ -24,6 +24,7 @@
     "express-async-errors": "^3.1.1",
     "fs": "0.0.1-security",
     "gridfs-stream": "^1.1.1",
+    "jimp-watermark": "^1.1.0",
     "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",

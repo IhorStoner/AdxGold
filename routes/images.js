@@ -3,16 +3,21 @@ const ImgRouter = Router();
 const ImageModel = require('../models/ImageModel');
 const multer = require('multer')
 const path = require('path')
+const watermark = require('jimp-watermark');
 const UPLOAD_PATH = path.resolve(__dirname, 'path/to/uploadedFiles')
 const fs = require('fs')
 const upload = multer({
      dest: UPLOAD_PATH,
-     limits: {fileSize: 1000000, files: 5}
+     limits: {fileSize: 100000000, files: 5}
 })
 
 // upload image
 ImgRouter.post('/', upload.array('image', 5),async (req, res, next) => {
+  const testImg = []
   const images = req.files.map((file) => {
+    const waterImg = watermark.addWatermark(file.path,`${__dirname}/../assets/logo.png`).then(img => testImg.push(img))
+    console.log(waterImg)
+
     return {
       filename: file.filename,
       originalname: file.originalname
@@ -20,6 +25,7 @@ ImgRouter.post('/', upload.array('image', 5),async (req, res, next) => {
   })
   ImageModel.insertMany(images, (err, result) => {
     if (err) return res.sendStatus(404)
+    console.log(result)
     res.json(result)
   })
 })

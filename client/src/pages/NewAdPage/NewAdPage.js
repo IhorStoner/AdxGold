@@ -7,8 +7,10 @@ import * as cityData from '../../assets/json/russian-cities.json'
 import { useHistory } from 'react-router-dom'
 import config from '../../config/default.json'
 import { useAuth } from '../../hooks/useAuth'
-import _ from 'lodash'
-
+import _, { toPath } from 'lodash'
+import watermark from 'watermarkjs'
+import logo from '../../assets/png/logo.png'
+import Liqpay from '../../components/Liqpay/Liqpay'
 
 export default function NewAdPage() {
   //раздел
@@ -48,8 +50,6 @@ export default function NewAdPage() {
   const [ serviceArr, setServiceArr ] = useState([])
   const [ images, setImages ] = useState([])
   const [ imgId,setImgId ] = useState([])
-  const { userId } = useAuth();
-  const [ ads,setAds ] = useState([])
   const history = useHistory();
 
   const typeAdConfig = [
@@ -99,16 +99,16 @@ export default function NewAdPage() {
   }, [section,selectedSubsection,type,selectedRegion,city,price,title,description,name,phone,mail,status,serviceArr,productPrice,imgId])
 
   const uploadImage = async () => {
-    const imgArr = [...images]
+    const imgArr = [...images] /// массив с input type file [file,file]
     const formData = new FormData()
-
+    console.log(imgArr)
     imgArr.map(img => {
+      // const waterImg = watermark.addTextWatermark(img).then(data => data) /// нужно как-то узнать путь к фото
       formData.append('image', img)
     })
 
     const result = await Promise.resolve(axios.post(`${config.serverUrl}/api/images`,formData))
     setImgId(result.data)
-    console.log(result)
   }
 
   const onChangeGold = () => {
@@ -245,6 +245,7 @@ export default function NewAdPage() {
           </Button>
         </div>
       </Form>
+      <Liqpay price={price}/>
     </div>
   )
 }

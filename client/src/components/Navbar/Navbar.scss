@@ -1,6 +1,22 @@
 .navbar {
-  max-width: 1000px;
+  display: flex;
+  flex-wrap: wrap;
+  width: 100%;
+
   
+
+  &--ml{
+    margin-left: 15px;
+  }
+  
+
+  &__box{
+    background: linear-gradient(180deg, #F78536 0%, #F46B26 100%);
+    width: 1486px;
+    height: 72px;
+    display: block;
+  }
+
   &__list {
     display: flex;
     justify-content: space-between;
@@ -11,6 +27,16 @@
   &__item {
     list-style-type: none;
     padding: 10px 0;
+    color: #F46F29;
+    font-weight: 400;
+    font-family: 'Roboto-normal';
+    font-size: 22px;
+    line-height: 26px;
+
+    &--active {
+      color: #fff;
+    
+    }
   }
   
   &__submenu {

@@ -21,6 +21,10 @@ const AdSchema = new Schema({
     type: String,
     default: moment().locale("ru").format('L'),
   },
+  backendDate: {
+    type: String,
+    default: Date.now(),
+  },
   status: {
     type: String,
   },

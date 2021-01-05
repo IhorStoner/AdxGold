@@ -3,9 +3,9 @@ import './Navbar.scss'
 
 export default function Navbar() {
   return (
-    <nav className='navbar'>
+    <nav className='navbar navbar--ml'>
       <ul className='navbar__list'>
-        <li className='navbar__item navbar__board'>
+        <li className='navbar__item navbar__item--active navbar__board'>
           <span>Доска объявлений</span>
           <ul className='navbar__submenu'>
             <li>Продам/Куплю</li>
@@ -46,6 +46,7 @@ export default function Navbar() {
           </ul>
         </li>
       </ul>
+      <div className="navbar__box"></div>
     </nav>
   )
 }
