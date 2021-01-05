@@ -1,49 +1,24 @@
-import React from 'react'
+import React,{useState} from 'react'
+
 import './Navbar.scss'
 
 export default function Navbar() {
+  const [ active, setActive ] = useState('board')
+
   return (
     <nav className='navbar navbar--ml'>
       <ul className='navbar__list'>
-        <li className='navbar__item navbar__item--active navbar__board'>
-          <span>Доска объявлений</span>
-          <ul className='navbar__submenu'>
-            <li>Продам/Куплю</li>
-            <li>Недвижимость</li>
-            <li>Авто</li>
-            <li>Услуги</li>
-            <li>Работа</li>
-            <li>Новые авто</li>
-            <li>Новые квартиры</li>
-            <li>Блогеры</li>
-          </ul>
+        <li className={active === 'board' ? 'navbar__item navbar__item--board navbar__item--active' : 'navbar__item navbar__item--board'} onClick={() => setActive('board')}>
+          Доска объявлений
         </li>
-        <li className='navbar__item navbar__market'>
+        <li className={active === 'market' ? 'navbar__item navbar__item--market navbar__item--active' : 'navbar__item navbar__item--market'} onClick={() => setActive('market')}>
           Рынок, Магазины
-          <ul className='navbar__submenu '>
-            <li>Case 1</li>
-            <li>Case 2</li>
-            <li>Case 3</li>
-            <li>Case 4</li>
-          </ul>
         </li>
-        <li className='navbar__item'>
+        <li className={active === 'food' ? 'navbar__item navbar__item--food navbar__item--active' : 'navbar__item navbar__item--food'} onClick={() => setActive('food')}>
           Заказ еды/Рестораны
-          <ul className='navbar__submenu '>
-            <li>Case 5</li>
-            <li>Case 6</li>
-            <li>Case 7</li>
-            <li>Case 8</li>
-          </ul>
         </li>
-        <li className='navbar__item'>
+        <li className={active === 'services' ? 'navbar__item navbar__item--services navbar__item--active' : 'navbar__item navbar__item--services'} onClick={() => setActive('services')}>
           Услуги профессионалов
-          <ul className='navbar__submenu '>
-            <li>Case 9</li>
-            <li>Case 10</li>
-            <li>Case 11</li>
-            <li>Case 12</li>
-          </ul>
         </li>
       </ul>
       <div className="navbar__box"></div>

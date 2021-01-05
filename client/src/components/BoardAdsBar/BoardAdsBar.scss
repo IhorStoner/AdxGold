@@ -1,0 +1,75 @@
+.boardAdsBar {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  position: relative;
+  padding-bottom: 61px;
+
+  &--mt {
+    margin-left: 15px;
+  }
+
+  &__subMenu {
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    display: none;
+    justify-content: space-between;
+    list-style-type: none;
+    background-color: #616C7A;
+    width: 100%;
+    z-index: 1;
+    padding: 20px 85px;
+    border-bottom-left-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  &__subMenuItem {
+    font-size: 22px;
+    font-family: 'Roboto-regular';
+  }
+
+  &__item {
+    list-style-type: none;
+    font-size: 18px;
+    line-height: 21px;
+    padding: 10px 10px 10px 43px;
+    color: #000;
+    cursor: pointer;
+    font-family: 'Roboto-bold';
+    
+    // &::before{
+    //   position: absolute;
+    //   display: inline-block;
+    //   content: "";
+    //   left: 0;
+    //   top: 25%;
+    //   transform: translateY(-50%);
+    //   -webkit-mask-size: cover;
+    //   mask-size: cover;
+    //   background-color: #616C7A;
+    // }
+
+    &--saleBuy::before {
+      width: 43px;
+      height: 43px;
+      -webkit-mask: url('../../assets/svg/armsIcon.svg') no-repeat 50% 50%;
+      mask: url('../../assets/svg/armsIcon.svg') no-repeat 50% 50%;
+    }
+
+    &--active {
+      color: #fff;
+      background-color: #616C7A;
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+      
+      &::before {
+        background-color: #fff;
+      }
+
+      &>ul {
+        display: flex;
+      }
+    }
+  }
+}

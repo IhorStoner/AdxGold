@@ -1,17 +1,75 @@
-.shares-list {
-  max-width: 100%;
+.sharesAds {
+  max-width: 230px;
+  min-width: 230px;
+  background: linear-gradient(180deg, #F5742C 0%, #F89741 100%);
+  border-radius: 5px;
+  padding: 5px;
 
+  &__linkContainer {
+    text-align: center;
+  }
+
+  &__link {
+    color: #817F7F;
+    font-family: 'PTSans-bold';
+    font-size: 14px;
+    text-transform: uppercase;
+    text-align: center;
+    border-bottom: 2px solid #817F7F;
+  }
+
+  &__title {
+    color: #fff;
+    font-size: 20px;
+    font-family: 'Roboto-regular';
+    text-align: center;
+    line-height: 23,4px;
+  }
+
+  &__img {
+    width: 105px;
+    height: 80px;
+    margin-right: 5px;
+  }
+
+  &__itemDescription {
+    font-size: 14px;
+    color: #000;
+    font-family: 'Roboto-normal';
+    width: 100%;
+  }
+
+  &__itemTitle {
+    color: #F5752C;
+    text-align: center;
+    margin-bottom: 5px;
+  }
+
+  &--mr {
+    margin-right: 15px;
+  }
+
+  &__contentContainer {
+    display: flex;
+    justify-content: flex-start;
+    margin-bottom: 8px;
+  }
+  
   &__item {
     max-width: 100%;
-    background: #F5752C;
-    color: #fff;
+    background: #F2F2F2;
+    color: #000;
     list-style-type: none;
-    margin-bottom: 10px;
-    cursor: pointer;
-    padding: 5px;
+    padding: 10px 0;
+
+    &:first-child {
+      border-top-left-radius: 5px;
+      border-top-right-radius: 5px;
+    }
 
     &:last-child {
-      margin-bottom: 0;
+      border-bottom-left-radius: 5px;
+      border-bottom-right-radius: 5px;
     }
   }
 }

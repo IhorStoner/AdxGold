@@ -1,24 +1,10 @@
 
-
-.mainContent {
-  display: flex;
-  margin-bottom: 50px;
-  &__btns {
-    max-width: 200px;
-    margin-right: 10%;
-  }
-
-  &__newAd {
-    margin-bottom: 10px;
-  }
-
-  &__discounts {
-    width: 100%;
-    background-color: #ccc;
-  }
-
-  &__btnAd {
-    background: #0FCA80 !important;
+.homePage {
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
   }
 }
 
@@ -26,13 +12,9 @@
   display: flex;
   justify-content: space-between;
   position: relative;
-  &__shares {
-    width: 250px;
-    background-color: #ccc;
-    padding: 20px;
-  }
+
 
   &__list {
-    width: 80%;
+    width: 100%;
   }
 }

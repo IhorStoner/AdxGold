@@ -2,33 +2,37 @@
 
 @font-face {
   font-family: 'PTSans-bold';
-  font-weight: 900;
   src: local('PTSans'), url(./fonts/PTSans-Bold.ttf) format('truetype');
 }
 
 @font-face {
     font-family: 'PTSans-normal';
-    font-weight: 400;
     src: local('PTSans'), url(./fonts/PTSans-Regular.ttf) format('truetype');
 }
 
 @font-face {
     font-family: 'Roboto-bold';
-    font-weight: 900;
     src: local('Roboto'), url(./fonts/Roboto-Bold.ttf) format('truetype');
 }
 
 @font-face {
   font-family: 'Roboto-normal';
-  font-weight: 400;
-  src: local('Roboto'), url(./fonts/Roboto-Bold.ttf) format('truetype');
+  src: local('Roboto'), url(./fonts/Roboto-Medium.ttf) format('truetype');
 }
 
+@font-face {
+  font-family: 'Roboto-regular';
+  src: local('Roboto'), url(./fonts/Roboto-Regular.ttf) format('truetype');
+}
+@font-face {
+  font-family: 'Arial';
+  src: local('Arial'), url(./fonts/Arial.ttf) format('truetype');
+}
 
 * {
   margin: 0;
   padding: 0;
-  font-family: 'Roboto-normal';
+  font-family: 'Roboto-regular';
 }
 
 .container {

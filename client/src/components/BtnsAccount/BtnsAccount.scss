@@ -1,0 +1,52 @@
+.btnsAccount {
+  min-width: 230px;
+
+  &__btnContainer {
+    margin-bottom: 25px;
+
+    &:last-child{
+      margin-bottom: 0;
+    }
+  }
+
+  &__btn {
+    padding: 15px 25px;
+    width: 100%;
+    border-radius: 5px;
+    color: #fff;
+    cursor: pointer;
+    font-family: 'Roboto-bold';
+    font-size: 15px;
+    position: relative;
+    outline: none;
+    border: none;
+
+    &::before {
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+    &:hover {
+      opacity: 0.9;
+    }
+  }
+
+  &__btnNewAd {
+    background-color: #0FCA80;
+
+    &::before {
+      content: url('../../assets/svg/plus.svg');
+      left: 25px;
+    }
+  }
+
+  &__btnAccount {
+    background-color: #BABABA;
+
+    &::before {
+      content: url('../../assets/svg/account.svg');
+      left: 8px;
+    }
+  }
+}

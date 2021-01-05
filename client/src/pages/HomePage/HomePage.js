@@ -4,13 +4,15 @@ import HeaderNav from '../../components/Header/Header'
 import { Button, Pagination, Header, Dropdown } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
-import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds,getPages } from '../../redux/selectors/adsSelector';
+import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds, getPages } from '../../redux/selectors/adsSelector';
 import { useDispatch, useSelector } from 'react-redux'
 import AdvertList from '../../components/AdvertList/AdvertList'
 import { fetchAds, fetchSharesAds, fetchSalesAds, fetchRecommendedAds, fetchHotsAds, fetchRunAds } from '../../redux/actions/adsAction'
 import SharesList from '../../components/SharesList/SharesList'
 import SalesAds from '../../components/SalesAds/SalesAds'
 import * as cityData from '../../assets/json/russian-cities.json'
+import BtnsAccount from '../../components/BtnsAccount/BtnsAccount'
+import BoardAdsBar from '../../components/BoardAdsBar/BoardAdsBar'
 
 export default function HomePage() {
   const { token, userId } = useAuth()
@@ -31,10 +33,10 @@ export default function HomePage() {
     })
     return optionsCity
   }) // options for city filter
-  const [ selectedCity, setSelectedCity ] = useState('') // dropdown city
-  const [ selectedFilteredPrice, setSelectedFilteredPrice ] = useState(null);
-  const [ selectedFilteredDate, setSelectedFilteredDate ] = useState(null)
-  const [ page, setPage ] = useState(1)
+  const [selectedCity, setSelectedCity] = useState('') // dropdown city
+  const [selectedFilteredPrice, setSelectedFilteredPrice] = useState(null);
+  const [selectedFilteredDate, setSelectedFilteredDate] = useState(null)
+  const [page, setPage] = useState(1)
   const optionFilterPrice = [
     { key: 1, text: 'По возрастанию', value: 'high' },
     { key: 2, text: 'По убыванию', value: 'low' },
@@ -47,8 +49,8 @@ export default function HomePage() {
   ]
 
   useEffect(async () => {
-    dispatch(fetchAds({page: page, city: selectedCity, price: selectedFilteredPrice, date: selectedFilteredDate}))
-  }, [page,selectedCity,selectedFilteredPrice,selectedFilteredDate])
+    dispatch(fetchAds({ page: page, city: selectedCity, price: selectedFilteredPrice, date: selectedFilteredDate }))
+  }, [page, selectedCity, selectedFilteredPrice, selectedFilteredDate])
 
   useEffect(() => {
     dispatch(fetchSharesAds())
@@ -61,29 +63,14 @@ export default function HomePage() {
 
   return (
     <div className='homePage'>
-      <HeaderNav/>
+      <HeaderNav />
       <div className="container">
-        <div className='mainContent'>
-          <aside className='mainContent__btns'>
-            <div className="mainContent__newAd">
-              <NavLink to={isAuth ? '/newAd' : '/account'}>
-                <Button color='teal' className='mainConent__btnAd'>Дать объявление</Button>
-              </NavLink>
-            </div>
-            <div className="mainContent__account">
-              <NavLink to={'/account'}>
-                <Button>Личный кабинет</Button>
-              </NavLink>
-            </div>
-          </aside>
-          <div className="mainContent__discounts">
-            <Header as='h2'>Скидки</Header>
-            <SalesAds salesArr={salesAds} />
-          </div>
+        <div className='homePage__content'>
+          <BtnsAccount isAuth={true} />
+          <BoardAdsBar />
         </div>
         <div className='ads'>
           <div className="ads__shares">
-            <h2>Акции:</h2>
             <SharesList sharesArr={sharesAds} />
           </div>
           <div className="ads__list">
@@ -104,6 +91,10 @@ export default function HomePage() {
               totalPages={pages}
               onPageChange={(event) => setPage(event.target.getAttribute('value'))}
             />
+            <div className="mainContent__discounts">
+              <Header as='h2'>Скидки</Header>
+              <SalesAds salesArr={salesAds} />
+            </div>
           </div>
         </div>
       </div>
