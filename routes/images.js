@@ -13,10 +13,8 @@ const upload = multer({
 
 // upload image
 ImgRouter.post('/', upload.array('image', 5),async (req, res, next) => {
-  const testImg = []
   const images = req.files.map((file) => {
-    const waterImg = watermark.addWatermark(file.path,`${__dirname}/../assets/logo.png`).then(img => testImg.push(img))
-    console.log(waterImg)
+    // const waterImg = watermark.addWatermark(file.path,`${__dirname}/../assets/logo.png`).then(img => testImg.push(img))
 
     return {
       filename: file.filename,
@@ -25,7 +23,6 @@ ImgRouter.post('/', upload.array('image', 5),async (req, res, next) => {
   })
   ImageModel.insertMany(images, (err, result) => {
     if (err) return res.sendStatus(404)
-    console.log(result)
     res.json(result)
   })
 })

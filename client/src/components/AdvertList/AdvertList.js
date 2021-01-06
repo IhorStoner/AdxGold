@@ -11,7 +11,7 @@ import RecomendedAds from '../RecommendedAds/RecommendedAds'
 import HotsAds from '../HotsAds/HotsAds'
 import RunAd from '../RunAd/RunAd'
 
-export default function AdvertList({ advertArr, recommendedAds, hotsAds,runAds }) {
+export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds }) {
 	const [isOpenInfo, setIsOpenInfo] = useState('')
 	const [imgId, setImgId] = useState('')
 
@@ -19,15 +19,29 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds,runAds }
 		<ul className='adsList'>
 			{advertArr.map((ad, i) => (
 				<div key={i}>
-					{i === 3 && <RunAd runAds={runAds}/>}
+					{i === 3 && <RunAd runAds={runAds} />}
 					<li className={`adsList__item ${ad.status}`} onClick={ad._id === isOpenInfo ? () => setIsOpenInfo('') : () => setIsOpenInfo(ad._id)}>
-						<span>{ad.city} </span>
-						<span><img src={!ad.img[0] ? logo : `${config.serverUrl}/api/images/${ad.img[0]}`} width='50' height='50' /></span>
-						<span>{ad.title}</span>
-						<span>{ad.type}</span>
-						<span>{ad.date}</span>
-						<span>{ad.productPrice}$ </span>
-						<NavLink to={`/detailsAd/${ad._id}`}><button data-tooltip='открыть в новом окне' className='adsList__openAd'></button></NavLink>
+						<table >
+							<tr className='adsList__table'>
+								<td width='300px' className='adsList__tableItem adsList__tableItem--titleMargin'><span className='adsList__tableText'>{ad.title}</span></td>
+								<td width='175px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.city}</span></td>
+								<td width='50px' className='adsList__tableItem adsList__tableItem--imgMargin'><span className='adsList__tableImg'><img src={!ad.img[0] ? logo : `${config.serverUrl}/api/images/${ad.img[0]}`} width='50' height='50' /></span></td>
+								<td width='160px' className='adsList__tableItem adsList__tableItem--wordWrap'><span className='adsList__tableText'>{ad.section}</span></td>
+								<td width='107px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.type}</span></td>
+								<td width='40px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.floor ? ad.floor : '0'}</span></td>
+								<td width='72px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.rooms ? ad.rooms : '1 комн.'}</span></td>
+								<td width='100px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.productPrice}руб. </span></td>
+								<td width='85px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.square ? ad.square : '30 кв.м.'}</span></td>
+								<td width='106px' className='adsList__tableItem'><span className='adsList__tableDate' className='adsList__tableText'>{ad.date}</span></td>
+								<td width='155px' >
+									<div className="adsList__tableBtns">
+										<NavLink to={`/detailsAd/${ad._id}`}><button data-tooltip='открыть в новом окне' className='adsList__openAd'></button></NavLink>
+										<button className="adsList__btnFavorite"></button>
+										<button className="adsList__btnDetails">подробнее</button>
+									</div>
+								</td>
+							</tr>
+						</table>
 					</li>
 					<div className='adsList__info' style={isOpenInfo === ad._id ? { display: 'flex' } : { display: 'none' }}>
 						<div className="adsList__content">

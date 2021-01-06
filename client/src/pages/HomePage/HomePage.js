@@ -10,9 +10,9 @@ import AdvertList from '../../components/AdvertList/AdvertList'
 import { fetchAds, fetchSharesAds, fetchSalesAds, fetchRecommendedAds, fetchHotsAds, fetchRunAds } from '../../redux/actions/adsAction'
 import SharesList from '../../components/SharesList/SharesList'
 import SalesAds from '../../components/SalesAds/SalesAds'
-import * as cityData from '../../assets/json/russian-cities.json'
 import BtnsAccount from '../../components/BtnsAccount/BtnsAccount'
 import BoardAdsBar from '../../components/BoardAdsBar/BoardAdsBar'
+import { getCity } from '../../redux/selectors/filterSelector'
 
 export default function HomePage() {
   const { token, userId } = useAuth()
@@ -24,19 +24,12 @@ export default function HomePage() {
   const recommendedAds = useSelector(getRecommendedAds)
   const hotsAds = useSelector(getHotsAds)
   const runAds = useSelector(getRunsAds)
+  const selectedCity = useSelector(getCity)
   const dispatch = useDispatch();
-  const [cityDataArr, setCityDataArr] = useState(() => {
-    const data = JSON.parse(JSON.stringify(cityData.default))
-    const filteredCity = data.filter(item => item.population > 500000)
-    const optionsCity = filteredCity.map((item, i) => {
-      return { key: i, text: item.name, value: item.name }
-    })
-    return optionsCity
-  }) // options for city filter
-  const [selectedCity, setSelectedCity] = useState('') // dropdown city
   const [selectedFilteredPrice, setSelectedFilteredPrice] = useState(null);
   const [selectedFilteredDate, setSelectedFilteredDate] = useState(null)
   const [page, setPage] = useState(1)
+
   const optionFilterPrice = [
     { key: 1, text: 'По возрастанию', value: 'high' },
     { key: 2, text: 'По убыванию', value: 'low' },
@@ -74,12 +67,12 @@ export default function HomePage() {
             <SharesList sharesArr={sharesAds} />
           </div>
           <div className="ads__list">
-            <div className='filter'>
+            {/* <div className='filter'>
               <Header as='h3'>Фильтр</Header>
               <Dropdown placeholder='Город' clearable search selection options={cityDataArr} onChange={(e) => setSelectedCity(e.target.innerText)} />
               <Dropdown placeholder='Цена' search selection options={optionFilterPrice} onChange={(e) => setSelectedFilteredPrice(e.target.innerText)} />
               <Dropdown placeholder='По дате' search selection options={optionFilterDate} onChange={(e) => setSelectedFilteredDate(e.target.innerText)} />
-            </div>
+            </div> */}
             {ads && <AdvertList advertArr={ads} recommendedAds={recommendedAds} hotsAds={hotsAds} runAds={runAds} />}
             <Pagination
               boundaryRange={0}

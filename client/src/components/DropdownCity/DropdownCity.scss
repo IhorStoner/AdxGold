@@ -1,0 +1,53 @@
+.dropdown {
+  background-color: #fff;
+  width: 175px;
+  padding: 9px 5px 6px 5px;
+  color: #F78536;
+  font-size: 20px;
+  position: relative;
+
+  &__btnReset {
+    position: absolute;
+    right: 5px;
+    top: 13px;
+    width: 10px;
+    height: 10px;
+    display: block;
+    background-image: url('../../assets/svg/btnClose.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      transform: rotate(360deg);
+
+    }
+  }
+
+  &__item {
+    padding: 3px 0;
+    &:hover {
+      background-color: rgba(247, 133, 54, 0.3);
+    }
+  }
+
+  &__selected {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  &__list {
+    top: 34px;
+    left: 0;
+    position: absolute;
+    flex-direction: column;
+    overflow: auto;
+    max-height: 150px;
+    width: 100%;
+    background-color: #fff;
+  }
+}

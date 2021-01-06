@@ -3,23 +3,35 @@
   justify-content: space-between;
   width: 100%;
   position: relative;
-  padding-bottom: 61px;
+  padding-bottom: 60px;
+
+
+  &__categoryContainer {
+    display: flex;
+    align-items: center;
+  }
 
   &--mt {
     margin-left: 15px;
   }
 
+  &__text {
+    font-size: 18px;
+    line-height: 21px;
+    font-family: 'Roboto-bold';
+  }
   &__subMenu {
     position: absolute;
     left: 0;
     bottom: 0;
     display: none;
-    justify-content: space-between;
+    justify-content: flex-start;
+    align-items: center;
     list-style-type: none;
     background-color: #616C7A;
     width: 100%;
     z-index: 1;
-    padding: 20px 85px;
+    padding: 20px 0px 20px 85px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
@@ -27,28 +39,51 @@
   &__subMenuItem {
     font-size: 22px;
     font-family: 'Roboto-regular';
+
+    &--squareMargin {
+      margin-right: 36px;
+    }
+
+    &--priceMargin {
+      margin-right: 25px;
+    }
+
+    &--roomsMargin {
+      margin-right: 5px;
+    }
+
+    &--floarMargin {
+      margin-right: 5px;
+    }
+    
+    &--subcategoryMargin {
+      margin-right: 5px;
+    }
+
+    &--categoryMargin {
+      margin-right: 10px;
+    }
+
+    &--photoMargin {
+      margin-right: 20px;
+    }
+
+    &--titleMargin {
+      margin-right: 135px;
+    }
+
+    &--cityMargin {
+      margin-right: 5px;
+    }
   }
 
   &__item {
     list-style-type: none;
-    font-size: 18px;
-    line-height: 21px;
-    padding: 10px 10px 10px 43px;
+    display: flex;
+    align-items: center;
+    padding: 0 5px;
     color: #000;
     cursor: pointer;
-    font-family: 'Roboto-bold';
-    
-    // &::before{
-    //   position: absolute;
-    //   display: inline-block;
-    //   content: "";
-    //   left: 0;
-    //   top: 25%;
-    //   transform: translateY(-50%);
-    //   -webkit-mask-size: cover;
-    //   mask-size: cover;
-    //   background-color: #616C7A;
-    // }
 
     &--saleBuy::before {
       width: 43px;
