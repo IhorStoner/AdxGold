@@ -44,7 +44,7 @@ adsRouter.get('/', async (req,res) => {
   }
 
   const page = req.query.page - 1;
-  const result = _.chunk(sortedArr, 10) // сортируем в массивы по 10 элементов и отдаем взависимости от страницы
+  const result = _.chunk(sortedArr, 25) // сортируем в массивы по 25 элементов и отдаем взависимости от страницы
   res.json([result[page],result.length]) // отдаю результат первым агрументом, вторым кол-во страниц
 })
 
@@ -61,13 +61,16 @@ const sortedFunc = (ad1, ad2) => {
 // get shares adverts
 adsRouter.get('/sharesAdverts', async (req,res) => {
   const ads = await AdModel.find({services: 'shares'})
-  res.json(ads)
+  const result = _.shuffle(ads).slice(0,4);
+  res.json(result)
 })
 
 // get sales adverts
 adsRouter.get('/salesAdverts', async (req,res) => {
   const ads = await AdModel.find({services: 'sales'})
-  res.json(ads)
+  const result = _.shuffle(ads).slice(0,4);
+  
+  res.json(result)
 })
 
 adsRouter.get('/recommendedAdverts', async (req,res) => {

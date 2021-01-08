@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { Button, Header } from 'semantic-ui-react'
 import config from '../../config/default.json'
-import logo from '../../assets/png/logo.png'
+import camera from '../../assets/svg/camera.svg'
 import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import 'reactjs-popup/dist/index.css';
@@ -10,22 +10,33 @@ import { NavLink } from 'react-router-dom'
 import RecomendedAds from '../RecommendedAds/RecommendedAds'
 import HotsAds from '../HotsAds/HotsAds'
 import RunAd from '../RunAd/RunAd'
+import axios from 'axios'
+import { useSelector } from 'react-redux';
+import { getUser } from '../../redux/selectors/userSelector';
 
 export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds }) {
 	const [isOpenInfo, setIsOpenInfo] = useState('')
 	const [imgId, setImgId] = useState('')
+	const user = useSelector(getUser)
+
+	const handleVisitedAd = async (adId) => {
+		localStorage.setItem('visitedAd',[adId])
+		if(user._id || !user.visitedAds.includes(adId)) {
+			await axios.put(`${config.serverUrl}/api/users/visitedAd/${user._id}`,[adId])
+		}
+	}
 
 	return (
 		<ul className='adsList'>
 			{advertArr.map((ad, i) => (
 				<div key={i}>
 					{i === 3 && <RunAd runAds={runAds} />}
-					<li className={`adsList__item ${ad.status}`} onClick={ad._id === isOpenInfo ? () => setIsOpenInfo('') : () => setIsOpenInfo(ad._id)}>
+					<li style={user.visitedAds && user.visitedAds.includes(ad._id) ? {backgroundColor: '#FFC8C8'} : null} className={`adsList__item ${ad.status}`} onClick={ad._id === isOpenInfo ? () => setIsOpenInfo('') : () => setIsOpenInfo(ad._id)}>
 						<table >
 							<tr className='adsList__table'>
 								<td width='300px' className='adsList__tableItem adsList__tableItem--titleMargin'><span className='adsList__tableText'>{ad.title}</span></td>
 								<td width='175px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.city}</span></td>
-								<td width='50px' className='adsList__tableItem adsList__tableItem--imgMargin'><span className='adsList__tableImg'><img src={!ad.img[0] ? logo : `${config.serverUrl}/api/images/${ad.img[0]}`} width='50' height='50' /></span></td>
+								<td width='50px' className='adsList__tableItem adsList__tableItem--imgMargin'><span className='adsList__tableImg'><img src={camera} width='50' height='50' /></span></td> {/*!ad.img[0] ? camera : `${config.serverUrl}/api/images/${ad.img[0] */}
 								<td width='160px' className='adsList__tableItem adsList__tableItem--wordWrap'><span className='adsList__tableText'>{ad.section}</span></td>
 								<td width='107px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.type}</span></td>
 								<td width='40px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.floor ? ad.floor : '0'}</span></td>
@@ -35,7 +46,7 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 								<td width='106px' className='adsList__tableItem'><span className='adsList__tableDate' className='adsList__tableText'>{ad.date}</span></td>
 								<td width='155px' >
 									<div className="adsList__tableBtns">
-										<NavLink to={`/detailsAd/${ad._id}`}><button data-tooltip='открыть в новом окне' className='adsList__openAd'></button></NavLink>
+										<NavLink to={`/detailsAd/${ad._id}`} onClick={() => handleVisitedAd(ad._id)}><button data-tooltip='открыть в новом окне' className='adsList__openAd'></button></NavLink>
 										<button className="adsList__btnFavorite"></button>
 										<button className="adsList__btnDetails">подробнее</button>
 									</div>

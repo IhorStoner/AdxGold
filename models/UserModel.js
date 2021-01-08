@@ -31,6 +31,9 @@ const UserSchema = new Schema({
   },
   ads: {
     type: Array
+  },
+  visitedAds: {
+    type: Array
   }
 });
 

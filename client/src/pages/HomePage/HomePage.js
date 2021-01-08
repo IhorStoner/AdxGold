@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import './HomePage.scss'
 import HeaderNav from '../../components/Header/Header'
-import { Button, Pagination, Header, Dropdown } from 'semantic-ui-react'
+import { Button, Header, Dropdown } from 'semantic-ui-react'
 import { NavLink } from 'react-router-dom'
 import { useAuth } from '../../hooks/useAuth'
 import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds, getPages } from '../../redux/selectors/adsSelector';
@@ -13,10 +13,15 @@ import SalesAds from '../../components/SalesAds/SalesAds'
 import BtnsAccount from '../../components/BtnsAccount/BtnsAccount'
 import BoardAdsBar from '../../components/BoardAdsBar/BoardAdsBar'
 import { getCity } from '../../redux/selectors/filterSelector'
+import Pagination from '../../components/Pagination/Pagination'
+import Footer from '../../components/Footer/Footer'
+import { fetchUser } from '../../redux/actions/userAction'
+import { getUser } from '../../redux/selectors/userSelector'
 
 export default function HomePage() {
   const { token, userId } = useAuth()
   const isAuth = !!token;
+  const user = useSelector(getUser)
   const ads = useSelector(getAds);
   const pages = useSelector(getPages)
   const sharesAds = useSelector(getSharesAds)
@@ -42,8 +47,15 @@ export default function HomePage() {
   ]
 
   useEffect(async () => {
+    console.log(page)
     dispatch(fetchAds({ page: page, city: selectedCity, price: selectedFilteredPrice, date: selectedFilteredDate }))
   }, [page, selectedCity, selectedFilteredPrice, selectedFilteredDate])
+
+  useEffect( () => {
+    if(isAuth) {
+      dispatch(fetchUser())
+    }
+  }, [isAuth])
 
   useEffect(() => {
     dispatch(fetchSharesAds())
@@ -70,11 +82,12 @@ export default function HomePage() {
             {/* <div className='filter'>
               <Header as='h3'>Фильтр</Header>
               <Dropdown placeholder='Город' clearable search selection options={cityDataArr} onChange={(e) => setSelectedCity(e.target.innerText)} />
-              <Dropdown placeholder='Цена' search selection options={optionFilterPrice} onChange={(e) => setSelectedFilteredPrice(e.target.innerText)} />
+              <Dropdown placeholder='Цена' search selection options={optionFilterPrice} onChange={(e) => setSelectedFilteredPrice(e.target.innerText)} />  // filters
               <Dropdown placeholder='По дате' search selection options={optionFilterDate} onChange={(e) => setSelectedFilteredDate(e.target.innerText)} />
             </div> */}
-            {ads && <AdvertList advertArr={ads} recommendedAds={recommendedAds} hotsAds={hotsAds} runAds={runAds} />}
-            <Pagination
+            {ads && <AdvertList advertArr={ads} recommendedAds={recommendedAds} hotsAds={hotsAds} runAds={runAds} visitedAds={user.visitedAds}/>}
+            <Pagination totalPages={pages} onPageChange={(e) => setPage(e.target.innerText)}/>  {/*totalPAges = pages*/}
+            {/* <Pagination
               boundaryRange={0}
               defaultActivePage={1}
               ellipsisItem={null}
@@ -83,14 +96,14 @@ export default function HomePage() {
               siblingRange={1}
               totalPages={pages}
               onPageChange={(event) => setPage(event.target.getAttribute('value'))}
-            />
+            /> */}
             <div className="mainContent__discounts">
-              <Header as='h2'>Скидки</Header>
               <SalesAds salesArr={salesAds} />
             </div>
           </div>
         </div>
       </div>
+      <Footer/>
     </div>
   )
 }

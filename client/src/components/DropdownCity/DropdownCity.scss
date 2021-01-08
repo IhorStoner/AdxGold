@@ -5,6 +5,25 @@
   color: #F78536;
   font-size: 20px;
   position: relative;
+  border-radius: 5px;
+  outline: none;
+
+  &__arrow {
+    position: absolute;
+    right: 5px;
+    top: 13px;
+    width: 10px;
+    height: 10px;
+    display: block;
+    background-image: url('../../assets/svg/arrow.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+  }
 
   &__btnReset {
     position: absolute;

@@ -57,7 +57,7 @@ export default function BoardAdsBar() {
         </div>
         <ul className="boardAdsBar__subMenu">
           <li className="boardAdsBar__subMenuItem">Заголовок</li>
-          <li className="boardAdsBar__subMenuItem">Город</li>
+          <li className="boardAdsBar__subMenuItem"><DropdownCity/></li>
           <li className="boardAdsBar__subMenuItem">Фото</li>
           <li className="boardAdsBar__subMenuItem">Категория</li>
           <li className="boardAdsBar__subMenuItem">Год выпуска</li>

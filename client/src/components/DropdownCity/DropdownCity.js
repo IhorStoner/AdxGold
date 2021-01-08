@@ -33,7 +33,8 @@ export default function DropdownCity() {
 
   return (
     <div className='dropdown' tabIndex="0" onBlur={() => setIsOpen(false)}>
-      <button onClick={() => handleBtnClose()} className='dropdown__btnReset'></button>
+      {selectedItem && <button onClick={() => handleBtnClose()} className='dropdown__btnReset'></button>}
+      {!selectedItem && <span className='dropdown__arrow'></span>}
       <div className="dropdown__selected" onClick={() => setIsOpen(isOpen ? false : true)}>
         <div className="dropdown__text">
           {selectedItem ? selectedItem : 'Город'}

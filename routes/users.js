@@ -18,7 +18,6 @@ usersRouter.post('/', userValidator, async(req,res) => {
 })
 
 
-
 // getUserById
 usersRouter.get('/:userId', async (req,res) => {
   const selectedUser = await UserModel.findById(req.params.userId);
@@ -41,6 +40,14 @@ usersRouter.put('/:userId',userValidator, async (req,res) => {
 usersRouter.put('/newAd/:userId', async(req,res) => {
   const updateUser = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {ads: req.body}})
   res.status(200).send(updateUser)
+})
+
+//add visited ad
+usersRouter.put('/visitedAd/:userId', async(req,res) => {
+  const updateUser = await UserModel.findById(req.params.userId)
+  const ads = [...updateUser.visitedAds,req.body[0]]
+  const result = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {visitedAds: ads}})
+  res.status(200).send(result)
 })
 
 //deleteUserById
