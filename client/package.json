@@ -26,6 +26,7 @@
     "react-scripts": "4.0.1",
     "react-slick": "^0.27.13",
     "react-slideshow-image": "^3.4.3",
+    "react-svg-color": "^2.3.0",
     "reactjs-popup": "^2.0.4",
     "redux": "^4.0.5",
     "redux-form": "^8.3.7",

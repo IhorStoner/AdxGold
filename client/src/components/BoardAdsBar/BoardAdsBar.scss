@@ -5,10 +5,18 @@
   position: relative;
   padding-bottom: 60px;
 
+  &__icon {
+    display: block;
+
+    &--active>g>rect {
+      fill: #fff;
+    }
+  }
 
   &__categoryContainer {
     display: flex;
     align-items: center;
+    justify-content: space-between;
   }
 
   &--mt {
@@ -16,9 +24,9 @@
   }
 
   &__text {
-    font-size: 18px;
+    font-size: 1rem;
     line-height: 21px;
-    font-family: 'Roboto-bold';
+    font-family: "Roboto-bold";
   }
   &__subMenu {
     position: absolute;
@@ -28,17 +36,32 @@
     justify-content: flex-start;
     align-items: center;
     list-style-type: none;
-    background-color: #616C7A;
+    background-color: #616c7a;
     width: 100%;
     z-index: 1;
-    padding: 20px 0px 20px 85px;
+    padding: 20px 0px 20px 70px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
   }
 
   &__subMenuItem {
-    font-size: 22px;
-    font-family: 'Roboto-regular';
+    font-size: 1rem;
+    font-family: "Roboto-regular";
+
+    &--brand {
+      margin-right: 10px;
+    }
+    &--model {
+      margin-right: 15px;
+    }
+
+    &--autoCategory {
+      margin-right: 45px;
+    }
+
+    &--yearOfIssue {
+      margin-right: 25px;
+    }
 
     &--squareMargin {
       margin-right: 36px;
@@ -55,7 +78,7 @@
     &--floarMargin {
       margin-right: 5px;
     }
-    
+
     &--subcategoryMargin {
       margin-right: 5px;
     }
@@ -69,7 +92,7 @@
     }
 
     &--titleMargin {
-      margin-right: 135px;
+      margin-right: 20px;
     }
 
     &--cityMargin {
@@ -88,21 +111,21 @@
     &--saleBuy::before {
       width: 43px;
       height: 43px;
-      -webkit-mask: url('../../assets/svg/armsIcon.svg') no-repeat 50% 50%;
-      mask: url('../../assets/svg/armsIcon.svg') no-repeat 50% 50%;
+      -webkit-mask: url("../../assets/svg/armsIcon.svg") no-repeat 50% 50%;
+      mask: url("../../assets/svg/armsIcon.svg") no-repeat 50% 50%;
     }
 
     &--active {
       color: #fff;
-      background-color: #616C7A;
+      background-color: #616c7a;
       border-top-left-radius: 5px;
       border-top-right-radius: 5px;
-      
+
       &::before {
         background-color: #fff;
       }
 
-      &>ul {
+      & > ul {
         display: flex;
       }
     }

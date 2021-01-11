@@ -9,7 +9,7 @@ export default function DetailsAdPage() {
   const [ ad, setAd ] = useState([])
 
   useEffect(async () => {
-    await axios.get(`${config.serverUrl}/api/ads/${adId}`).then(res => setAd(res.data))
+    await axios.get(`${config.serverUrl}/api/offer/${adId}`).then(res => setAd(res.data))
     
   }, [adId])
 

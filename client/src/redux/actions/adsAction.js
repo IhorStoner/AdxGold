@@ -1,4 +1,4 @@
-import { createAsyncThunk,createAction  } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios'
 import config from '../../config/default.json'
 
@@ -16,37 +16,37 @@ export const fetchAds = createAsyncThunk('ads/fetchAds', async ({page,city,price
     selectedFilterDate = 'high'
   }
 
-  const data = axios.get(`${config.serverUrl}/api/ads?page=${page}&city=${city}&price=${selectedFilterPrice}&date=${selectedFilterDate}`).then(
+  const data = axios.get(`${config.serverUrl}/api/offer?page=${page}&city=${city}&price=${selectedFilterPrice}&date=${selectedFilterDate}`).then(
     res => res.data)
   return data;
 });
 
-export const fetchSharesAds = createAsyncThunk('ads/fetchSharesAds', async () => {
-  const data = axios.get(`${config.serverUrl}/api/ads/sharesAdverts`).then(
+export const fetchSharesAds = createAsyncThunk('offer/fetchSharesAds', async () => {
+  const data = axios.get(`${config.serverUrl}/api/offer/sharesAdverts`).then(
     res => res.data)
   return data;
 });
 
-export const fetchSalesAds = createAsyncThunk('ads/fetchSalesAds', async () => {
-  const data = axios.get(`${config.serverUrl}/api/ads/salesAdverts`).then(
+export const fetchSalesAds = createAsyncThunk('offer/fetchSalesAds', async () => {
+  const data = axios.get(`${config.serverUrl}/api/offer/salesAdverts`).then(
     res => res.data)
   return data;
 });
 
-export const fetchRecommendedAds = createAsyncThunk('ads/fetchRecommendedAds', async () => {
-  const data = axios.get(`${config.serverUrl}/api/ads/recommendedAdverts`).then(
+export const fetchRecommendedAds = createAsyncThunk('offer/fetchRecommendedAds', async () => {
+  const data = axios.get(`${config.serverUrl}/api/offer/recommendedAdverts`).then(
     res => res.data)
   return data;
 });
 
-export const fetchHotsAds = createAsyncThunk('ads/fetchHotsAds', async () => {
-  const data = axios.get(`${config.serverUrl}/api/ads/hotsAdverts`).then(
+export const fetchHotsAds = createAsyncThunk('offer/fetchHotsAds', async () => {
+  const data = axios.get(`${config.serverUrl}/api/offer/hotsAdverts`).then(
     res => res.data)
   return data;
 });
 
-export const fetchRunAds = createAsyncThunk('ads/fetchRunAds', async () => {
-  const data = axios.get(`${config.serverUrl}/api/ads/runAdverts`).then(
+export const fetchRunAds = createAsyncThunk('offer/fetchRunAds', async () => {
+  const data = axios.get(`${config.serverUrl}/api/offer/runAdverts`).then(
     res => res.data)
   return data;
 });

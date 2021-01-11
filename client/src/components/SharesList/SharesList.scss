@@ -12,7 +12,7 @@
   &__link {
     color: #817F7F;
     font-family: 'PTSans-bold';
-    font-size: 14px;
+    font-size: 0.8rem;
     text-transform: uppercase;
     text-align: center;
     border-bottom: 2px solid #817F7F;
@@ -20,7 +20,7 @@
 
   &__title {
     color: #fff;
-    font-size: 20px;
+    font-size: 1rem;
     font-family: 'Roboto-regular';
     text-align: center;
     line-height: 23,4px;
@@ -33,7 +33,7 @@
   }
 
   &__itemDescription {
-    font-size: 14px;
+    font-size: 0.8rem;
     color: #000;
     font-family: 'Roboto-normal';
     width: 100%;
@@ -43,6 +43,7 @@
     color: #F5752C;
     text-align: center;
     margin-bottom: 5px;
+    font-size: 1rem;
   }
 
   &--mr {

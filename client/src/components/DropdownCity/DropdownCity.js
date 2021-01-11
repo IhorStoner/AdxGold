@@ -47,8 +47,6 @@ export default function DropdownCity() {
           </div>
         ))}
       </div>
-
-      {/* <Dropdown  placeholder='Город' clearable search selection options={cityDataArr} onChange={(e) => setSelectedCity(e.target.innerText)} /> */}
     </div>
   )
 }

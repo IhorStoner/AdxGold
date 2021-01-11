@@ -39,7 +39,7 @@ export default function Liqpay({price = 0 }) {
         style={{ margin: "8px" }}
         disabled={false}
       />
-      {/* <LiqPaySubscribe
+      <LiqPaySubscribe
         publicKey={process.env.REACT_APP_PUBLIC_KEY}
         privateKey={process.env.REACT_APP_PRIVATE_KEY}
         amount={price}
@@ -63,7 +63,7 @@ export default function Liqpay({price = 0 }) {
         product_description="Online courses"
         style={{ margin: "8px" }}
         extra={[<ButtonComponent key="1" />]}
-      /> */}
+      />
     </div>
   )
 }

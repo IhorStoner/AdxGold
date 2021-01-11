@@ -7,7 +7,6 @@ const apiRouter = require('./routes');
 const config = require('config');
 const mongoose = require('mongoose');
 
-
 const app = express();
 
 app.use(cors());

@@ -9,7 +9,7 @@ const apiRouter = Router();
 apiRouter.use('/users', users);
 apiRouter.use('/auth', authRouter);
 apiRouter.use('/registration', registrationRouter)
-apiRouter.use('/ads', adsRouter)
+apiRouter.use('/offer', adsRouter)
 apiRouter.use('/images', imageRouter)
 
 module.exports = apiRouter;

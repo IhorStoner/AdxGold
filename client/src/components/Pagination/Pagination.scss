@@ -1,5 +1,5 @@
 .pagination {
-
+  max-width: 100%;
   text-align: center;
   margin-top: 50px;
 
@@ -20,6 +20,9 @@
     font-style: normal;
     padding: 2px 9px;
     cursor: pointer;
+    border: none;
+    background-color: transparent;
+    outline: none;
 
     &--active {
       border: 1px solid #000;

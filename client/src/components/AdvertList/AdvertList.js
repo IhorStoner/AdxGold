@@ -11,19 +11,33 @@ import RecomendedAds from '../RecommendedAds/RecommendedAds'
 import HotsAds from '../HotsAds/HotsAds'
 import RunAd from '../RunAd/RunAd'
 import axios from 'axios'
-import { useSelector } from 'react-redux';
-import { getUser } from '../../redux/selectors/userSelector';
+import { useDispatch, useSelector } from 'react-redux';
+import { getFavorites, getUser } from '../../redux/selectors/userSelector';
+import { fetchUser } from '../../redux/actions/userAction'
+
 
 export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds }) {
 	const [isOpenInfo, setIsOpenInfo] = useState('')
 	const [imgId, setImgId] = useState('')
+	const [ visitedAds, setVisitedAds ] = useState(() => !localStorage.getItem('visitedAd') ? localStorage.setItem('visitedAd', JSON.stringify([])) : localStorage.getItem('visitedAd'))
+	const favorites = useSelector(getFavorites)
 	const user = useSelector(getUser)
+	const dispatch = useDispatch();
 
-	const handleVisitedAd = async (adId) => {
-		localStorage.setItem('visitedAd',[adId])
-		if(user._id || !user.visitedAds.includes(adId)) {
-			await axios.put(`${config.serverUrl}/api/users/visitedAd/${user._id}`,[adId])
+	const handleVisitedAd = async (e,adId) => {
+		e.stopPropagation()
+		const ads = JSON.parse(localStorage.getItem('visitedAd'))
+
+		if(!ads) {
+			localStorage.setItem('visitedAd',JSON.stringify([adId]))
+		} else {
+			localStorage.setItem('visitedAd',JSON.stringify([...ads, adId]))
 		}
+	}
+
+	const handleFavoritesAd = async (e,adId) => {
+		e.stopPropagation()
+		await axios.put(`${config.serverUrl}/api/users/favoritesAd/${user._id}`,[adId]).then(res => dispatch(fetchUser()))
 	}
 
 	return (
@@ -31,23 +45,23 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 			{advertArr.map((ad, i) => (
 				<div key={i}>
 					{i === 3 && <RunAd runAds={runAds} />}
-					<li style={user.visitedAds && user.visitedAds.includes(ad._id) ? {backgroundColor: '#FFC8C8'} : null} className={`adsList__item ${ad.status}`} onClick={ad._id === isOpenInfo ? () => setIsOpenInfo('') : () => setIsOpenInfo(ad._id)}>
-						<table >
-							<tr className='adsList__table'>
-								<td width='300px' className='adsList__tableItem adsList__tableItem--titleMargin'><span className='adsList__tableText'>{ad.title}</span></td>
-								<td width='175px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.city}</span></td>
-								<td width='50px' className='adsList__tableItem adsList__tableItem--imgMargin'><span className='adsList__tableImg'><img src={camera} width='50' height='50' /></span></td> {/*!ad.img[0] ? camera : `${config.serverUrl}/api/images/${ad.img[0] */}
-								<td width='160px' className='adsList__tableItem adsList__tableItem--wordWrap'><span className='adsList__tableText'>{ad.section}</span></td>
-								<td width='107px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.type}</span></td>
-								<td width='40px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.floor ? ad.floor : '0'}</span></td>
-								<td width='72px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.rooms ? ad.rooms : '1 комн.'}</span></td>
-								<td width='100px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.productPrice}руб. </span></td>
-								<td width='85px' className='adsList__tableItem'><span className='adsList__tableText'>{ad.square ? ad.square : '30 кв.м.'}</span></td>
-								<td width='106px' className='adsList__tableItem'><span className='adsList__tableDate' className='adsList__tableText'>{ad.date}</span></td>
-								<td width='155px' >
+					<li style={visitedAds && visitedAds.includes(ad._id) ? {backgroundColor: '#FFC8C8'} : null} className={`adsList__item ${ad.status}`} onClick={ad._id === isOpenInfo ? () => setIsOpenInfo('') : () => setIsOpenInfo(ad._id)}>
+						<table className='adsList__table'>
+							<tr className='adsList__row'>
+								<td  className='adsList__tableItem adsList__itemTitle adsList__tableItem--titleMargin'><span className='adsList__tableText'>{ad.title}</span></td>
+								<td  className='adsList__tableItem adsList__itemCity'><span className='adsList__tableText'>{ad.city}</span></td>
+								<td  className='adsList__tableItem adsList__itemImg adsList__tableItem--imgMargin'><span className='adsList__tableImg'>{ad.img[0] && <img src={camera} width='50' height='50' />}</span></td> {/*!ad.img[0] ? camera : `${config.serverUrl}/api/images/${ad.img[0] */}
+								<td  className='adsList__tableItem adsList__itemSection adsList__tableItem--wordWrap'><span className='adsList__tableText'>{ad.section}</span></td>
+								<td  className='adsList__tableItem adsList__itemType'><span className='adsList__tableText'>{ad.type}</span></td>
+								<td  className='adsList__tableItem adsList__itemFloor'><span className='adsList__tableText'>{ad.floor ? ad.floor : '0'}</span></td>
+								<td className='adsList__tableItem adsList__itemRooms'><span className='adsList__tableText'>{ad.rooms ? ad.rooms : '1 комн.'}</span></td>
+								<td  className='adsList__tableItem adsList__itemPrice'><span className='adsList__tableText'>{ad.productPrice}руб. </span></td>
+								<td className='adsList__tableItem adsList__itemSquare'><span className='adsList__tableText'>{ad.square ? ad.square : '30 кв.м.'}</span></td>
+								<td  className='adsList__tableItem adsList__itemDate'><span className='adsList__tableDate' className='adsList__tableText'>{ad.date}</span></td>
+								<td  >
 									<div className="adsList__tableBtns">
-										<NavLink to={`/detailsAd/${ad._id}`} onClick={() => handleVisitedAd(ad._id)}><button data-tooltip='открыть в новом окне' className='adsList__openAd'></button></NavLink>
-										<button className="adsList__btnFavorite"></button>
+										<NavLink to={`/detailsAd/${ad._id}`} onClick={(e) => handleVisitedAd(e,ad._id)}><button data-tooltip='открыть в новом окне' className='adsList__openAd'></button></NavLink>
+										<button className={favorites && favorites.includes(ad._id) ? 'adsList__btnFavorite adsList__btnFavorite--active' : 'adsList__btnFavorite'} onClick={(e) => handleFavoritesAd(e,ad._id)}></button>
 										<button className="adsList__btnDetails">подробнее</button>
 									</div>
 								</td>

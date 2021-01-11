@@ -6,7 +6,6 @@ import { Button } from 'semantic-ui-react'
 
 export default function AdvertItem({ ad }) {
   const [imgId, setImgId] = useState('')
-  console.log(ad)
 
   return (
     <Container>

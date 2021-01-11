@@ -36,8 +36,12 @@
   box-sizing: border-box;
 }
 
+html {
+  font-size: 17px;
+}
+
 .container {
-  max-width: 1720px;
+  max-width: 1400px;  /// has been 1720
   margin: 0 auto;
   padding: 0 5px;
 }

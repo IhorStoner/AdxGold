@@ -1,4 +1,4 @@
-import { createAsyncThunk,createAction  } from "@reduxjs/toolkit";
+import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios'
 import config from '../../config/default.json'
 

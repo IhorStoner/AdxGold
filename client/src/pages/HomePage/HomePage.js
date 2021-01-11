@@ -34,6 +34,15 @@ export default function HomePage() {
   const [selectedFilteredPrice, setSelectedFilteredPrice] = useState(null);
   const [selectedFilteredDate, setSelectedFilteredDate] = useState(null)
   const [page, setPage] = useState(1)
+  const [paginations, setPaginations] = useState([
+    { totalPages: pages, currentPage: 1 }
+  ]);
+
+  const updatePaginations = (index, currentPage) => {
+    setPaginations(paginations.map((n, i) => i === index ? { ...n, currentPage } : n));
+    console.log(pages)
+    setPage(currentPage)
+  }
 
   const optionFilterPrice = [
     { key: 1, text: 'По возрастанию', value: 'high' },
@@ -47,12 +56,11 @@ export default function HomePage() {
   ]
 
   useEffect(async () => {
-    console.log(page)
     dispatch(fetchAds({ page: page, city: selectedCity, price: selectedFilteredPrice, date: selectedFilteredDate }))
   }, [page, selectedCity, selectedFilteredPrice, selectedFilteredDate])
 
-  useEffect( () => {
-    if(isAuth) {
+  useEffect(() => {
+    if (isAuth) {
       dispatch(fetchUser())
     }
   }, [isAuth])
@@ -85,25 +93,21 @@ export default function HomePage() {
               <Dropdown placeholder='Цена' search selection options={optionFilterPrice} onChange={(e) => setSelectedFilteredPrice(e.target.innerText)} />  // filters
               <Dropdown placeholder='По дате' search selection options={optionFilterDate} onChange={(e) => setSelectedFilteredDate(e.target.innerText)} />
             </div> */}
-            {ads && <AdvertList advertArr={ads} recommendedAds={recommendedAds} hotsAds={hotsAds} runAds={runAds} visitedAds={user.visitedAds}/>}
-            <Pagination totalPages={pages} onPageChange={(e) => setPage(e.target.innerText)}/>  {/*totalPAges = pages*/}
-            {/* <Pagination
-              boundaryRange={0}
-              defaultActivePage={1}
-              ellipsisItem={null}
-              firstItem={null}
-              lastItem={null}
-              siblingRange={1}
-              totalPages={pages}
-              onPageChange={(event) => setPage(event.target.getAttribute('value'))}
-            /> */}
+            {ads && <AdvertList advertArr={ads} recommendedAds={recommendedAds} hotsAds={hotsAds} runAds={runAds} visitedAds={user.visitedAds} />}
+            {paginations.map((n, i) => (
+              <Pagination
+                {...n}
+                totalPages={pages}
+                onChange={page => updatePaginations(i, page)}
+              />
+            ))}
             <div className="mainContent__discounts">
               <SalesAds salesArr={salesAds} />
             </div>
           </div>
         </div>
       </div>
-      <Footer/>
+      <Footer />
     </div>
   )
 }

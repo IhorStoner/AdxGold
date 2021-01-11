@@ -4,7 +4,7 @@ const userValidator = require('../middlewares/userValidator');
 const UserModel = require('../models/UserModel')
 const usersRouter = Router();
 
-//get all studets
+//get all
 usersRouter.get('/', async (req,res) => {
   const users = await UserModel.find({});
   res.json(users)
@@ -42,12 +42,20 @@ usersRouter.put('/newAd/:userId', async(req,res) => {
   res.status(200).send(updateUser)
 })
 
-//add visited ad
-usersRouter.put('/visitedAd/:userId', async(req,res) => {
+//add favorites ad
+usersRouter.put('/favoritesAd/:userId', async(req,res) => {
   const updateUser = await UserModel.findById(req.params.userId)
-  const ads = [...updateUser.visitedAds,req.body[0]]
-  const result = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {visitedAds: ads}})
-  res.status(200).send(result)
+  let result;
+  let ads;
+  if(updateUser.favorites.includes(req.body[0])) {
+    ads = updateUser.favorites.filter(ad => ad !== req.body[0])
+    result = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {favorites: ads}})
+  } else {
+    ads = [...updateUser.favorites, req.body[0]]
+    result = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {favorites: ads}})
+  }
+  
+  res.status(200).send(ads)
 })
 
 //deleteUserById

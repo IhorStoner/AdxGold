@@ -1,5 +1,34 @@
 .adsList {
-  width: 100%;
+  max-width: 100%;
+
+  &__itemTitle {
+    width: 220px;
+  }
+  &__itemCity{
+    width: 90px;
+  }
+  &__itemImg {
+    width: 50px;
+  }
+  &__itemSection {
+    width: 120px;
+  }
+  &__itemType{
+    width: 80px;
+  }
+  &__itemFloor {
+    width: 20px;
+  }
+  &__itemRooms {
+    width: 60px;
+  }
+  &__itemPrice {
+    width: 100px;
+  }
+  &__itemSquare {
+    width: 100px;
+  }
+
 
   &__tableItem {
     height: 54px;
@@ -25,9 +54,8 @@
 
   &__tableText {
     overflow: hidden;
-    font-size: 18px;
+    font-size: 0.8rem;
     max-height: 54px;
-    padding-bottom: 3px;
   }
 
   &__tableImg {
@@ -36,10 +64,18 @@
 
   }
 
-  &__table {
+  &__row {
+    width: 100%;
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-start;
     align-items: center;
+  }
+
+  &__table {
+    display: table;
+    table-layout: fixed;
+    // justify-content: space-between;
+    // align-items: center;
     width: 100%;
     padding-left: 10px;
   }
@@ -59,7 +95,7 @@
     color: #000;
     background-color: transparent;
     border-radius: 5px;
-    font-size: 14px;
+    font-size: 0.8rem;
     cursor: pointer;
   }
 
@@ -74,13 +110,23 @@
     border: none;
     cursor: pointer;
     outline: none;
+    position: relative;
+    z-index: 100;
+
+    &:hover {
+      background-image: url('../../assets/svg/faviritesActive.svg');
+    }
+
+    &--active {
+      background-image: url('../../assets/svg/faviritesActive.svg');
+    }
   }
 
   &__openAd {
     display: block;
     width: 27px;
     height: 27px;
-    background-image: url("../../assets/svg/openAd.svg");
+    background-image: url("../../assets/svg/openOffer.svg");
     background-position: center;
     background-size: contain;
     background-repeat: no-repeat;
@@ -139,10 +185,12 @@
     margin-bottom: 5px;
     border: 2px solid white;
     cursor: pointer;
-    font-size: 22px;
+    font-size: 1rem;
     font-family: "PTSans-normal";
     height: 59px;
-
+    position: relative;
+    z-index: 0;
+    width: 100%;
 
     &:hover {
       opacity: 0.8;

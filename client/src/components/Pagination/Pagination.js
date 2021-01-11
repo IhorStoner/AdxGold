@@ -1,65 +1,44 @@
 import React, { useState, useEffect } from 'react'
 import './Pagination.scss'
 
-export default function Pagination({ totalPages, onPageChange }) {
-  const [pages, setPages] = useState([])
-  const [selectedPage, setSelectedPage] = useState(1)
+export default function Pagination({
+  totalPages,
+  currentPage,
+  separator = '...',
+  onChange,
+}) {
 
-  useEffect(() => {
-    getNumbersPages(totalPages)
-  }, [totalPages])
+  const showAfterFirst = currentPage < 5;
+  const showBeforeLast = currentPage > totalPages - 4;
 
-  const getNumbersPages = totalPages => {
-    let pagesNumber = [];
-    for (let i = 0; i < totalPages; i++) {
-      pagesNumber.push(i + 1);
-    }
-    setPages(pagesNumber)
-  };
+  const buttons = (num, base) => [...Array(num)].map((n, i) => base + i);
+  const buttonsToRender = totalPages > 8
+    ? [
+      1,
+      showAfterFirst && buttons(4, 2),
+      !showAfterFirst && separator,
+      !(showAfterFirst || showBeforeLast) && buttons(3, currentPage - 1),
+      !showBeforeLast && separator,
+      showBeforeLast && buttons(4, totalPages - 4),
+      totalPages,
+    ].flat().filter(Boolean)
+    : buttons(totalPages, 1);
 
-  const handlePageChangeLeft = (e) => {
-    onPageChange(e)
-    if (selectedPage <= 1) {
-      return
-    } else {
-      setSelectedPage(selectedPage - 1)
-    }
-  }
-
-  const handlePageChangeRight = (e) => {
-    onPageChange(e)
-    if (selectedPage >= pages.length) {
-      return
-    } else {
-      setSelectedPage(selectedPage + 1)
-    }
-  }
-
-  const handlePageChange = (e, page) => {
-    onPageChange(e)
-    setSelectedPage(Number(page))
-  }
+  const onClick = ({ target: t }) => t.tagName === 'BUTTON' && onChange(+t.dataset.page);
 
   return (
-    <div className='pagination'>
+    <div className="pagination" onClick={onClick}>
       <div className="pagination__content">
-        <button className="pagination__btn pagination__btn--left" data-page={selectedPage} onClick={(e) => handlePageChangeLeft(e)}>{selectedPage === 1 ? selectedPage : selectedPage - 1}</button>
+        <button className='pagination__btn pagination__btn--left' data-page={currentPage - 1} disabled={currentPage === 1}></button>
         <div className="pagination__numbers">
-          {pages.map((page, i) => ( // [25].slice(selectedPage - 1,selectedPage+10).push(pages[pages.length])  как вариант добавить в конец последний елемент массива if(selectedPage > 5 unsift()) , if(selectedPage < 10) pop()
-            <div>                    
-              {
-                i < selectedPage + 11 || i === totalPages ?
-                <div key={page} data-page={selectedPage} className={selectedPage === page ? 'pagination__page pagination__page--active' : 'pagination__page'} onClick={(e) => handlePageChange(e, page)}>
-                  {page === selectedPage + 10 ? '...' : page}
-                </div>
-                : null
-              }
-            </div>
-          ))}
+          {buttonsToRender.map(n => n === separator
+            ? <div>{separator}</div>
+            : <button data-page={n} className={n === currentPage ? 'pagination__page pagination__page--active' : 'pagination__page'}>{n}</button>
+          )}
         </div>
-        <button className="pagination__btn pagination__btn--right" data-page={selectedPage} onClick={(e) => handlePageChangeRight(e)}>{selectedPage === totalPages ? selectedPage : selectedPage + 1}</button>
+        <button className='pagination__btn pagination__btn--right' data-page={currentPage + 1} disabled={currentPage === totalPages}></button>
       </div>
 
     </div>
-  )
+  );
 }

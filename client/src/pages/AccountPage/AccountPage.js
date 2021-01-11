@@ -26,7 +26,7 @@ export default function AccountPage() {
   // обьявления
   useEffect(()  => {
     if(isAuth) {
-      const result = user.ads && axios.post(`${config.serverUrl}/api/ads/getAdverts`,user.ads).then(res => setAds(res.data))
+      const result = user.ads && axios.post(`${config.serverUrl}/api/offer/getAdverts`,user.ads).then(res => setAds(res.data))
     }
   }, [user])
 

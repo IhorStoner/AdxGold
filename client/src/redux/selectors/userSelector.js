@@ -4,3 +4,8 @@ export const getUser = createSelector(
   state => state.user.data,
   user => user
 );
+
+export const getFavorites = createSelector(
+  getUser,
+  user => user.favorites,
+)

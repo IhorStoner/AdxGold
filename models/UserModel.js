@@ -32,7 +32,7 @@ const UserSchema = new Schema({
   ads: {
     type: Array
   },
-  visitedAds: {
+  favorites: {
     type: Array
   }
 });
