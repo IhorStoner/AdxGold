@@ -9,3 +9,8 @@ export const getFavorites = createSelector(
   getUser,
   user => user.favorites,
 )
+
+export const getFavoritesArr = createSelector(
+  getUser,
+  user => user.favoritesArr,
+)

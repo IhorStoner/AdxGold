@@ -6,8 +6,11 @@ import AuthPage from './pages/AuthPage/AuthPage'
 import RegPage from './pages/RegPage/RegPage'
 import NewAdPage from './pages/NewAdPage/NewAdPage'
 import DetailsAdPage from './pages/DetailsAdPage/DetailsAdPage'
-
+import { useAuth } from './hooks/useAuth'
 export default function Routes() {
+  const { token } = useAuth()
+  const isAuth = !!token;
+
   return (
     <Switch>
       <Route path="/home" exact>
@@ -17,7 +20,9 @@ export default function Routes() {
         <AccountPage />
       </Route>
       <Route path='/newAd'>
-        <NewAdPage/>
+        {
+          isAuth ? <NewAdPage/> : <AccountPage />
+        }
       </Route>
       <Route path='/detailsAd/:adId' component={DetailsAdPage}/>
       <Route path='/auth' component={AuthPage} />

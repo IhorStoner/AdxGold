@@ -6,11 +6,11 @@ const initialState = {
   selectedCity: '',
 };
 
-const userReducer = createReducer(initialState, {
+const cityReducer = createReducer(initialState, {
   [changeSelectedCity.type]: (state,action) => {
     state.selectedCity = action.payload;
   },
 });
 
 
-export default userReducer;
+export default cityReducer;

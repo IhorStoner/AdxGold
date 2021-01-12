@@ -46,7 +46,8 @@ export default function NewAdPage() {
   const [ result, setResult ] = useState({})
   const [ serviceArr, setServiceArr ] = useState([])
   const [ images, setImages ] = useState([])
-  const [ imgId,setImgId ] = useState([])
+  const [ imgNames,setImgNames ] = useState([])
+  const [ formD,setFormD ] = useState({})
   const history = useHistory();
 
   const typeAdConfig = [
@@ -77,7 +78,7 @@ export default function NewAdPage() {
   // подготовка данных формы для отправки
   useEffect(() => {
     setResult({
-      img: imgId.map(img => img._id),
+      img: imgNames,
       section: section,
       subsection: selectedSubsection,
       type: type,
@@ -93,23 +94,75 @@ export default function NewAdPage() {
       status: status,
       services: serviceArr,
     })
-  }, [section,selectedSubsection,type,selectedRegion,city,price,title,description,name,phone,mail,status,serviceArr,productPrice,imgId])
+    console.log(result)
+  }, [section,selectedSubsection,type,selectedRegion,city,price,title,description,name,phone,mail,status,serviceArr,productPrice,imgNames,images])
 
-  const uploadImage = async () => {
-    const imgArr = [...images] /// массив с input type file [file,file]
-    const formData = new FormData()
-    console.log(imgArr)
-    imgArr.map(img => {
-      // const waterImg = watermark.addTextWatermark(img).then(data => data) /// нужно как-то узнать путь к фото
-      formData.append('image', img)
-    })
+  // const uploadImage = async () => {
+  //   const imgArr = [...images] /// массив с input type file [file,file]
+  //   const formData = new FormData()
 
-    const result = await Promise.resolve(axios.post(`${config.serverUrl}/api/images`,formData))
-    setImgId(result.data)
+  //   imgArr.map(img => {
+  //     // const waterImg = watermark.addTextWatermark(img).then(data => data) /// нужно как-то узнать путь к фото
+  //     formData.append('image', img)
+  //   })
+
+  //   const result = await Promise.resolve(axios.post(`${config.serverUrl}/api/images`,formData))
+  //   setImgId(result.data)
+  // }
+
+  async function wrap(ev, cb) {
+    const btn = ev.target;
+
+    ev.preventDefault();
+    btn.setAttribute('disabled', true);
+
+    const formData = getFormData();
+    let json;
+    try {
+      json = await cb(formData);
+    } catch (err) {
+      console.error(err);
+    }
+
+    btn.removeAttribute('disabled');
   }
 
-  const onChangeGold = () => {
 
+  function getFormData() {
+    const formEl = document.getElementById('exampleForm');
+    const formData = new FormData(formEl);
+    setFormD(formData)
+    console.log(formD)
+
+    for (const key of formData.keys()) {
+      const val = formData.get(key);
+      if (val === undefined || val === null || (typeof val === 'string' && !/\S/.test(val))) {
+        formData.delete(key);
+      }
+    }
+
+    return formData;
+  }
+
+  async function submitAxios(ev) {
+    return wrap(ev, async (formData) => {
+      const { data } = await axios.post(
+        `${config.serverUrl}/api/images`,
+        formData,
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data',
+            'Accept': 'application/json'
+          }
+        }
+      ).then(res => setImgNames(res.data))
+
+      return data;
+    });
+  }
+
+  const onChangeGold = (ev) => {
+    ev.preventDefault()
     if(status !== 'gold') {
       setPrice(() => {
         if(status === 'silver'){
@@ -125,7 +178,8 @@ export default function NewAdPage() {
     }
   }
 
-  const onChangeSilver = () => {
+  const onChangeSilver = (ev) => {
+    ev.preventDefault()
     if(status !== 'silver') {
       setPrice(() => {
         if(status === 'gold') {
@@ -142,7 +196,8 @@ export default function NewAdPage() {
   }
 
 
-  const onChangeService = (service) => {
+  const onChangeService = (ev,service) => {
+    ev.preventDefault()
     if(serviceArr.includes(service)) {
       const newServiceArr = serviceArr.filter(item => item !== service)
       setServiceArr(newServiceArr)
@@ -153,22 +208,29 @@ export default function NewAdPage() {
     }
   }
 
-  const onSubmit = useCallback(async values => {
-    await uploadImage()
+  const setImagesData = (e) => {
+    const files = e.target.files;
+    setImages(files);
+    submitAxios(e);
+  }
+ 
+  const onSubmit = useCallback(async (ev,result) => {
+    ev.preventDefault()
+  
     const user = JSON.parse(localStorage.getItem('userData')).userId
     const userAds = await Promise.resolve(axios.get(`${config.serverUrl}/api/users/${user}`))
     
-    const adId = await axios.post(`${config.serverUrl}/api/offer`, values)
+    const adId = await axios.post(`${config.serverUrl}/api/offer`, result)
     .then(res => res.data._id)
 
     const adsArr = [...userAds.data.ads,adId]
-    const saveInUser = await axios.put(`${config.serverUrl}/api/users/newAd/${user}`, adsArr).then(res => history.push('/home'))
-
+    const saveInUser = await axios.put(`${config.serverUrl}/api/users/newOffer/${user}`, adsArr).then(res => history.push('/home'))
+    
   }, [])
 
   return (
     <div className='container'>
-      <Form className="offerForm" method="post" enctype="multipart/form-data">
+      <form className="offerForm" method="post" enctype="multipart/form-data" id='exampleForm'>
         <div className="offerForm__content">
           <div className="offerForm__info">
             <h2 className='offerForm__title'>Добавить новое объявление</h2>
@@ -181,13 +243,13 @@ export default function NewAdPage() {
           </div>
           <div className="offerForm__img">
             <h2 className='offerForm__title'>Фото</h2>
-            <input type="file" onChange={(e) => setImages(e.target.files)} multiple/>
+            <input type="file" name="slider" onChange={(e) => setImagesData(e)} class="form-control-file" id="exampleSlider" accept="image/*" multiple></input>
             {[...images].map((file, i) => (
               <div className='offerForm__imgContainer'>
                 <img src={URL.createObjectURL(file)} width='100' height='100'></img>
               </div>
             ))}
-            <Button onClick={() => uploadImage()}>Загрузить фото</Button>
+            <Button onClick={(ev) => submitAxios(ev)}>Загрузить фото</Button>
           </div>
         </div>
         <div className="offerForm__content">
@@ -209,39 +271,39 @@ export default function NewAdPage() {
           <div className="offerForm__btns">
             <h3>Объязательно для эффективности</h3>
             <div className='offerForm__btnContainer'>
-              <button style={status === 'gold' ? {backgroundColor:'#ece218'} : {backgroundColor:'#ecff18'}} className='offerForm__btn--gold offerForm__btn' onClick={() => onChangeGold()}>
+              <button type='button' style={status === 'gold' ? {backgroundColor:'#ece218'} : {backgroundColor:'#ecff18'}} className='offerForm__btn--gold offerForm__btn' onClick={(ev) => onChangeGold(ev)}>
                 Выделить золотым
               </button>
             </div>
             <div className='offerForm__btnContainer'>
-              <button style={status === 'silver' ? {backgroundColor:'#bec6c1'} : {backgroundColor:'#ddedd6'}} className='offerForm__btn--silver offerForm__btn' onClick={(e) => onChangeSilver()}>
+              <button style={status === 'silver' ? {backgroundColor:'#bec6c1'} : {backgroundColor:'#ddedd6'}} className='offerForm__btn--silver offerForm__btn' onClick={(ev) => onChangeSilver(ev)}>
                 Выделить серебряным
               </button>
             </div>
           </div>
           <div className="offerForm__btns">
             <h3>Увеличение продаж</h3>
-            <div className="offerForm__btnContainer"><button style={ serviceArr.includes('shares') ? {backgroundColor:'#78849A'} : {backgroundColor:'#B4C6E7'}} className='offerForm__btn--blue offerForm__btn' onClick={() => onChangeService('shares')}>Акции</button></div>
-            <div className="offerForm__btnContainer"><button style={ serviceArr.includes('sales') ? {backgroundColor:'#78849A'} : {backgroundColor:'#B4C6E7'}}  className='offerForm__btn--blue offerForm__btn' onClick={() => onChangeService('sales')}>Скидки</button></div>
+            <div className="offerForm__btnContainer"><button style={ serviceArr.includes('shares') ? {backgroundColor:'#78849A'} : {backgroundColor:'#B4C6E7'}} className='offerForm__btn--blue offerForm__btn' onClick={(ev) => onChangeService(ev,'shares')}>Акции</button></div>
+            <div className="offerForm__btnContainer"><button style={ serviceArr.includes('sales') ? {backgroundColor:'#78849A'} : {backgroundColor:'#B4C6E7'}}  className='offerForm__btn--blue offerForm__btn' onClick={(ev) => onChangeService(ev,'sales')}>Скидки</button></div>
           </div>
           <div className="offerForm__btns">
             <h3>Больше заинтересованых соискателей</h3>
-            <button className='offerForm__btn--gray offerForm__btn' style={ serviceArr.includes('hots') ? {backgroundColor:'#808080'} : {backgroundColor:'#D9D9D9'}} onClick={() => onChangeService('hots')}>Горячие</button>
-            <button className='offerForm__btn--gray offerForm__btn' style={ serviceArr.includes('recommend') ? {backgroundColor:'#808080'} : {backgroundColor:'#D9D9D9'}} onClick={() => onChangeService('recommend')}>Рекомендованые</button>
+            <button className='offerForm__btn--gray offerForm__btn' style={ serviceArr.includes('hots') ? {backgroundColor:'#808080'} : {backgroundColor:'#D9D9D9'}} onClick={(ev) => onChangeService(ev,'hots')}>Горячие</button>
+            <button className='offerForm__btn--gray offerForm__btn' style={ serviceArr.includes('recommend') ? {backgroundColor:'#808080'} : {backgroundColor:'#D9D9D9'}} onClick={(ev) => onChangeService(ev,'recommend')}>Рекомендованые</button>
           </div>
           <div className="offerForm__btns">
             <h3>Привлекающие внимание</h3>
-            <button className='offerForm__btn--green offerForm__btn' style={ serviceArr.includes('runStroke') ? {backgroundColor:'#8B9D7E'} : {backgroundColor:'#C6E0B4'}} onClick={() => onChangeService('runStroke')}>Бегущая строка</button>
-            <button className='offerForm__btn--green offerForm__btn' style={ serviceArr.includes('banner') ? {backgroundColor:'#8B9D7E'} : {backgroundColor:'#C6E0B4'}} onClick={() => onChangeService('banner')}>Баннер</button>
+            <button className='offerForm__btn--green offerForm__btn' style={ serviceArr.includes('runStroke') ? {backgroundColor:'#8B9D7E'} : {backgroundColor:'#C6E0B4'}} onClick={(ev) => onChangeService(ev,'runStroke')}>Бегущая строка</button>
+            <button className='offerForm__btn--green offerForm__btn' style={ serviceArr.includes('banner') ? {backgroundColor:'#8B9D7E'} : {backgroundColor:'#C6E0B4'}} onClick={(ev) => onChangeService(ev,'banner')}>Баннер</button>
           </div>
         </div>
         <div>
           <h2>Price:{price}$</h2>
-          <Button inverted color='brown' onClick={() => onSubmit(result)}>
+          <Button inverted color='brown' onClick={(ev) => onSubmit(ev,result)}>
             Подтвердить
           </Button>
         </div>
-      </Form>
+      </form>
       <Liqpay price={price}/>
     </div>
   )

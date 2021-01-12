@@ -2,6 +2,7 @@ const { Router } = require('express');
 require('express-async-errors')
 const userValidator = require('../middlewares/userValidator');
 const UserModel = require('../models/UserModel')
+const AdModel = require('../models/AdModel')
 const usersRouter = Router();
 
 //get all
@@ -37,7 +38,7 @@ usersRouter.put('/:userId',userValidator, async (req,res) => {
 })
 
 //new AD
-usersRouter.put('/newAd/:userId', async(req,res) => {
+usersRouter.put('/newOffer/:userId', async(req,res) => {
   const updateUser = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {ads: req.body}})
   res.status(200).send(updateUser)
 })
@@ -49,10 +50,12 @@ usersRouter.put('/favoritesAd/:userId', async(req,res) => {
   let ads;
   if(updateUser.favorites.includes(req.body[0])) {
     ads = updateUser.favorites.filter(ad => ad !== req.body[0])
-    result = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {favorites: ads}})
+    const favoriteArr = await AdModel.find({_id: {$all: ads}})
+    result = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {favorites: ads, favoritesArr: favoriteArr}})
   } else {
     ads = [...updateUser.favorites, req.body[0]]
-    result = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {favorites: ads}})
+    const favoriteArr =  await AdModel.find({_id: {$all: ads}})
+    result = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {favorites: ads, favoritesArr: favoriteArr}})
   }
   
   res.status(200).send(ads)

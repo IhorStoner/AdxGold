@@ -34,6 +34,9 @@ const UserSchema = new Schema({
   },
   favorites: {
     type: Array
+  },
+  favoritesArr: {
+    type: Array
   }
 });
 

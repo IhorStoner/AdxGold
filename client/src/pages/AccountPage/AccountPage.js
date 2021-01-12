@@ -57,10 +57,10 @@ export default function AccountPage() {
         <NavLink to='/home'>На главную</NavLink>
       </Header>
       <Switch>
-        <Route path='/account' exact>
+        <div>
           <Link to='/auth'><Button>Войти</Button></Link>
           <Link to='/registration'><Button>Зарегистрироваться</Button></Link>
-        </Route>
+        </div>
       </Switch>
     </div>
   )
