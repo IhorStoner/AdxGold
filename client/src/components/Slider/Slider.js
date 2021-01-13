@@ -1,31 +1,30 @@
 import React from 'react'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import SwiperCore, { Navigation, Pagination, Autoplay } from 'swiper';
-import 'swiper/swiper-bundle.css'
 import './Slider.scss'
-import 'swiper/swiper.scss';
-import 'swiper/components/navigation/navigation.scss';
-import 'swiper/components/pagination/pagination.scss';
-import 'swiper/components/scrollbar/scrollbar.scss';
 import config from '../../config/default.json'
+import { Fade } from 'react-slideshow-image';
+import 'react-slideshow-image/dist/styles.css'
 
-SwiperCore.use([Navigation, Pagination, Autoplay])
-
-export default function Slider({imgArr}) {
-
+export default function Slider({ imgArr, onClickPhotos }) {
+  const zoomOutProperties = {
+    duration: 10000000000,
+    transitionDuration: 500,
+    infinite: true,
+    indicators: true,
+    // scale: 0.4,
+    arrows: imgArr.length <= 1 ? false : true
+  };
+  console.log(imgArr.length)
   return (
-    <div className='sliderContainer'>
-      <Swiper className='sliderImg'
-        navigation
-        spaceBetween={50}
-        slidesPerView={1}
-        pagination={{ clickable: true }}
-        autoplay={{ delay: 3000 }}
-        loop={true}
-      >
-      {imgArr.map(img => <SwiperSlide><img src={`${config.serverUrl}/api/images/${img}`} className='sliderImg__slide' alt='sliderImg' width='400px'/></SwiperSlide>)}
-        
-      </Swiper>
+    <div className="slide-container">
+      <Fade {...zoomOutProperties} style={{width: "100%"}}>
+        {imgArr.map((img,i) => (
+          <div key={i} className="each-fade" >
+            <div className="image-container" onClick={() => onClickPhotos(imgArr)}>
+              <img src={`${config.serverUrl}/api/images/${img}`} style={{width: "100%"}}/>
+            </div>
+          </div>
+        ))}
+      </Fade>
     </div>
   )
 }

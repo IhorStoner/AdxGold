@@ -51,6 +51,7 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 
 	const handleOpenPhoto = (e, imgs) => {
 		setImgId(imgs)
+		console.log(imgs)
 	}
 
 	return (
@@ -64,7 +65,7 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 							<tr className='adsList__row'>
 								<td className='adsList__tableItem adsList__itemTitle adsList__tableItem--titleMargin'><span className='adsList__tableText'>{ad.title}</span></td>
 								<td className='adsList__tableItem adsList__itemCity'><span className='adsList__tableText'>{ad.city}</span></td>
-								<td className='adsList__tableItem adsList__itemImg adsList__tableItem--imgMargin' onClick={(e) => handleOpenPhoto(e, ad.img[0])}><span className='adsList__tableImg'>{ad.img[0] && <img src={camera} width='50' height='50' />}</span></td> {/*!ad.img[0] ? camera : `${config.serverUrl}/api/images/${ad.img[0] */}
+								<td className='adsList__tableItem adsList__itemImg adsList__tableItem--imgMargin' onClick={(e) => handleOpenPhoto(e, ad.img)}><span className='adsList__tableImg'>{ad.img[0] && <img src={camera} width='50' height='50' />}</span></td> {/*!ad.img[0] ? camera : `${config.serverUrl}/api/images/${ad.img[0] */}
 								<td className='adsList__tableItem adsList__itemSection adsList__tableItem--wordWrap'><span className='adsList__tableText'>{ad.section}</span></td>
 								<td className='adsList__tableItem adsList__itemType'><span className='adsList__tableText'>{ad.type}</span></td>
 								<td className='adsList__tableItem adsList__itemFloor'><span className='adsList__tableText'>{ad.floor ? ad.floor : '0'}</span></td>

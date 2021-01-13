@@ -26,7 +26,7 @@ const adsReducer = createReducer(initialState, {
   },
   [fetchAds.rejected]: (state, action) => {
     state.loading = false;
-    state.error = action.payload.error;
+    state.error = action.payload;
   },
   [fetchSharesAds.pending]: (state) => {
     state.loading = true;
@@ -38,7 +38,7 @@ const adsReducer = createReducer(initialState, {
   },
   [fetchSharesAds.rejected]: (state, action) => {
     state.loading = false;
-    state.error = action.payload.error;
+    state.error = action.payload;
   },
   [fetchSalesAds.pending]: (state) => {
     state.loading = true;
@@ -62,7 +62,7 @@ const adsReducer = createReducer(initialState, {
   },
   [fetchRecommendedAds.rejected]: (state, action) => {
     state.loading = false;
-    state.error = action.payload.error;
+    state.error = action.payload;
   },
   [fetchHotsAds.pending]: (state) => {
     state.loading = true;
@@ -74,7 +74,7 @@ const adsReducer = createReducer(initialState, {
   },
   [fetchHotsAds.rejected]: (state, action) => {
     state.loading = false;
-    state.error = action.payload.error;
+    state.error = action.payload;
   },
   [fetchRunAds.pending]: (state) => {
     state.loading = true;
@@ -86,7 +86,7 @@ const adsReducer = createReducer(initialState, {
   },
   [fetchRunAds.rejected]: (state, action) => {
     state.loading = false;
-    state.error = action.payload.error;
+    state.error = action.payload;
   }
 });
 
