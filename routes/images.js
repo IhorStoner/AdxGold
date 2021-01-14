@@ -36,7 +36,7 @@ ImgRouter.post(
     }
 
     
-    const data = { ...req.files };
+    const data = { ...req.body, ...req.files };
     const filesNames = data.slider.map(file => file.filename)
 
     if (req.header('accept') === 'application/json') {

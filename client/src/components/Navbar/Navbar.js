@@ -21,7 +21,7 @@ export default function Navbar() {
           Услуги профессионалов
         </li>
       </ul>
-      <div className="navbar__box navbar__box--banner2"></div>
+      <div className={active === 'board' ? "navbar__box navbar__box--banner2" : "navbar__box navbar__box--banner1"}></div>
        {/* --banner1 */}
     </nav>
   )

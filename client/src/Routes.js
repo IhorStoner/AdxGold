@@ -13,7 +13,7 @@ export default function Routes() {
 
   return (
     <Switch>
-      <Route path="/home" exact>
+      <Route path="/home" >
         <HomePage />
       </Route>
       <Route path="/account" exact>

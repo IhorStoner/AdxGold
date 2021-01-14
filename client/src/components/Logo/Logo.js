@@ -3,7 +3,7 @@ import './Logo.scss'
 
 export default function Logo() {
   return (
-    <div className='logo'>
-    </div>
+    <a href='index.html' className='logo'>
+    </a>
   )
 }

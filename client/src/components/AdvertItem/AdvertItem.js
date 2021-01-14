@@ -19,8 +19,8 @@ export default function AdvertItem({ ad }) {
             <h3>Фото:</h3>
             <div className="adsList__sliderContainer">
               <Carousel >
-                {ad.img && ad.img.map(img => (
-                  <div onClick={() => setImgId(img)}>
+                {ad.img && ad.img.map((img,i) => (
+                  <div key={i} onClick={() => setImgId(img)}>
                     <img src={`${config.serverUrl}/api/images/${img}`} />
                   </div>
                 ))}

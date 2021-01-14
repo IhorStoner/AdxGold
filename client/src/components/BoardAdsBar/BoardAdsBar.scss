@@ -24,8 +24,7 @@
   }
 
   &__text {
-    font-size: 1rem;
-    line-height: 21px;
+    font-size: 0.9rem;
     font-family: "Roboto-bold";
   }
   &__subMenu {
@@ -38,7 +37,6 @@
     list-style-type: none;
     background-color: #616c7a;
     width: 100%;
-    z-index: 1;
     padding: 20px 0px 20px 70px;
     border-bottom-left-radius: 5px;
     border-bottom-right-radius: 5px;
@@ -72,11 +70,11 @@
     }
 
     &--roomsMargin {
-      margin-right: 5px;
+      margin-right: 25px;
     }
 
     &--floarMargin {
-      margin-right: 5px;
+      margin-right: 18px;
     }
 
     &--subcategoryMargin {
@@ -89,10 +87,12 @@
 
     &--photoMargin {
       margin-right: 20px;
+      color: #F78536;
     }
 
     &--titleMargin {
       margin-right: 20px;
+      color: #F78536;
     }
 
     &--cityMargin {

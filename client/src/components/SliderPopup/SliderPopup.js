@@ -1,18 +1,52 @@
-import React, { useState, useEffect } from 'react'
+import React, { useState, useEffect,useCallback } from 'react'
 import config from '../../config/default.json'
 import './SliderPopup.scss'
-import { Swiper, SwiperSlide } from 'swiper/react';
-import 'swiper/swiper.scss';
-import 'swiper/components/navigation/navigation.scss';
-import 'swiper/components/pagination/pagination.scss';
-import 'swiper/components/scrollbar/scrollbar.scss';
-import 'swiper/swiper-bundle.css';
-import SwiperCore, { Navigation, Pagination, Controller, Thumbs } from 'swiper';
+import { useEmblaCarousel } from "embla-carousel/react";
+import { Thumb } from "./EmblaCarouselThumb";
+// import { mediaByIndex } from "../media";
+import "./embla.css";
 
-SwiperCore.use([Navigation, Pagination, Controller, Thumbs]);
+const viewportCss = {
+  overflow: 'hidden',
+}
+const containerCss = {
+  display: 'flex',
+}
+const slideCss = {
+  position: 'relative',
+  minWidth: '100%',
+}
 
 export default function SliderPopup({ imgArr, onClickPhoto }) {
-  const [controlledSwiper, setControlledSwiper] = useState(null);
+  const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
+  const [selectedIndex, setSelectedIndex] = useState(0);
+  const [mainViewportRef, embla] = useEmblaCarousel();
+  const [thumbViewportRef, emblaThumbs] = useEmblaCarousel({
+    containScroll: "keepSnaps",
+    selectedClass: ""
+  });
+
+  const onThumbClick = useCallback(
+    (index) => {
+      if (!embla || !emblaThumbs) return;
+      if (emblaThumbs.clickAllowed()) embla.scrollTo(index);
+    },
+    [embla, emblaThumbs]
+  );
+
+  const onSelect = useCallback(() => {
+    if (!embla || !emblaThumbs) return;
+    setSelectedIndex(embla.selectedScrollSnap());
+    emblaThumbs.scrollTo(embla.selectedScrollSnap());
+  }, [embla, emblaThumbs, setSelectedIndex]);
+
+  useEffect(() => {
+    if (!embla) return;
+    onSelect();
+    embla.on("select", onSelect);
+  }, [embla, onSelect]);
+
+
 
   return (
     <div className="fixed-overlay">
@@ -21,15 +55,55 @@ export default function SliderPopup({ imgArr, onClickPhoto }) {
           <div className="sliderPopup">
             <button className='sliderPopup__closeBtn' onClick={() => onClickPhoto('')}></button>
             <div className="slide-container">
-              <Swiper // первый слайдер
+              <div className="embla">
+                <div className="embla__viewport" ref={mainViewportRef}>
+                  <div className="embla__container">
+                    {imgArr.map((img,index) => (
+                      <div className="embla__slide" key={index}>
+                        <div className="embla__slide__inner">
+                          <img
+                            className="embla__slide__img"
+                            src={`${config.serverUrl}/api/images/${img}`}
+                            alt="sliderImg"
+                            style={{ width: "100%",height:'100%' }}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+
+              <div className="embla embla--thumb">
+                <div className="embla__viewport" ref={thumbViewportRef}>
+                  <div className="embla__container embla__container--thumb">
+                    {imgArr.map((img,index) => (
+                      <Thumb
+                        onClick={() => onThumbClick(index)}
+                        selected={index === selectedIndex}
+                        imgSrc={`${config.serverUrl}/api/images/${img}`}
+                        
+                        key={index}
+                      />
+                    ))}
+                  </div>
+                </div>
+              </div>
+              {/* <div style={viewportCss} ref={emblaRef}>
+                <div style={containerCss}>
+                  {imgArr.map((img, i) => (
+                    <div style={slideCss}><img key={i} src={`${config.serverUrl}/api/images/${img}`} style={{ width: "100%" }} /></div>
+                  ))}
+                </div>
+              </div> */}
+              {/* <Swiper // первый слайдер
                 controller={{ control: controlledSwiper }}
                 navigation
                 slidesPerView={1}
+                onActiveIndexChange={2}
               >
-                {imgArr.map((img, i) => (
-                  <SwiperSlide><img key={i} src={`${config.serverUrl}/api/images/${img}`} style={{ width: "100%" }} /></SwiperSlide>
-                ))}
-              </Swiper>
+
+              </Swiper> */}
               {/* <Swiper  // сделал как в документации, но не работатет
                 onSwiper={setControlledSwiper}
               >
@@ -40,9 +114,9 @@ export default function SliderPopup({ imgArr, onClickPhoto }) {
             </div>
             <div className='sliderPopup__imgContainer' //свой вариант
             >
-              {imgArr.map((img, i) => (
+              {/* {imgArr.map((img, i) => (
                 <img className='sliderPopup__img' key={i} src={`${config.serverUrl}/api/images/${img}`} style={{ width: "240px" }}></img>
-              ))}
+              ))} */}
             </div>
           </div>
         </div>

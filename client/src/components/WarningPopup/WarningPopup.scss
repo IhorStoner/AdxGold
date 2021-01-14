@@ -1,0 +1,85 @@
+.warningPopup {
+  background-color: #f9f9f9;
+  border: 5px solid #f5742c;
+  border-radius: 5px;
+  padding: 10px 55px 55px 55px;
+  max-width: 500px;
+  margin: 0 auto;
+  margin-top: 150px;
+  position: relative;
+
+  &__btnClose {
+    display: block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    right: 15px;
+    top: 15px;
+    background-image: url('../../assets/svg/btnCloseOrange.svg');
+    background-repeat: no-repeat;
+    background-size: contain;
+    background-position: center;
+    border: none;
+    background-color: transparent;
+    outline: none;
+    cursor: pointer;
+  }
+
+  &__linksContainer {
+    text-align: center;
+    margin-top: 15px;
+  }
+
+  &__link {
+    font-size: 1.2rem;
+    font-family: "Roboto-normal";
+    color: #f46f29;
+    margin-right: 10px;
+    padding: 3px 5px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+    &:hover {
+      background: linear-gradient(180deg, #f5752c 0%, #f8923e 100%);
+      border-radius: 5px;
+      color: #fff;
+    }
+  }
+
+  &__logo {
+    margin-bottom: 15px;
+  }
+
+  &__content {
+    background: linear-gradient(180deg, #e2e2e2 39.06%, rgba(226, 226, 226, 0) 100%);
+    box-shadow: inset 0px 4px 13px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    padding: 30px 40px 45px 40px;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      left: 5px;
+      top: 5px;
+      display: block;
+      background-image: url("../../assets/svg/warning.svg");
+      background-repeat: no-repeat;
+      width: 30px;
+      height: 30px;
+      background-position: center;
+      background-size: contain;
+    }
+  }
+
+  &__text {
+    font-family: "Roboto-normal";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1.2rem;
+    line-height: 35px;
+    text-align: center;
+    color: #000000;
+  }
+}

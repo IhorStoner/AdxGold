@@ -4,16 +4,16 @@ import config from '../../config/default.json'
 import { Fade } from 'react-slideshow-image';
 import 'react-slideshow-image/dist/styles.css'
 
-export default function Slider({ imgArr, onClickPhotos }) {
+export default function Slider({ imgArr = [], onClickPhotos }) {
   const zoomOutProperties = {
     duration: 10000000000,
     transitionDuration: 500,
     infinite: true,
-    indicators: true,
+    indicators: false,
     // scale: 0.4,
     arrows: imgArr.length <= 1 ? false : true
   };
-  console.log(imgArr.length)
+  
   return (
     <div className="slide-container">
       <Fade {...zoomOutProperties} style={{width: "100%"}}>

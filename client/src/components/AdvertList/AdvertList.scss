@@ -29,17 +29,17 @@
     width: 60px;
   }
   &__itemPrice {
-    width: 100px;
+    width: 60px;
   }
   &__itemSquare {
-    width: 100px;
+    width: 60px;
   }
 
 
   &__tableItem {
     height: 54px;
     overflow: hidden;
-    margin-right: 5px;
+    margin-right: 17px;
     display: flex;
     align-items: center;
     padding: 0;
@@ -183,7 +183,7 @@
     align-items: center;
     padding: 15px 3px;
     margin-bottom: 5px;
-    border: 2px solid white;
+    // border: 2px solid white;
     cursor: pointer;
     font-size: 1rem;
     font-family: "PTSans-normal";

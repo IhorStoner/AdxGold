@@ -6,7 +6,7 @@ import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import 'reactjs-popup/dist/index.css';
 import './AdvertList.scss'
-import { NavLink } from 'react-router-dom'
+import { NavLink,useRouteMatch } from 'react-router-dom'
 import RecomendedAds from '../RecommendedAds/RecommendedAds'
 import HotsAds from '../HotsAds/HotsAds'
 import RunAd from '../RunAd/RunAd'
@@ -28,6 +28,7 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 	const user = useSelector(getUser)
 	const [isAlertOpen, setIsAlertOpen] = useState(false)
 	const dispatch = useDispatch();
+	const match = useRouteMatch();
 
 	const handleVisitedAd = async (e, adId) => {
 		e.stopPropagation()
@@ -51,7 +52,6 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 
 	const handleOpenPhoto = (e, imgs) => {
 		setImgId(imgs)
-		console.log(imgs)
 	}
 
 	return (
@@ -72,7 +72,7 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 								<td className='adsList__tableItem adsList__itemRooms'><span className='adsList__tableText'>{ad.rooms ? ad.rooms : '1 комн.'}</span></td>
 								<td className='adsList__tableItem adsList__itemPrice'><span className='adsList__tableText'>{ad.productPrice}руб. </span></td>
 								<td className='adsList__tableItem adsList__itemSquare'><span className='adsList__tableText'>{ad.square ? ad.square : '30 кв.м.'}</span></td>
-								<td className='adsList__tableItem adsList__itemDate'><span className='adsList__tableDate' className='adsList__tableText'>{ad.date}</span></td>
+								<td className='adsList__tableItem adsList__itemDate'><span className='adsList__tableText adsList__tableDate' >{ad.date}</span></td>
 								<td >
 									<div className="adsList__tableBtns">
 										<NavLink to={`/detailsAd/${ad._id}`} onClick={(e) => handleVisitedAd(e, ad._id)}><button data-tooltip='открыть в новом окне' className='adsList__openAd'></button></NavLink>

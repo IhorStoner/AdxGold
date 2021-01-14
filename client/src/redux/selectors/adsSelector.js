@@ -5,6 +5,11 @@ export const getAds = createSelector(
   ads => ads
 );
 
+export const getLoading = createSelector(
+  state => state.ads.loading,
+  loading => loading
+);
+
 export const getPages = createSelector(
   state => state.ads.pages,
   pages => pages

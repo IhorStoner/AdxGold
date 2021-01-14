@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from 'react'
 import './HomePage.scss'
+import { useParams } from 'react-router-dom'
 import HeaderNav from '../../components/Header/Header'
 import { useAuth } from '../../hooks/useAuth'
-import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds, getPages } from '../../redux/selectors/adsSelector';
+import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds, getPages,getLoading } from '../../redux/selectors/adsSelector';
 import { useDispatch, useSelector } from 'react-redux'
 import AdvertList from '../../components/AdvertList/AdvertList'
 import { fetchAds, fetchSharesAds, fetchSalesAds, fetchRecommendedAds, fetchHotsAds, fetchRunAds } from '../../redux/actions/adsAction'
@@ -14,8 +15,11 @@ import { getCity } from '../../redux/selectors/filterSelector'
 import Pagination from '../../components/Pagination/Pagination'
 import Footer from '../../components/Footer/Footer'
 import { fetchUser } from '../../redux/actions/userAction'
-import { getUser,getFavoritesArr } from '../../redux/selectors/userSelector'
+import { getUser, getFavoritesArr } from '../../redux/selectors/userSelector'
 import { getCategory } from '../../redux/selectors/categorySelector'
+import axios from 'axios';
+import config from '../../config/default.json'
+import DimmerLoader from '../../components/DimmerLoader/DimmerLoader'
 
 export default function HomePage() {
   const { token, userId } = useAuth()
@@ -30,7 +34,7 @@ export default function HomePage() {
   const runAds = useSelector(getRunsAds)
   const selectedCity = useSelector(getCity)
   const category = useSelector(getCategory)
-  const favoritesArr = useSelector(getFavoritesArr) 
+  const favoritesArr = useSelector(getFavoritesArr)
   const dispatch = useDispatch();
   const [selectedFilteredPrice, setSelectedFilteredPrice] = useState(null);
   const [selectedFilteredDate, setSelectedFilteredDate] = useState(null)
@@ -38,10 +42,11 @@ export default function HomePage() {
   const [paginations, setPaginations] = useState([
     { totalPages: pages, currentPage: 1 }
   ]);
-
+  const { adId } = useParams();
+  const [ad, setAd] = useState([])
+  const isLoading = useSelector(getLoading)
   const updatePaginations = (index, currentPage) => {
     setPaginations(paginations.map((n, i) => i === index ? { ...n, currentPage } : n));
-    console.log(pages)
     setPage(currentPage)
   }
 
@@ -75,12 +80,18 @@ export default function HomePage() {
   }, []);
 
 
+
+  useEffect(async () => {
+    await axios.get(`${config.serverUrl}/api/offer/${adId}`).then(res => setAd(res.data))
+    console.log(adId)
+  }, [adId])
+
   return (
     <div className='homePage'>
       <HeaderNav />
       <div className="container">
         <div className='homePage__content'>
-          <BtnsAccount isAuth={true} />
+          <BtnsAccount isAuth={isAuth} />
           <BoardAdsBar />
         </div>
         <div className='ads'>
@@ -94,6 +105,7 @@ export default function HomePage() {
               <Dropdown placeholder='Цена' search selection options={optionFilterPrice} onChange={(e) => setSelectedFilteredPrice(e.target.innerText)} />  // filters
               <Dropdown placeholder='По дате' search selection options={optionFilterDate} onChange={(e) => setSelectedFilteredDate(e.target.innerText)} />
             </div> */}
+            {isLoading && <DimmerLoader />}
             {ads && <AdvertList advertArr={category === 'favorites' ? favoritesArr : ads} recommendedAds={recommendedAds} hotsAds={hotsAds} runAds={runAds} visitedAds={user.visitedAds} />}
             {category !== 'favorites' && paginations.map((n, i) => (
               <Pagination

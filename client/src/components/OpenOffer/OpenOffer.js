@@ -1,5 +1,4 @@
-import React from 'react'
-import config from '../../config/default.json'
+import React,{useState} from 'react'
 import './OpenOffer.scss'
 import Slider from '../Slider/Slider'
 import mail from '../../assets/svg/mail.svg'
@@ -7,11 +6,15 @@ import phone from '../../assets/svg/phone.svg'
 import photos from '../../assets/svg/photos.svg'
 import documents from '../../assets/svg/documents.svg'
 import SliderPopup from '../SliderPopup/SliderPopup'
-import logo from '../../assets/png/logo.png'
+import WarningPopup from '../WarningPopup/WarningPopup'
+
 
 export default function OpenOffer({ ad, setImgId, imgId }) {
+  const [ isWarningOpen, setIsWarningOpen ] = useState(false) // false
+
   return (
     <div className='openOffer'>
+      {isWarningOpen && <WarningPopup setIsOpenWarning={setIsWarningOpen}/>}
       <div className="openOffer__content">
         <div className="openOffer__infoContainer">
           <div className="openOffer__offerData">
@@ -51,24 +54,11 @@ export default function OpenOffer({ ad, setImgId, imgId }) {
               <p className='openOffer__moreInfo'>Имя: <span className="openOffer__moreInfoText">{ad.name}</span></p>
               <p className='openOffer__moreInfo'>Телефон: <span className="openOffer__moreInfoText">{ad.phone}</span></p>
               <p className='openOffer__moreInfo'>Эл.почта: <span className="openOffer__moreInfoText">{ad.email}</span></p>
-              <p className='openOffer__btnContainer'><button className='openOffer__btn'>Отправить сообщение <img className='openOffer__icon' src={mail} alt="mailIcon" /></button></p>
+              <p className='openOffer__btnContainer'><button className='openOffer__btn' onClick={() => setIsWarningOpen(true)}>Отправить сообщение <img className='openOffer__icon' src={mail} alt="mailIcon" /></button></p>
             </div>
           </div>
         </div>
-        {/* {recommendedAds &&
-								<div className='recommended-ads'>
-									<Header>Рекомендуемые</Header>
-									<RecomendedAds recommendedAds={recommendedAds} />
-								</div>
-							} */}
       </div>
-      {/* {
-							hotsAds &&
-							<div className="adsList__content adsList__hots">
-								<Header as='h2'>Горячие</Header>
-								<HotsAds hotsAds={hotsAds} />
-							</div>
-						} */}
     </div>
   )
 }

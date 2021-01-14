@@ -162,7 +162,6 @@ const storage = new WatermarkInterceptorStorage({
     cb(null, dirname);
   },
   filename: (req, file, cb) => {
-    console.log(file.mimetype)
     const filename = file.originalname || `${file.fieldname}.${file.mimetype.split('/')[1]}`;
     const parsed = path.parse(filename);
     cb(null, `${parsed.name}${parsed.ext.toLocaleLowerCase()}`);
