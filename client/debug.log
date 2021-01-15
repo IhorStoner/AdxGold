@@ -26,3 +26,16 @@
 [1230/093947.677:ERROR:directory_reader_win.cc(43)] FindFirstFile: Системе не удается найти указанный путь. (0x3)
 [0108/171721.614:ERROR:directory_reader_win.cc(43)] FindFirstFile: Системе не удается найти указанный путь. (0x3)
 [0114/114301.674:ERROR:directory_reader_win.cc(43)] FindFirstFile: Системе не удается найти указанный путь. (0x3)
+[0115/094338.187:ERROR:directory_reader_win.cc(43)] FindFirstFile: Системе не удается найти указанный путь. (0x3)
+[0115/105129.731:ERROR:process_reader_win.cc(123)] NtOpenThread: {Отказано в доступе} Процесс запросил доступ к объекту, но права на доступ не предоставлены. (0xc0000022)
+[0115/105129.795:ERROR:exception_snapshot_win.cc(99)] thread ID 2324 not found in process
+[0115/105129.728:ERROR:process_reader_win.cc(123)] NtOpenThread: {Отказано в доступе} Процесс запросил доступ к объекту, но права на доступ не предоставлены. (0xc0000022)
+[0115/105129.795:ERROR:exception_snapshot_win.cc(99)] thread ID 2692 not found in process
+[0115/105129.811:ERROR:process_reader_win.cc(123)] NtOpenThread: {Отказано в доступе} Процесс запросил доступ к объекту, но права на доступ не предоставлены. (0xc0000022)
+[0115/105129.811:ERROR:exception_snapshot_win.cc(99)] thread ID 9552 not found in process
+[0115/105129.783:ERROR:process_reader_win.cc(123)] NtOpenThread: {Отказано в доступе} Процесс запросил доступ к объекту, но права на доступ не предоставлены. (0xc0000022)
+[0115/105129.811:ERROR:exception_snapshot_win.cc(99)] thread ID 7612 not found in process
+[0115/105129.763:ERROR:process_reader_win.cc(123)] NtOpenThread: {Отказано в доступе} Процесс запросил доступ к объекту, но права на доступ не предоставлены. (0xc0000022)
+[0115/105129.811:ERROR:exception_snapshot_win.cc(99)] thread ID 544 not found in process
+[0115/105129.811:ERROR:process_reader_win.cc(123)] NtOpenThread: {Отказано в доступе} Процесс запросил доступ к объекту, но права на доступ не предоставлены. (0xc0000022)
+[0115/105129.811:ERROR:exception_snapshot_win.cc(99)] thread ID 7952 not found in process

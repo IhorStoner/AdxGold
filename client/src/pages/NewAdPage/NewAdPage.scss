@@ -13,9 +13,93 @@
 }
 
 .offerForm {
-  max-width: 83%;
+  width: 83%;
   background-color: #ececec;
   padding: 15px 5px 50px 5px;
+
+  &__btnSubmit {
+    font-family: "Roboto-bold";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.3rem;
+    color: #ffffff;
+    background: #f6782e;
+    border-radius: 5px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+    padding: 6px 10px;
+    display: block;
+    margin: 0 auto;
+    text-transform: uppercase;
+
+    &:hover {
+      background: #E25400
+    }
+  }
+
+  &__totalPriceContainer {
+    background-color: #c4c4c4;
+    padding: 5px;
+    border-radius: 5px;
+    max-width: 280px;
+    font-family: "Roboto-normal";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1rem;
+    color: #000000;
+  }
+
+  &__totalPrice {
+    color: #ff0000;
+  }
+
+  &__daysCount {
+    color: #ff0000;
+  }
+
+  &__daysBtn {
+    background-color: #fff;
+    padding: 3px 7px;
+    border: none;
+    outline: none;
+    cursor: pointer;
+  }
+
+  &__days {
+    display: flex;
+    justify-content: flex-start;
+  }
+
+  &__daysCounter {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__serviceTitle {
+    color: #fff;
+    // padding: 0 20px;
+    height: 58px;
+    font-family: "Roboto-normal";
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1rem;
+    text-align: center;
+    margin: 0;
+  }
+
+  &__moreService {
+    background: linear-gradient(180deg, #f36925 0%, #f8923e 65.62%);
+    border-radius: 5px;
+    padding: 2px 3px 3px 3px;
+  }
+
+  &__servicesBtns {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 3px 5px 10px 5px;
+  }
 
   &__contactsContainer {
     display: flex;
@@ -25,6 +109,30 @@
     &:last-child {
       margin-bottom: 0;
     }
+  }
+
+  &__priceText {
+    margin: 0;
+    font-family: "Roboto-normal";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 176.3%;
+    color: #000000;
+  }
+
+  &__priceContainer {
+    display: flex;
+    justify-content: space-between;
+    font-family: "Roboto-normal";
+    align-items: center;
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1rem;
+    line-height: 176.3%;
+    color: #000000;
+    background: linear-gradient(180deg, rgba(255, 255, 255, 0) 0%, #ffffff 100%), #c4c4c4;
+    box-shadow: 0px 2px 3px rgba(0, 0, 0, 0.25);
   }
 
   &__images {
@@ -43,7 +151,7 @@
     padding: 40px 36px;
     text-align: center;
     cursor: pointer;
-    font-family: 'Roboto-normal';
+    font-family: "Roboto-normal";
     font-style: normal;
     font-weight: normal;
     font-size: 1rem;
@@ -92,7 +200,6 @@
 
   &__contactsContent {
     max-width: 400px;
-  
   }
 
   &__info {
@@ -111,19 +218,36 @@
     font-size: 0.9rem;
     border: none;
     outline: none;
+
+    &--priceInput {
+      background: none;
+      box-shadow: none;
+    }
   }
 
   &__contactInput {
     width: 200px;
   }
 
-  &__btnContainer {
-    margin-bottom: 10px;
-  }
-
   &__btns {
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
+    width: 260px;
+
+    &:first-child {
+      width: 310px;
+    }
+  }
+
+  &__servicePrice {
+    text-align: center;
+    display: block;
+    font-family: "Roboto-normal";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 0.9rem;
+    color: #ff0000;
   }
 
   &__btn {
@@ -131,24 +255,81 @@
     width: 100%;
     margin-bottom: 10px;
     cursor: pointer;
+    border-radius: 10px;
+    outline: none;
+    border: 2px solid #000000;
+    position: relative;
+    font-family: "Roboto-normal";
+    font-size: 1rem;
+    text-transform: uppercase;
 
-    &:last-child {
-      margin-bottom: 0;
+    &::before {
+      content: "";
+      display: block;
+      left: 3px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 30px;
+      height: 30px;
+      background-size: cover;
     }
+
+    &--active {
+      &::after {
+        content: "";
+        position: absolute;
+        width: 30px;
+        height: 30px;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        background-image: url("../../assets/svg/iconActive.svg");
+        background-position: center;
+        background-size: cover;
+        background-repeat: no-repeat;
+      }
+    }
+
+    &:hover {
+      border: 2px solid #f46b26;
+    }
+
     &--gold {
-      background-color: #ece218;
+      background-color: #faf460;
+
+      &::before {
+        display: block;
+        background-image: url("../../assets/svg/corona.svg");
+      }
     }
     &--silver {
-      background-color: silver;
+      background-color: #c4c4c4;
+      &::before {
+        display: block;
+        background-image: url("../../assets/svg/corona.svg");
+      }
     }
-    &--blue {
-      background-color: #b4c6e7;
+    &--shares {
+      background: linear-gradient(180deg, #f36925 0%, #faf460 100%);
+      &::before {
+        display: block;
+        background-image: url("../../assets/svg/salesIcon.svg");
+      }
     }
     &--green {
-      background-color: #c6e0b4;
+      background-color: #9cdd7d;
+      &::before {
+        display: block;
+        background-image: url("../../assets/svg/fireIcon.svg");
+      }
     }
-    &--gray {
-      background-color: #d9d9d9;
+    &--pink {
+      background-color: #ffc8c8;
+      &::before {
+        display: block;
+        background-image: url("../../assets/svg/shout.svg");
+      }
     }
   }
 

@@ -1,4 +1,4 @@
-import React from 'react'
+import React,{useEffect, useState} from 'react'
 import { Redirect, Route, Switch } from "react-router-dom"
 import HomePage from './pages/HomePage/HomePage'
 import AccountPage from './pages/AccountPage/AccountPage'
@@ -7,9 +7,13 @@ import RegPage from './pages/RegPage/RegPage'
 import NewAdPage from './pages/NewAdPage/NewAdPage'
 import DetailsAdPage from './pages/DetailsAdPage/DetailsAdPage'
 import { useAuth } from './hooks/useAuth'
+
 export default function Routes() {
-  const { token } = useAuth()
-  const isAuth = !!token;
+  // const { token } = useAuth()
+  // const [isAuth, setIsAuth] = useState(!!token)
+  // useEffect(() => {
+  //    setIsAuth(!!token)
+  // }, [token])
 
   return (
     <Switch>
@@ -20,9 +24,7 @@ export default function Routes() {
         <AccountPage />
       </Route>
       <Route path='/newAd'>
-        {
-          isAuth ? <NewAdPage/> : <AccountPage />
-        }
+        <NewAdPage/>  
       </Route>
       <Route path='/detailsAd/:adId' component={DetailsAdPage}/>
       <Route path='/auth' component={AuthPage} />

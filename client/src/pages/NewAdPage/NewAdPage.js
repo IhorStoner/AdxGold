@@ -1,7 +1,6 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import axios from 'axios'
 import './NewAdPage.scss'
-import { Input, Dropdown, Form, TextArea, Button } from 'semantic-ui-react'
 import * as category from '../../assets/json/category.json'
 import * as cityData from '../../assets/json/russian-cities.json'
 import { useHistory } from 'react-router-dom'
@@ -16,6 +15,7 @@ import SharesList from '../../components/SharesList/SharesList'
 import { useDispatch, useSelector } from 'react-redux'
 import { getSharesAds } from '../../redux/selectors/adsSelector'
 import { fetchSharesAds } from '../../redux/actions/adsAction'
+import MyDropdown from '../../components/MyDropdown/MyDropdown'
 
 export default function NewAdPage() {
   const { token, userId } = useAuth()
@@ -59,6 +59,7 @@ export default function NewAdPage() {
   const [serviceArr, setServiceArr] = useState([])
   const [images, setImages] = useState([])
   const [imgNames, setImgNames] = useState([])
+  const [days, setDays] = useState(1)
   const history = useHistory();
 
   const typeAdConfig = [
@@ -127,13 +128,13 @@ export default function NewAdPage() {
     }
 
     btn.removeAttribute('disabled');
+    return json
   }
 
 
   function getFormData() {
     const formEl = document.getElementById('exampleForm');
     const formData = new FormData(formEl);
-
     for (const key of formData.keys()) {
       const val = formData.get(key);
       if (val === undefined || val === null || (typeof val === 'string' && !/\S/.test(val))) {
@@ -145,7 +146,7 @@ export default function NewAdPage() {
   }
 
   async function submitAxios(ev) {
-
+    
     return wrap(ev, async (formData) => {
       const { data } = await axios.post(
         `${config.serverUrl}/api/images`,
@@ -209,27 +210,20 @@ export default function NewAdPage() {
     }
   }
 
-  const setImagesData = async (e) => {
-    const files = e.target.files;
-    setImages(files);
-    // await submitAxios(e);
-
-  }
-
   const onSubmit = useCallback(async (ev, result) => {
     ev.preventDefault()
-    const resultImg = await submitAxios(ev).then(res => console.log(res));
-
-    const user = JSON.parse(localStorage.getItem('userData')).userId
-    const userAds = await Promise.resolve(axios.get(`${config.serverUrl}/api/users/${user}`))
+    const resultImg = await submitAxios(ev);
 
     const adId = await axios.post(`${config.serverUrl}/api/offer`, result)
       .then(res => res.data._id)
 
+    const user = JSON.parse(localStorage.getItem('userData')).userId
+    const userAds = await Promise.resolve(axios.get(`${config.serverUrl}/api/users/${user}`))
+
     const adsArr = [...userAds.data.ads, adId]
     const saveInUser = await axios.put(`${config.serverUrl}/api/users/newOffer/${user}`, adsArr).then(res => history.push('/home'))
 
-  }, [])
+  }, [result])
 
   return (
     <div className='newAd'>
@@ -252,17 +246,21 @@ export default function NewAdPage() {
                   <input type="text" className='offerForm__input' onChange={(e) => setTitle(e.target.value)} />
                   <p className='offerForm__text'>Описание</p>
                   <textarea className='offerForm__descriptionInput' onChange={(e) => setDescription(e.target.value)} />
+                  <div className='offerForm__priceContainer'>
+                    <p className='offerForm__priceText'>Цена:</p>
+                    <input type="text" className='offerForm__input offerForm__input--priceInput' onChange={(e) => setProductPrice(e.target.value)} />
+                  </div>
                 </div>
               </div>
               <div className="offerForm__img offerForm__item">
                 <h2 className='offerForm__title'>Фото</h2>
                 <div className="offerForm__itemContent offerForm__images">
                   <label className='offerForm__labelFile offerForm__imgItem' for="uploadImg">Добавить<br />Фото</label>
-                  <input type="file" name="slider" onChange={(e) => setImagesData(e)} class="offerForm__inputFile" id="uploadImg" accept="image/*" multiple />
+                  <input type="file" name="slider" onChange={(e) => setImages(e.target.files)} class="offerForm__inputFile" id="uploadImg" accept="image/*" multiple />
                   {[...images].map((file, i) => (
                     <img src={URL.createObjectURL(file)} className='offerForm__imgItem' width='150' height='150'></img>
                   ))}
-                  {/* <Button onClick={(ev) => submitAxios(ev)}>Загрузить фото</Button> */}
+                  <button onClick={(ev) => submitAxios(ev)}>Загрузить фото</button>
                 </div>
               </div>
             </div>
@@ -270,15 +268,12 @@ export default function NewAdPage() {
               <div className="offerForm__info offerForm__item">
                 <h2 className='offerForm__title'>Добавить новое объявление</h2>
                 <div className="offerForm__itemContent">
-                  <Dropdown clearable  search options={optionsSection} selection placeholder='Раздел' onChange={(e) => setSection(e.target.innerText)} />
-                  <Dropdown clearable  placeholder='Подраздел' search selection options={subsection} onChange={(e) => setSelectedSubsection(e.target.innerText)} />
-                  <Dropdown clearable  placeholder='Тип' search selection options={typeAdConfig} onChange={(e) => setType(e.target.innerText)} />
-                  {/* <Dropdown clearable className='ad__input' placeholder='Область' search selection options={uniqueSubject} onChange={(e) => setSelectedRegion(e.target.innerText)}/> */}
-                  <Dropdown clearable  placeholder='Город' search selection options={cityArr} onChange={(e) => setCity(e.target.innerText)} />
-                  <Input  placeholder='Цена $' onChange={(e) => setProductPrice(e.target.value)} />
+                  <MyDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Раздел' onChange={(e) => setSection(e.target.innerText)} />
+                  <MyDropdown placeholder='Подраздел' arr={subsection} onChange={(e) => setSelectedSubsection(e.target.innerText)} />
+                  <MyDropdown placeholder='Тип' arr={typeAdConfig} onChange={(e) => setType(e.target.innerText)} />
+                  <MyDropdown clearable placeholder='Город' arr={cityArr} onChange={(e) => setCity(e.target.innerText)} />
                 </div>
               </div>
-
               <div className="offerForm__contacts offerForm__item">
                 <h2 className='offerForm__title '>Контакты</h2>
                 <div className="offerForm__itemContent offerForm__contactsContent">
@@ -298,47 +293,126 @@ export default function NewAdPage() {
               </div>
             </div>
             <div className='offerForm__content'>
+
               <div className="offerForm__btns">
-                <h3>Объязательно для эффективности</h3>
-                <div className='offerForm__btnContainer'>
-                  <button type='button' style={status === 'gold' ? { backgroundColor: '#ece218' } : { backgroundColor: '#ecff18' }} className='offerForm__btn--gold offerForm__btn' onClick={(ev) => onChangeGold(ev)}>
-                    Выделить золотым
-              </button>
+                <div className="offerForm__moreService">
+                  <h3 className='offerForm__serviceTitle'>Объязательно для эффективности</h3>
+                  <div className='offerForm__servicesBtns'>
+                    <button type='button'
+                      style={status === 'gold' ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#ecff18' }}
+                      className={status === 'gold' ? 'offerForm__btn--gold offerForm__btn offerForm__btn--active' : 'offerForm__btn--gold offerForm__btn'}
+                      onClick={(ev) => onChangeGold(ev)}
+                    >
+                      Выделить золотым
+                      <span className='offerForm__servicePrice'>25 руб.</span>
+                    </button>
+                    <button
+                      style={status === 'silver' ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#ddedd6' }}
+                      className={status === 'silver' ? 'offerForm__btn--silver offerForm__btn offerForm__btn--active' : 'offerForm__btn--silver offerForm__btn'}
+                      onClick={(ev) => onChangeSilver(ev)}
+                    >
+                      Выделить серебряным
+                      <span className='offerForm__servicePrice'>25 руб.</span>
+                    </button>
+                  </div>
                 </div>
-                <div className='offerForm__btnContainer'>
-                  <button style={status === 'silver' ? { backgroundColor: '#bec6c1' } : { backgroundColor: '#ddedd6' }} className='offerForm__btn--silver offerForm__btn' onClick={(ev) => onChangeSilver(ev)}>
-                    Выделить серебряным
-              </button>
+              </div>
+
+              <div className="offerForm__btns">
+                <div className="offerForm__moreService">
+                  <h3 className='offerForm__serviceTitle'>Увеличение <br /> продаж</h3>
+                  <div className='offerForm__servicesBtns'>
+                    <button
+                      style={serviceArr.includes('shares') ? { background: '#E2E2E2' } : { backgroundColor: '#78849A' }}
+                      className={serviceArr.includes('shares') ? 'offerForm__btn--shares offerForm__btn offerForm__btn--active' : 'offerForm__btn--shares offerForm__btn'}
+                      onClick={(ev) => onChangeService(ev, 'shares')}
+                    >
+                      Акции
+                      <span className='offerForm__servicePrice'>25 руб.</span>
+                    </button>
+                    <button
+                      style={serviceArr.includes('sales') ? { background: '#E2E2E2' } : { backgroundColor: '#78849A' }}
+                      className={serviceArr.includes('sales') ? 'offerForm__btn--shares offerForm__btn offerForm__btn--active' : 'offerForm__btn--shares offerForm__btn'}
+                      onClick={(ev) => onChangeService(ev, 'sales')}
+                    >
+                      Скидки
+                      <span className='offerForm__servicePrice'>25 руб.</span>
+                    </button>
+                  </div>
                 </div>
               </div>
+
               <div className="offerForm__btns">
-                <h3>Увеличение продаж</h3>
-                <div className="offerForm__btnContainer"><button style={serviceArr.includes('shares') ? { backgroundColor: '#78849A' } : { backgroundColor: '#B4C6E7' }} className='offerForm__btn--blue offerForm__btn' onClick={(ev) => onChangeService(ev, 'shares')}>Акции</button></div>
-                <div className="offerForm__btnContainer"><button style={serviceArr.includes('sales') ? { backgroundColor: '#78849A' } : { backgroundColor: '#B4C6E7' }} className='offerForm__btn--blue offerForm__btn' onClick={(ev) => onChangeService(ev, 'sales')}>Скидки</button></div>
+                <div className="offerForm__moreService">
+                  <h3 className='offerForm__serviceTitle'>Больше заинтересованых соискателей</h3>
+                  <div className='offerForm__servicesBtns'>
+                    <button
+                      className={serviceArr.includes('hots') ? 'offerForm__btn--green offerForm__btn offerForm__btn--active' : 'offerForm__btn--green offerForm__btn'}
+                      style={serviceArr.includes('hots') ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#9CDD7D' }}
+                      onClick={(ev) => onChangeService(ev, 'hots')}
+                    >
+                      Горячие
+                      <span className='offerForm__servicePrice'>25 руб.</span>
+                    </button>
+                    <button
+                      className={serviceArr.includes('recommend') ? 'offerForm__btn--green offerForm__btn offerForm__btn--active' : 'offerForm__btn--green offerForm__btn'}
+                      style={serviceArr.includes('recommend') ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#9CDD7D' }}
+                      onClick={(ev) => onChangeService(ev, 'recommend')}
+                    >
+                      Рекомендованые
+                      <span className='offerForm__servicePrice'>25 руб.</span>
+                    </button>
+                  </div>
+                </div>
               </div>
+
               <div className="offerForm__btns">
-                <h3>Больше заинтересованых соискателей</h3>
-                <button className='offerForm__btn--gray offerForm__btn' style={serviceArr.includes('hots') ? { backgroundColor: '#808080' } : { backgroundColor: '#D9D9D9' }} onClick={(ev) => onChangeService(ev, 'hots')}>Горячие</button>
-                <button className='offerForm__btn--gray offerForm__btn' style={serviceArr.includes('recommend') ? { backgroundColor: '#808080' } : { backgroundColor: '#D9D9D9' }} onClick={(ev) => onChangeService(ev, 'recommend')}>Рекомендованые</button>
+                <div className="offerForm__moreService">
+                  <h3 className='offerForm__serviceTitle'>Привлекающие<br />внимание</h3>
+                  <div className='offerForm__servicesBtns'>
+                    <button 
+                      className={serviceArr.includes('runStroke') ? 'offerForm__btn--pink offerForm__btn offerForm__btn--active' : 'offerForm__btn--pink offerForm__btn'}
+                      style={serviceArr.includes('runStroke') ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#FFC8C8' }}
+                      onClick={(ev) => onChangeService(ev, 'runStroke')}
+                    >
+                      Бегущая строка
+                      <span className='offerForm__servicePrice'>25 руб.</span>
+                    </button>
+                    <button 
+                      className={serviceArr.includes('banner') ? 'offerForm__btn--pink offerForm__btn offerForm__btn--active' : 'offerForm__btn--pink offerForm__btn'}
+                      style={serviceArr.includes('banner') ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#FFC8C8' }}
+                      onClick={(ev) => onChangeService(ev, 'banner')}
+                    >
+                      Баннер
+                      <span className='offerForm__servicePrice'>25 руб.</span>
+                    </button>
+                  </div>
+                </div>
               </div>
-              <div className="offerForm__btns">
-                <h3>Привлекающие внимание</h3>
-                <button className='offerForm__btn--green offerForm__btn' style={serviceArr.includes('runStroke') ? { backgroundColor: '#8B9D7E' } : { backgroundColor: '#C6E0B4' }} onClick={(ev) => onChangeService(ev, 'runStroke')}>Бегущая строка</button>
-                <button className='offerForm__btn--green offerForm__btn' style={serviceArr.includes('banner') ? { backgroundColor: '#8B9D7E' } : { backgroundColor: '#C6E0B4' }} onClick={(ev) => onChangeService(ev, 'banner')}>Баннер</button>
-              </div>
+
             </div>
-            <div>
-              <h2>Price:{price}$</h2>
-              <Button inverted color='brown' onClick={(ev) => onSubmit(ev, result)}>
-                Подтвердить
-          </Button>
+            <div className='offerForm__totalPriceContainer'>
+              <div className="offerForm__days">
+                <span>Количество дней:</span>
+                <div className="offerForm__daysCounter">
+                  <button type='button' className="offerForm__daysBtn" onClick={() => setDays(days - 1)} disabled={days === 1}>-</button>
+                  <span className='offerForm__daysCount'>{days}</span>
+                  <button type='button' className="offerForm__daysBtn" onClick={() => setDays(days + 1)} disabled={days === 10}>+</button>
+                </div>
+              </div>
+              <p className='offerForm__totalPrice'>Общая сумма: {price}руб.</p>
             </div>
-            <Liqpay price={price} />
+
+            <button type='button' className='offerForm__btnSubmit' onClick={(ev) => onSubmit(ev, result)}>
+              ОПЛАТИТЬ И ОПУБЛИКОВАТЬ
+            </button>
+
+            {/* <Liqpay price={price} /> */}
           </form>
 
         </div>
 
       </div>
-    </div>
+    </div >
   )
 }

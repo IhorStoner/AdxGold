@@ -6,7 +6,6 @@ const { Schema } = mongoose;
 const AdSchema = new Schema({
   city: {
     type: String,
-    required: true,
   },
   img: {
     type: Array,
