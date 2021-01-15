@@ -9,8 +9,8 @@ export default function RegPage() {
   const [ signUpSuccess, setSignUpSuccess ] = useState(false);
 
   const onSubmit = useCallback(async values => {
-    await axios.post(`${config.serverUrl}/api/registration`, values)
-    setSignUpSuccess(true)
+    await axios.post(`${config.serverUrl}/api/registration`, values).then(res => setSignUpSuccess(true))
+    
   },[])
   
   return (
