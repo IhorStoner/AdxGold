@@ -4,13 +4,11 @@ import adsReducer from './reducers/adsReducer'
 import userReducer from './reducers/userReducer'
 import dropdownCityReducer from './reducers/dropdownCityReducer'
 import categoryReducer from './reducers/categoryReducer'
-import newAdFormReducer from './reducers/newAdFormReducer'
 
 export default combineReducers({
   ads: adsReducer,
   user: userReducer,
   filter: dropdownCityReducer,
   selectedCategory: categoryReducer,
-  newAdForm: newAdFormReducer,
   form: formReducer
 })

@@ -48,17 +48,18 @@ usersRouter.put('/favoritesAd/:userId', async(req,res) => {
   const updateUser = await UserModel.findById(req.params.userId)
   let result;
   let ads;
+
   if(updateUser.favorites.includes(req.body[0])) {
     ads = updateUser.favorites.filter(ad => ad !== req.body[0])
-    const favoriteArr = await AdModel.find({_id: {$all: ads}})
+    let favoriteArr = await AdModel.find({'_id': {$in: ads}})
     result = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {favorites: ads, favoritesArr: favoriteArr}})
   } else {
     ads = [...updateUser.favorites, req.body[0]]
-    const favoriteArr =  await AdModel.find({_id: {$all: ads}})
+    let favoriteArr =  await AdModel.find({'_id': {$in: ads}})
     result = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {favorites: ads, favoritesArr: favoriteArr}})
   }
   
-  res.status(200).send(ads)
+  res.status(200).send(result)
 })
 
 //deleteUserById

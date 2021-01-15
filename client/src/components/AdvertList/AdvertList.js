@@ -43,7 +43,7 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 
 	const handleFavoritesAd = async (e, adId) => {
 		e.stopPropagation()
-		if (!isAuth) {
+		if (!userId) {
 			setIsAlertOpen(true)
 		} else {
 			await axios.put(`${config.serverUrl}/api/users/favoritesAd/${user._id}`, [adId]).then(res => dispatch(fetchUser()))

@@ -16,6 +16,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getSharesAds } from '../../redux/selectors/adsSelector'
 import { fetchSharesAds } from '../../redux/actions/adsAction'
 import MyDropdown from '../../components/MyDropdown/MyDropdown'
+import DimmerLoader from '../../components/DimmerLoader/DimmerLoader'
 
 export default function NewAdPage() {
   const { token, userId } = useAuth()
@@ -60,6 +61,7 @@ export default function NewAdPage() {
   const [images, setImages] = useState([])
   const [imgNames, setImgNames] = useState([])
   const [days, setDays] = useState(1)
+  const [isLodaing, setIsLoading ] = useState(false)
   const history = useHistory();
 
   const typeAdConfig = [
@@ -90,7 +92,7 @@ export default function NewAdPage() {
   // подготовка данных формы для отправки
   useEffect(() => {
     setResult({
-      img: imgNames,
+      // img: imgNames,
       section: section,
       subsection: selectedSubsection,
       type: type,
@@ -144,7 +146,7 @@ export default function NewAdPage() {
 
     return formData;
   }
-
+  /// сохранение картинок
   async function submitAxios(ev) {
     
     return wrap(ev, async (formData) => {
@@ -157,7 +159,7 @@ export default function NewAdPage() {
             'Accept': 'application/json'
           }
         }
-      ).then(res => setImgNames(res.data))
+      )//.then(res => setImgNames(res.data))
 
       return data;
     });
@@ -210,11 +212,14 @@ export default function NewAdPage() {
     }
   }
 
-  const onSubmit = useCallback(async (ev, result) => {
+  const onSubmit = useCallback(async (ev) => {
+    setIsLoading(true)
     ev.preventDefault()
     const resultImg = await submitAxios(ev);
+    let finnalyData = result;
+    finnalyData.img = resultImg
 
-    const adId = await axios.post(`${config.serverUrl}/api/offer`, result)
+    const adId = await axios.post(`${config.serverUrl}/api/offer`, finnalyData)
       .then(res => res.data._id)
 
     const user = JSON.parse(localStorage.getItem('userData')).userId
@@ -260,7 +265,6 @@ export default function NewAdPage() {
                   {[...images].map((file, i) => (
                     <img src={URL.createObjectURL(file)} className='offerForm__imgItem' width='150' height='150'></img>
                   ))}
-                  <button onClick={(ev) => submitAxios(ev)}>Загрузить фото</button>
                 </div>
               </div>
             </div>
@@ -299,7 +303,8 @@ export default function NewAdPage() {
                   <h3 className='offerForm__serviceTitle'>Объязательно для эффективности</h3>
                   <div className='offerForm__servicesBtns'>
                     <button type='button'
-                      style={status === 'gold' ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#ecff18' }}
+                      style={status === 'gold' ? { backgroundColor: '#ecff18' } : { backgroundColor: '#ecff18' }}
+                      onMouseDown={(e) => console.log(e)}
                       className={status === 'gold' ? 'offerForm__btn--gold offerForm__btn offerForm__btn--active' : 'offerForm__btn--gold offerForm__btn'}
                       onClick={(ev) => onChangeGold(ev)}
                     >
@@ -307,7 +312,7 @@ export default function NewAdPage() {
                       <span className='offerForm__servicePrice'>25 руб.</span>
                     </button>
                     <button
-                      style={status === 'silver' ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#ddedd6' }}
+                      style={status === 'silver' ? { backgroundColor: '#ddedd6' } : { backgroundColor: '#ddedd6' }}
                       className={status === 'silver' ? 'offerForm__btn--silver offerForm__btn offerForm__btn--active' : 'offerForm__btn--silver offerForm__btn'}
                       onClick={(ev) => onChangeSilver(ev)}
                     >
@@ -323,7 +328,7 @@ export default function NewAdPage() {
                   <h3 className='offerForm__serviceTitle'>Увеличение <br /> продаж</h3>
                   <div className='offerForm__servicesBtns'>
                     <button
-                      style={serviceArr.includes('shares') ? { background: '#E2E2E2' } : { backgroundColor: '#78849A' }}
+                      style={serviceArr.includes('shares') ? { background: '#78849A' } : { backgroundColor: '#78849A' }}
                       className={serviceArr.includes('shares') ? 'offerForm__btn--shares offerForm__btn offerForm__btn--active' : 'offerForm__btn--shares offerForm__btn'}
                       onClick={(ev) => onChangeService(ev, 'shares')}
                     >
@@ -331,7 +336,7 @@ export default function NewAdPage() {
                       <span className='offerForm__servicePrice'>25 руб.</span>
                     </button>
                     <button
-                      style={serviceArr.includes('sales') ? { background: '#E2E2E2' } : { backgroundColor: '#78849A' }}
+                      style={serviceArr.includes('sales') ? { background: '#78849A' } : { backgroundColor: '#78849A' }}
                       className={serviceArr.includes('sales') ? 'offerForm__btn--shares offerForm__btn offerForm__btn--active' : 'offerForm__btn--shares offerForm__btn'}
                       onClick={(ev) => onChangeService(ev, 'sales')}
                     >
@@ -348,7 +353,7 @@ export default function NewAdPage() {
                   <div className='offerForm__servicesBtns'>
                     <button
                       className={serviceArr.includes('hots') ? 'offerForm__btn--green offerForm__btn offerForm__btn--active' : 'offerForm__btn--green offerForm__btn'}
-                      style={serviceArr.includes('hots') ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#9CDD7D' }}
+                      style={serviceArr.includes('hots') ? { backgroundColor: '#9CDD7D' } : { backgroundColor: '#9CDD7D' }}
                       onClick={(ev) => onChangeService(ev, 'hots')}
                     >
                       Горячие
@@ -356,7 +361,7 @@ export default function NewAdPage() {
                     </button>
                     <button
                       className={serviceArr.includes('recommend') ? 'offerForm__btn--green offerForm__btn offerForm__btn--active' : 'offerForm__btn--green offerForm__btn'}
-                      style={serviceArr.includes('recommend') ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#9CDD7D' }}
+                      style={serviceArr.includes('recommend') ? { backgroundColor: '#9CDD7D' } : { backgroundColor: '#9CDD7D' }}
                       onClick={(ev) => onChangeService(ev, 'recommend')}
                     >
                       Рекомендованые
@@ -372,7 +377,7 @@ export default function NewAdPage() {
                   <div className='offerForm__servicesBtns'>
                     <button 
                       className={serviceArr.includes('runStroke') ? 'offerForm__btn--pink offerForm__btn offerForm__btn--active' : 'offerForm__btn--pink offerForm__btn'}
-                      style={serviceArr.includes('runStroke') ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#FFC8C8' }}
+                      style={serviceArr.includes('runStroke') ? { backgroundColor: '#FFC8C8' } : { backgroundColor: '#FFC8C8' }}
                       onClick={(ev) => onChangeService(ev, 'runStroke')}
                     >
                       Бегущая строка
@@ -380,7 +385,7 @@ export default function NewAdPage() {
                     </button>
                     <button 
                       className={serviceArr.includes('banner') ? 'offerForm__btn--pink offerForm__btn offerForm__btn--active' : 'offerForm__btn--pink offerForm__btn'}
-                      style={serviceArr.includes('banner') ? { backgroundColor: '#E2E2E2' } : { backgroundColor: '#FFC8C8' }}
+                      style={serviceArr.includes('banner') ? { backgroundColor: '#FFC8C8' } : { backgroundColor: '#FFC8C8' }}
                       onClick={(ev) => onChangeService(ev, 'banner')}
                     >
                       Баннер
@@ -403,8 +408,9 @@ export default function NewAdPage() {
               <p className='offerForm__totalPrice'>Общая сумма: {price}руб.</p>
             </div>
 
-            <button type='button' className='offerForm__btnSubmit' onClick={(ev) => onSubmit(ev, result)}>
+            <button type='button' className='offerForm__btnSubmit' onClick={(ev) => onSubmit(ev)}>
               ОПЛАТИТЬ И ОПУБЛИКОВАТЬ
+              {isLodaing && <DimmerLoader/>}
             </button>
 
             {/* <Liqpay price={price} /> */}
