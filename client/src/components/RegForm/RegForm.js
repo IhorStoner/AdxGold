@@ -4,6 +4,7 @@ import { Button } from 'semantic-ui-react'
 import { reduxForm, Field } from 'redux-form'
 import TextField from '../TextField/TextField'
 import './RegForm.scss'
+import config from '../../config/default.json'
 
 function RegForm({handleSubmit, valid, submitting}) {
   return (
@@ -55,7 +56,7 @@ const validate = values => {
 
 const asyncValidate = async values => {
   if (!values.email) return;
-  const response = await axios.get(`http://localhost:5000/api/registration/is_exist?email=${values.email}`);
+  const response = await axios.get(`${config.serverUrl}/api/registration/is_exist?email=${values.email}`);
   if (response.data.is_exist) {
     throw { email: 'This email is already taken' }
   }

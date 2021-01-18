@@ -92,7 +92,6 @@ export default function NewAdPage() {
   // подготовка данных формы для отправки
   useEffect(() => {
     setResult({
-      // img: imgNames,
       section: section,
       subsection: selectedSubsection,
       type: type,
@@ -108,7 +107,6 @@ export default function NewAdPage() {
       status: status,
       services: serviceArr,
     })
-    console.log(result)
   }, [section, selectedSubsection, type, selectedRegion, city, price, title, description, name, phone, mail, status, serviceArr, productPrice, imgNames, images])
 
   useEffect(() => {
@@ -300,7 +298,7 @@ export default function NewAdPage() {
 
               <div className="offerForm__btns">
                 <div className="offerForm__moreService">
-                  <h3 className='offerForm__serviceTitle'>Объязательно для эффективности</h3>
+                  <h3 className='offerForm__serviceTitle'>Объязательно для<br/> эффективности</h3>
                   <div className='offerForm__servicesBtns'>
                     <button type='button'
                       style={status === 'gold' ? { backgroundColor: '#ecff18' } : { backgroundColor: '#ecff18' }}
@@ -328,7 +326,6 @@ export default function NewAdPage() {
                   <h3 className='offerForm__serviceTitle'>Увеличение <br /> продаж</h3>
                   <div className='offerForm__servicesBtns'>
                     <button
-                      style={serviceArr.includes('shares') ? { background: '#78849A' } : { backgroundColor: '#78849A' }}
                       className={serviceArr.includes('shares') ? 'offerForm__btn--shares offerForm__btn offerForm__btn--active' : 'offerForm__btn--shares offerForm__btn'}
                       onClick={(ev) => onChangeService(ev, 'shares')}
                     >
@@ -336,7 +333,6 @@ export default function NewAdPage() {
                       <span className='offerForm__servicePrice'>25 руб.</span>
                     </button>
                     <button
-                      style={serviceArr.includes('sales') ? { background: '#78849A' } : { backgroundColor: '#78849A' }}
                       className={serviceArr.includes('sales') ? 'offerForm__btn--shares offerForm__btn offerForm__btn--active' : 'offerForm__btn--shares offerForm__btn'}
                       onClick={(ev) => onChangeService(ev, 'sales')}
                     >
