@@ -37,6 +37,9 @@
     color: #000;
     font-family: 'Roboto-normal';
     width: 100%;
+    overflow: hidden;
+    max-width: 50%;
+    max-height: 174px;
   }
 
   &__itemTitle {

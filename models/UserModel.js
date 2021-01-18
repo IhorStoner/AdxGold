@@ -15,7 +15,6 @@ const UserSchema = new Schema({
   },
   surname: {
     type: String,
-    required: true,
     maxlength: 60,
   },
   email: {

@@ -20,7 +20,7 @@ export default function Slider({ imgArr = [], onClickPhotos }) {
         {imgArr.map((img,i) => (
           <div key={i} className="each-fade" >
             <div className="image-container" onClick={() => onClickPhotos(imgArr)}>
-              <img src={`${config.serverUrl}/api/images/${img}`} style={{width: "100%"}}/>
+              <img className='slider__img' src={`${config.serverUrl}/api/images/${img}`} style={{width: "100%", height: '100%', objectFit: 'contain'}}/>
             </div>
           </div>
         ))}

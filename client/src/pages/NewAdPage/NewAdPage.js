@@ -61,13 +61,24 @@ export default function NewAdPage() {
   const [images, setImages] = useState([])
   const [imgNames, setImgNames] = useState([])
   const [days, setDays] = useState(1)
-  const [isLodaing, setIsLoading ] = useState(false)
+  const [navCategory, setNavCategory] = useState('Куплю/продам')
+  const [isLodaing, setIsLoading] = useState(false)
   const history = useHistory();
 
   const typeAdConfig = [
     { key: 1, text: 'Покупка', value: 'Покупка' },
     { key: 2, text: 'Продажа', value: 'Продажа' },
     { key: 3, text: 'Аренда', value: 'Аренда' }
+  ]
+
+  const categoryArr = [
+    { key: 1, text: 'Продам/куплю', value: 'Продам/куплю' },
+    { key: 2, text: 'Недвижимость', value: 'Недвижимость' },
+    { key: 3, text: 'Авто', value: 'Авто' },
+    { key: 4, text: 'Услуги', value: 'Услуги' },
+    { key: 5, text: 'Работа', value: 'Работа' },
+    { key: 6, text: 'Новые авто', value: 'Новые авто' },
+    { key: 7, text: 'Новые квартиры', value: 'Новые квартиры' },
   ]
 
   const optionsSection = Object.keys(stateSection).map((item, i) => {
@@ -146,7 +157,7 @@ export default function NewAdPage() {
   }
   /// сохранение картинок
   async function submitAxios(ev) {
-    
+
     return wrap(ev, async (formData) => {
       const { data } = await axios.post(
         `${config.serverUrl}/api/images`,
@@ -210,6 +221,17 @@ export default function NewAdPage() {
     }
   }
 
+  const onChangePriceByDay = (action) => {
+    if(action === 'minus') {
+      setDays(days - 1)
+      setPrice(price - 25)
+    } else if(action === 'plus') {
+      setDays(days + 1)
+      setPrice(price + 25)
+    }
+    
+  }
+
   const onSubmit = useCallback(async (ev) => {
     setIsLoading(true)
     ev.preventDefault()
@@ -242,19 +264,17 @@ export default function NewAdPage() {
           </div>
           <form className="offerForm" method="post" enctype="multipart/form-data" id='exampleForm'>
             <div className="offerForm__content">
-              <div className="offerForm__data offerForm__item">
-                <h2 className='offerForm__title'>Данные объявление</h2>
+              <div className="offerForm__info offerForm__item">
+                <h2 className='offerForm__title'>Добавить новое объявление</h2>
                 <div className="offerForm__itemContent">
-                  <h3 className='offerForm__text'>Заголовок</h3>
-                  <input type="text" className='offerForm__input' onChange={(e) => setTitle(e.target.value)} />
-                  <p className='offerForm__text'>Описание</p>
-                  <textarea className='offerForm__descriptionInput' onChange={(e) => setDescription(e.target.value)} />
-                  <div className='offerForm__priceContainer'>
-                    <p className='offerForm__priceText'>Цена:</p>
-                    <input type="text" className='offerForm__input offerForm__input--priceInput' onChange={(e) => setProductPrice(e.target.value)} />
-                  </div>
+                  <MyDropdown className='offerForm__dropdown' arr={categoryArr} placeholder='Категория' onChange={(e) => setNavCategory(e.target.innerText)} />
+                  <MyDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Раздел' onChange={(e) => setSection(e.target.innerText)} />
+                  <MyDropdown placeholder='Подраздел' arr={subsection} onChange={(e) => setSelectedSubsection(e.target.innerText)} />
+                  <MyDropdown placeholder='Тип' arr={typeAdConfig} onChange={(e) => setType(e.target.innerText)} />
+                  <MyDropdown clearable placeholder='Город' arr={cityArr} onChange={(e) => setCity(e.target.innerText)} />
                 </div>
               </div>
+
               <div className="offerForm__img offerForm__item">
                 <h2 className='offerForm__title'>Фото</h2>
                 <div className="offerForm__itemContent offerForm__images">
@@ -267,13 +287,17 @@ export default function NewAdPage() {
               </div>
             </div>
             <div className="offerForm__content">
-              <div className="offerForm__info offerForm__item">
-                <h2 className='offerForm__title'>Добавить новое объявление</h2>
+              <div className="offerForm__data offerForm__item">
+                <h2 className='offerForm__title'>Данные объявление</h2>
                 <div className="offerForm__itemContent">
-                  <MyDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Раздел' onChange={(e) => setSection(e.target.innerText)} />
-                  <MyDropdown placeholder='Подраздел' arr={subsection} onChange={(e) => setSelectedSubsection(e.target.innerText)} />
-                  <MyDropdown placeholder='Тип' arr={typeAdConfig} onChange={(e) => setType(e.target.innerText)} />
-                  <MyDropdown clearable placeholder='Город' arr={cityArr} onChange={(e) => setCity(e.target.innerText)} />
+                  <h3 className='offerForm__text'>Заголовок</h3>
+                  <input type="text" className='offerForm__input' onChange={(e) => setTitle(e.target.value)} />
+                  <p className='offerForm__text'>Описание</p>
+                  <textarea className='offerForm__descriptionInput' onChange={(e) => setDescription(e.target.value)} />
+                  <div className='offerForm__priceContainer'>
+                    <p className='offerForm__priceText'>Цена:</p>
+                    <input type="text" className='offerForm__input offerForm__input--priceInput' onChange={(e) => setProductPrice(e.target.value)} />
+                  </div>
                 </div>
               </div>
               <div className="offerForm__contacts offerForm__item">
@@ -298,7 +322,7 @@ export default function NewAdPage() {
 
               <div className="offerForm__btns">
                 <div className="offerForm__moreService">
-                  <h3 className='offerForm__serviceTitle'>Объязательно для<br/> эффективности</h3>
+                  <h3 className='offerForm__serviceTitle'>Объязательно для<br /> эффективности</h3>
                   <div className='offerForm__servicesBtns'>
                     <button type='button'
                       style={status === 'gold' ? { backgroundColor: '#ecff18' } : { backgroundColor: '#ecff18' }}
@@ -307,7 +331,7 @@ export default function NewAdPage() {
                       onClick={(ev) => onChangeGold(ev)}
                     >
                       Выделить золотым
-                      <span className='offerForm__servicePrice'>25 руб.</span>
+                      <span className='offerForm__servicePrice'>50 руб.</span>
                     </button>
                     <button
                       style={status === 'silver' ? { backgroundColor: '#ddedd6' } : { backgroundColor: '#ddedd6' }}
@@ -330,14 +354,14 @@ export default function NewAdPage() {
                       onClick={(ev) => onChangeService(ev, 'shares')}
                     >
                       Акции
-                      <span className='offerForm__servicePrice'>25 руб.</span>
+                      <span className='offerForm__servicePrice'>30 руб.</span>
                     </button>
                     <button
                       className={serviceArr.includes('sales') ? 'offerForm__btn--shares offerForm__btn offerForm__btn--active' : 'offerForm__btn--shares offerForm__btn'}
                       onClick={(ev) => onChangeService(ev, 'sales')}
                     >
                       Скидки
-                      <span className='offerForm__servicePrice'>25 руб.</span>
+                      <span className='offerForm__servicePrice'>30 руб.</span>
                     </button>
                   </div>
                 </div>
@@ -353,7 +377,7 @@ export default function NewAdPage() {
                       onClick={(ev) => onChangeService(ev, 'hots')}
                     >
                       Горячие
-                      <span className='offerForm__servicePrice'>25 руб.</span>
+                      <span className='offerForm__servicePrice'>30 руб.</span>
                     </button>
                     <button
                       className={serviceArr.includes('recommend') ? 'offerForm__btn--green offerForm__btn offerForm__btn--active' : 'offerForm__btn--green offerForm__btn'}
@@ -361,7 +385,7 @@ export default function NewAdPage() {
                       onClick={(ev) => onChangeService(ev, 'recommend')}
                     >
                       Рекомендованые
-                      <span className='offerForm__servicePrice'>25 руб.</span>
+                      <span className='offerForm__servicePrice'>30 руб.</span>
                     </button>
                   </div>
                 </div>
@@ -371,21 +395,21 @@ export default function NewAdPage() {
                 <div className="offerForm__moreService">
                   <h3 className='offerForm__serviceTitle'>Привлекающие<br />внимание</h3>
                   <div className='offerForm__servicesBtns'>
-                    <button 
+                    <button
                       className={serviceArr.includes('runStroke') ? 'offerForm__btn--pink offerForm__btn offerForm__btn--active' : 'offerForm__btn--pink offerForm__btn'}
                       style={serviceArr.includes('runStroke') ? { backgroundColor: '#FFC8C8' } : { backgroundColor: '#FFC8C8' }}
                       onClick={(ev) => onChangeService(ev, 'runStroke')}
                     >
                       Бегущая строка
-                      <span className='offerForm__servicePrice'>25 руб.</span>
+                      <span className='offerForm__servicePrice'>30 руб.</span>
                     </button>
-                    <button 
+                    <button
                       className={serviceArr.includes('banner') ? 'offerForm__btn--pink offerForm__btn offerForm__btn--active' : 'offerForm__btn--pink offerForm__btn'}
                       style={serviceArr.includes('banner') ? { backgroundColor: '#FFC8C8' } : { backgroundColor: '#FFC8C8' }}
                       onClick={(ev) => onChangeService(ev, 'banner')}
                     >
                       Баннер
-                      <span className='offerForm__servicePrice'>25 руб.</span>
+                      <span className='offerForm__servicePrice'>30 руб.</span>
                     </button>
                   </div>
                 </div>
@@ -396,9 +420,9 @@ export default function NewAdPage() {
               <div className="offerForm__days">
                 <span>Количество дней:</span>
                 <div className="offerForm__daysCounter">
-                  <button type='button' className="offerForm__daysBtn" onClick={() => setDays(days - 1)} disabled={days === 1}>-</button>
+                  <button type='button' className="offerForm__daysBtn" onClick={() => onChangePriceByDay('minus')} disabled={days === 1}>-</button>
                   <span className='offerForm__daysCount'>{days}</span>
-                  <button type='button' className="offerForm__daysBtn" onClick={() => setDays(days + 1)} disabled={days === 10}>+</button>
+                  <button type='button' className="offerForm__daysBtn" onClick={() => onChangePriceByDay('plus')} disabled={days === 10}>+</button>
                 </div>
               </div>
               <p className='offerForm__totalPrice'>Общая сумма: {price}руб.</p>
@@ -406,7 +430,7 @@ export default function NewAdPage() {
 
             <button type='button' className='offerForm__btnSubmit' onClick={(ev) => onSubmit(ev)}>
               ОПЛАТИТЬ И ОПУБЛИКОВАТЬ
-              {isLodaing && <DimmerLoader/>}
+              {isLodaing && <DimmerLoader />}
             </button>
 
             {/* <Liqpay price={price} /> */}

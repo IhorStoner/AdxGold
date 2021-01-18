@@ -4,6 +4,9 @@ const moment = require('moment')
 const { Schema } = mongoose;
 
 const AdSchema = new Schema({
+  category: {
+    type: String,
+  },
   city: {
     type: String,
   },

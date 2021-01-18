@@ -1,7 +1,11 @@
-// .slide-container {
-//   max-height: 540px !important;
-//   position: relative !important;
-// }
+.slider {
+  &__img {
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    vertical-align: middle;
+  }
+}
 
 .indicators {
   position: absolute;
@@ -15,4 +19,5 @@
 
 .image-container {
   cursor: pointer !important;
+  height: 276px !important;
 }

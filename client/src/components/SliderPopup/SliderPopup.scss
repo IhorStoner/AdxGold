@@ -63,7 +63,12 @@
 
   &__img {
     margin-right: 5px;
+    width: 100%;
+    max-width: none;
+    max-height: none;
+    vertical-align: middle;
     cursor: pointer;
+    object-fit: 'contain'; 
 
     &:last-child {
       margin-right: 0;

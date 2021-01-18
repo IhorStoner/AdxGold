@@ -1,6 +1,7 @@
-import React, { useState, useEffect,useCallback } from 'react'
+import React, { useState, useEffect, useCallback } from 'react'
 import config from '../../config/default.json'
 import './SliderPopup.scss'
+import { PrevButton, NextButton } from "./EmblaCarouselButtons";
 import { useEmblaCarousel } from "embla-carousel/react";
 import { Thumb } from "./EmblaCarouselThumb";
 // import { mediaByIndex } from "../media";
@@ -19,12 +20,17 @@ const slideCss = {
 
 export default function SliderPopup({ imgArr, onClickPhoto }) {
   const [emblaRef, emblaApi] = useEmblaCarousel({ loop: false })
+  const [prevBtnEnabled, setPrevBtnEnabled] = useState(false);
+  const [nextBtnEnabled, setNextBtnEnabled] = useState(false);
   const [selectedIndex, setSelectedIndex] = useState(0);
   const [mainViewportRef, embla] = useEmblaCarousel();
   const [thumbViewportRef, emblaThumbs] = useEmblaCarousel({
     containScroll: "keepSnaps",
     selectedClass: ""
   });
+
+  const scrollPrev = useCallback(() => embla && embla.scrollPrev(), [embla]);
+  const scrollNext = useCallback(() => embla && embla.scrollNext(), [embla]);
 
   const onThumbClick = useCallback(
     (index) => {
@@ -33,11 +39,14 @@ export default function SliderPopup({ imgArr, onClickPhoto }) {
     },
     [embla, emblaThumbs]
   );
+  
 
   const onSelect = useCallback(() => {
     if (!embla || !emblaThumbs) return;
     setSelectedIndex(embla.selectedScrollSnap());
     emblaThumbs.scrollTo(embla.selectedScrollSnap());
+    setPrevBtnEnabled(embla.canScrollPrev());
+    setNextBtnEnabled(embla.canScrollNext());
   }, [embla, emblaThumbs, setSelectedIndex]);
 
   useEffect(() => {
@@ -58,31 +67,33 @@ export default function SliderPopup({ imgArr, onClickPhoto }) {
               <div className="embla">
                 <div className="embla__viewport" ref={mainViewportRef}>
                   <div className="embla__container">
-                    {imgArr.map((img,index) => (
+                    {imgArr.map((img, index) => (
                       <div className="embla__slide" key={index}>
                         <div className="embla__slide__inner">
                           <img
                             className="embla__slide__img"
                             src={`${config.serverUrl}/api/images/${img}`}
                             alt="sliderImg"
-                            style={{ width: "100%",height:'100%' }}
+                            style={{ width: "100%", height: '100%', objectFit: 'contain' }}
                           />
                         </div>
                       </div>
                     ))}
                   </div>
                 </div>
+                <PrevButton onClick={scrollPrev} enabled={prevBtnEnabled} />
+                <NextButton onClick={scrollNext} enabled={nextBtnEnabled} />
               </div>
 
               <div className="embla embla--thumb">
                 <div className="embla__viewport" ref={thumbViewportRef}>
                   <div className="embla__container embla__container--thumb">
-                    {imgArr.map((img,index) => (
+                    {imgArr.map((img, index) => (
                       <Thumb
                         onClick={() => onThumbClick(index)}
                         selected={index === selectedIndex}
                         imgSrc={`${config.serverUrl}/api/images/${img}`}
-                        
+
                         key={index}
                       />
                     ))}

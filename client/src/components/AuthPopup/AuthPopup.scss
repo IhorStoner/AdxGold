@@ -1,0 +1,134 @@
+.authPopup {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  background: #f9f9f9;
+  border: 5px solid #f5742c;
+  box-sizing: border-box;
+  border-radius: 5px;
+  padding: 5px 70px 70px 70px;
+
+  &__submitContainer {
+    text-align: center;
+    margin-top: 10px;
+  }
+
+  &__regText {
+    text-align: center;
+    font-size: 1rem;
+    font-family: 'Roboto-normal';
+
+  }
+
+  &__btnSubmit {
+    padding: 3px 5px;
+    background: linear-gradient(180deg, #f5742c 0%, #ffad6a 100%);
+    border-radius: 5px;
+    font-family: "Roboto-normal";
+    font-size: 1rem;
+    margin: 0 auto;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+
+    &:hover {
+      background: linear-gradient(180deg, #e74d00 0%, #f17006 100%);
+    }
+  }
+
+  &__btnClose {
+    display: block;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background-image: url("../../assets/svg/btnCloseOrange.svg");
+    background-color: transparent;
+    border: none;
+    outline: none;
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    cursor: pointer;
+  }
+
+  &__input {
+    border: 2px solid #f36925;
+    box-sizing: border-box;
+    box-shadow: inset 0px 4px 13px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    padding: 5px 5px 5px 20px;
+    display: block;
+    margin-bottom: 15px;
+    width: 100%;
+    position: relative;
+
+    &::before {
+      content: "";
+      position: absolute;
+      display: block;
+      left: 0;
+      top: 50%;
+      width: 60px;
+      height: 43px;
+      background-image: url("../../assets/svg/name.svg");
+      transform: translateY(-50%);
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      z-index: 10111;
+    }
+
+    &--name::before {
+      background-image: url("../../assets/svg/name.svg");
+
+    }
+    &--email::before {
+      background-image: url("../../assets/svg/email.svg");
+    }
+    &--password::before {
+      background-image: url("../../assets/svg/password.svg");
+    }
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__btns {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 15px;
+  }
+
+  &__btn {
+    font-family: "Roboto-regular";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #f36925;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    padding: 5px 10px;
+    outline: none;
+    margin-right: 5px;
+    
+    &:last-child {
+      margin-right: 0;
+    }
+    &:hover {
+      background: linear-gradient(180deg, #e74d00 0%, #f17006 100%);
+      border-radius: 5px;
+      color: #fff;
+    }
+
+    &--active {
+      color: #fff;
+      background: linear-gradient(180deg, #f5742c 0%, #ffad6a 100%);
+      border-radius: 5px;
+    }
+  }
+}
