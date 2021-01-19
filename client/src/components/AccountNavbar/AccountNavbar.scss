@@ -1,0 +1,61 @@
+.accountNavbar {
+  width: 82.9%;
+  background-color: #616c7a;
+  padding: 5px 10px;
+  border-radius: 5px;
+
+  &__itemIcon {
+    width: 25px;
+    height: 25px;
+  }
+
+  &__content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  &__counter {
+    background: #f5732b;
+    border-radius: 5px;
+    color: #fff;
+    padding: 3px 5px;
+    font-size: 1rem;
+    font-family: "Roboto-normal";
+  }
+
+  &__item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    cursor: pointer;
+    padding: 5px 10px;
+
+    &--active {
+      background: #505965;
+      border-radius: 5px;
+    }
+    &:hover {
+      background: #505965;
+      border-radius: 5px;
+      color: #fff;
+    }
+  }
+
+  &__itemText {
+    font-family: "Roboto-normal";
+    font-style: normal;
+    font-weight: 500;
+    font-size: 1rem;
+    color: #ffffff;
+    margin: 0;
+
+    &:hover {
+      color: #fff;
+    }
+
+    &--uppercase {
+      text-transform: uppercase;
+    }
+  }
+}

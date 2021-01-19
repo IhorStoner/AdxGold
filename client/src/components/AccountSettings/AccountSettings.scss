@@ -1,0 +1,27 @@
+.accountSettings {
+  padding: 20px 35px;
+  text-align: center;
+  background-color: #F2F2F2;
+  border-radius: 5px;
+
+  &__item {
+    background: linear-gradient(180deg, #f36a25 0%, #f8923e 100%);
+    border-radius: 5px;
+    max-width: 600px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+    padding: 10px 5px;
+    cursor: pointer;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__text {
+    color: #fff;
+    text-transform: uppercase;
+    font-family: 'Roboto-normal';
+    font-size: 1rem;
+  }
+}

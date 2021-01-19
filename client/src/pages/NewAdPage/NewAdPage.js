@@ -18,6 +18,7 @@ import { fetchSharesAds } from '../../redux/actions/adsAction'
 import MyDropdown from '../../components/MyDropdown/MyDropdown'
 import DimmerLoader from '../../components/DimmerLoader/DimmerLoader'
 
+
 export default function NewAdPage() {
   const { token, userId } = useAuth()
   const isAuth = !!token;
@@ -222,14 +223,14 @@ export default function NewAdPage() {
   }
 
   const onChangePriceByDay = (action) => {
-    if(action === 'minus') {
+    if (action === 'minus') {
       setDays(days - 1)
       setPrice(price - 25)
-    } else if(action === 'plus') {
+    } else if (action === 'plus') {
       setDays(days + 1)
       setPrice(price + 25)
     }
-    
+
   }
 
   const onSubmit = useCallback(async (ev) => {
@@ -265,21 +266,21 @@ export default function NewAdPage() {
           <form className="offerForm" method="post" enctype="multipart/form-data" id='exampleForm'>
             <div className="offerForm__content">
               <div className="offerForm__info offerForm__item">
-                <h2 className='offerForm__title'>Добавить новое объявление</h2>
+                <h2 className='offerForm__title'>Данные объявления</h2>
                 <div className="offerForm__itemContent">
-                  <MyDropdown className='offerForm__dropdown' arr={categoryArr} placeholder='Категория' onChange={(e) => setNavCategory(e.target.innerText)} />
-                  <MyDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Раздел' onChange={(e) => setSection(e.target.innerText)} />
-                  <MyDropdown placeholder='Подраздел' arr={subsection} onChange={(e) => setSelectedSubsection(e.target.innerText)} />
-                  <MyDropdown placeholder='Тип' arr={typeAdConfig} onChange={(e) => setType(e.target.innerText)} />
+                  <MyDropdown className='offerForm__dropdown' arr={categoryArr} placeholder='Раздел' onChange={(e) => setNavCategory(e.target.innerText)} />
+                  <MyDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Категория' onChange={(e) => setSection(e.target.innerText)} />
+                  <MyDropdown placeholder='Подкатегория' arr={subsection} onChange={(e) => setSelectedSubsection(e.target.innerText)} />
+                  {/* <MyDropdown placeholder='Тип' arr={typeAdConfig} onChange={(e) => setType(e.target.innerText)} /> */}
                   <MyDropdown clearable placeholder='Город' arr={cityArr} onChange={(e) => setCity(e.target.innerText)} />
                 </div>
               </div>
 
               <div className="offerForm__img offerForm__item">
-                <h2 className='offerForm__title'>Фото</h2>
+                <h2 className='offerForm__title'>Фотографии</h2>
                 <div className="offerForm__itemContent offerForm__images">
                   <label className='offerForm__labelFile offerForm__imgItem' for="uploadImg">Добавить<br />Фото</label>
-                  <input type="file" name="slider" onChange={(e) => setImages(e.target.files)} class="offerForm__inputFile" id="uploadImg" accept="image/*" multiple />
+                  <input type="file" name="slider" onChange={(e) => setImages(e.target.files)} class="offerForm__inputFile" id="uploadImg" accept="image/jpeg,image/png,image/jpg" multiple />
                   {[...images].map((file, i) => (
                     <img src={URL.createObjectURL(file)} className='offerForm__imgItem' width='150' height='150'></img>
                   ))}
@@ -288,7 +289,7 @@ export default function NewAdPage() {
             </div>
             <div className="offerForm__content">
               <div className="offerForm__data offerForm__item">
-                <h2 className='offerForm__title'>Данные объявление</h2>
+                <h2 className='offerForm__title'>Описание объявления</h2>
                 <div className="offerForm__itemContent">
                   <h3 className='offerForm__text'>Заголовок</h3>
                   <input type="text" className='offerForm__input' onChange={(e) => setTitle(e.target.value)} />
@@ -301,7 +302,7 @@ export default function NewAdPage() {
                 </div>
               </div>
               <div className="offerForm__contacts offerForm__item">
-                <h2 className='offerForm__title '>Контакты</h2>
+                <h2 className='offerForm__title '>Контактные данные</h2>
                 <div className="offerForm__itemContent offerForm__contactsContent">
                   <div className='offerForm__contactsContainer'>
                     <p className='offerForm__text'>Имя</p>

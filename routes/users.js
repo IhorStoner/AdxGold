@@ -61,6 +61,15 @@ usersRouter.put('/favoritesAd/:userId', async(req,res) => {
   
   res.status(200).send(result)
 })
+//delete ad in account
+usersRouter.put('/deleteAd/:userId/:adId', async (req,res) => {
+  const userId = req.params.userId
+  const adId = req.params.adId
+  const selectedUser = await UserModel.findById(userId)
+  const newAdsArr = selectedUser.ads.filter(ad => ad !== adId)
+  const result = await UserModel.findByIdAndUpdate(userId,{$set: {ads: newAdsArr}})
+  res.status(200).send(result)
+})
 
 //deleteUserById
 usersRouter.delete('/:userId', async (req,res) => {

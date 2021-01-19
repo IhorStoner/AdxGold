@@ -1,0 +1,47 @@
+.submitPopup {
+  background: #FFFFFF;
+  border-radius: 5px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  margin-top: 250px;
+  padding: 20px;
+
+  &__btns {
+    text-align: center;
+  }
+
+  &__btn {
+    border: none;
+    background-color: #F5742C;
+    font-family: 'Roboto-normal';
+    color: #fff;
+    padding: 3px 5px;
+    margin-right: 5px;
+    outline: none;
+    font-size: 1rem;
+    cursor: pointer;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &--ok {
+      background-color: #F5742C;
+      opacity: 0.6;
+    }
+  }
+
+  &__text {
+    font-family: 'Roboto-normal';
+    font-size: 1rem;
+    text-align: center;
+  }
+
+  &__subtext {
+    font-family: 'Roboto-regular';
+    font-size: 1rem;
+    text-align: center;
+  }
+}

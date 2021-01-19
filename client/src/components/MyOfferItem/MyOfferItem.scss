@@ -1,0 +1,66 @@
+.myOfferItem {
+  margin-bottom: 10px;
+  
+  &:last-child {
+    margin-bottom: 0;
+  }
+
+  &__btn {
+    border: none;
+    font-family: 'Roboto-normal';
+    background-color: transparent;
+    color: #F46B26;
+    text-decoration: underline;
+    margin-right: 5px;
+    padding: 2px 3px 2px 25px;
+    font-size: 1rem;
+    cursor: pointer;
+    position: relative;
+    outline: none;
+
+    &--view:before {
+      background-image: url('../../assets/svg/eye.svg');
+    }
+    &--edit:before {
+      background-image: url('../../assets/svg/edit.svg');
+    }
+    &--delete:before {
+      background-image: url('../../assets/svg/delete.svg');
+    }
+
+    &::before {
+      content: '';
+      background-repeat: no-repeat;
+      display: block;
+      width: 25px;
+      height: 25px;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      background-size: contain;
+      background-position: center;
+    }
+
+    &:last-child {
+      margin-right: 0;
+    }
+  }
+
+  &__views {
+    display: flex;
+    justify-content: flex-start;
+    background: #f2f2f2;
+    border-radius: 5px;
+    padding: 2px 3px;
+    max-width: 230px;
+    font-family: 'Roboto-regular';
+    font-size: 1rem;
+    color: #727171;
+  }
+
+  &__viewsCounter {
+    font-family: 'Roboto-normal';
+    color: #575757;
+  }
+}

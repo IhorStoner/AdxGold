@@ -84,6 +84,7 @@
     // align-items: center;
     width: 100%;
     padding-left: 10px;
+    
   }
 
   &__tableDate {
@@ -195,11 +196,13 @@
 }
 
 .gold {
-  background-color: #faf460;
+  background-color: #FAF460;
 }
 
 .silver {
-  background-color: silver;
+  background-color:#C4C4C4;
 }
 
-
+.common {
+  background-color: #F2F2F2;
+}

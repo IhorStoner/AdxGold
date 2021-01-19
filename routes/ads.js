@@ -123,16 +123,16 @@ adsRouter.get('/:adId', async (req,res) => {
   }
 })
 
-//changeUserById
+//changeById
 adsRouter.put('/:adId', async (req,res) => {
   const updateAd = await AdModel.findByIdAndUpdate(req.params.adId, req.body)
   res.status(200).send(updateAd)
 })
 
-//deleteUserById
+//deleteById
 adsRouter.delete('/:adId', async (req,res) => {
-  const deletedUser = await AdModel.findByIdAndDelete(req.params.userId)
-  res.status(200).send(deletedUser)
+  const deletedAd = await AdModel.findByIdAndDelete(req.params.adId)
+  res.status(200).send(deletedAd)
 })
 
 

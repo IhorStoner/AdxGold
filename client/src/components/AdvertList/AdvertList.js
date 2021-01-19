@@ -1,14 +1,10 @@
 import React, { useState } from 'react'
-import { Button, Header } from 'semantic-ui-react'
 import config from '../../config/default.json'
 import camera from '../../assets/svg/camera.svg'
-import { Carousel } from 'react-responsive-carousel';
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import 'reactjs-popup/dist/index.css';
 import './AdvertList.scss'
 import { NavLink,useRouteMatch } from 'react-router-dom'
-import RecomendedAds from '../RecommendedAds/RecommendedAds'
-import HotsAds from '../HotsAds/HotsAds'
 import RunAd from '../RunAd/RunAd'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';

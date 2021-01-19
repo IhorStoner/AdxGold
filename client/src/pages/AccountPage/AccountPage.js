@@ -1,6 +1,5 @@
-import React, { useEffect, useState,useCallback,useContext } from 'react'
-import { Header, Button, Container, Grid } from 'semantic-ui-react'
-import { Redirect, useHistory } from "react-router-dom"
+import React, { useEffect, useState, useCallback, useContext } from 'react'
+import { useHistory } from "react-router-dom"
 import { useAuth } from '../../hooks/useAuth'
 import axios from 'axios'
 import config from '../../config/default.json'
@@ -11,6 +10,13 @@ import { getUser } from '../../redux/selectors/userSelector'
 import AuthPopup from '../../components/AuthPopup/AuthPopup'
 import HomePage from '../HomePage/HomePage'
 import { AuthContext } from '../../context/AuthContext';
+import HeaderNav from '../../components/Header/Header'
+import AccountNavbar from '../../components/AccountNavbar/AccountNavbar'
+import MyOfferItem from '../../components/MyOfferItem/MyOfferItem'
+import './AccountPage.scss'
+import SubmitPopup from '../../components/SubmitPopup/SubmitPopup'
+import AccountSettings from '../../components/AccountSettings/AccountSettings'
+
 
 export default function AccountPage() {
   const { token, logout, ready } = useAuth()
@@ -23,13 +29,15 @@ export default function AccountPage() {
   const [ads, setAds] = useState([])
   const history = useHistory()
   const [isOpenForm, setIsOpenForm] = useState(() => {
-    if(isAuth) {
+    if (isAuth) {
       return false
     } else {
       return true
     }
   })
-  const [ activeForm, setActiveForm ] = useState('auth')
+  const [activeForm, setActiveForm] = useState('auth')
+  const [submitPopup, setSubmitPopup] = useState('')
+  const [activeNav, setActiveNav] = useState('myOffers')
 
   useEffect(() => {
     if (isAuth) {
@@ -65,24 +73,65 @@ export default function AccountPage() {
   }, [])
 
   const onSubmitReg = useCallback(async values => {
-    await axios.post(`${config.serverUrl}/api/registration`, values).then(res => history.push('/home')) 
-  },[])
+    await axios.post(`${config.serverUrl}/api/registration`, values).then(res => history.push('/home'))
+  }, [])
+
+  const deleteSelectedAd = async (adId) => {
+    const deleteInAdModel = await axios.delete(`${config.serverUrl}/api/offer/${adId}`).then(
+      res => res.data)
+    const deleteInUserModel = await axios.put(`${config.serverUrl}/api/users/deleteAd/${user._id}/${adId}`).then(
+      res => {
+        setSubmitPopup('')
+        dispatch(fetchUser())
+      })
+  };
 
   if (isAuth) {
     return (
-      <Container>
-        <div>
-          <Header as='h2'>Вы авторизованы</Header>
-          <Button onClick={() => handleLogout()}>Выйти</Button>
-          <Header as='h2'>Имя: {user.name}</Header>
-          <Header as='h2'>Фамилия: {user.surname}</Header>
-          <Header as='h2'>Почта: {user.email}</Header>
+      <div className='accountPage'>
+        {submitPopup && submitPopup !== 'exit' &&
+          <SubmitPopup
+            text='Вы точно хотите удалить объявление?'
+            subtext='Это объявление будет немедленно удалено. Данные необратимы.'
+            btnNoText='Отменить'
+            btnOkText='Удалить'
+            setSubmitPopup={setSubmitPopup}
+            adId={submitPopup}
+            btnOkAction={deleteSelectedAd}
+          />}
+        {submitPopup === 'exit' &&
+          <SubmitPopup
+            text='Вы действительно хотите выйти? '
+            btnNoText='Отмена'
+            btnOkText='Выйти'
+            setSubmitPopup={setSubmitPopup}
+            btnOkAction={handleLogout}
+          />}
+        <HeaderNav />
+        <div className="container">
+          <div className="accountPage__accountNavbar">
+            <AccountNavbar user={user} isAuth={isAuth} activeNav={activeNav} setActiveNav={setActiveNav} setSubmitPopup={setSubmitPopup} />
+          </div>
+          <div className="accountPage__content">
+            {activeNav === 'myOffers' && ads &&
+              <div className="accountPage__offersList">
+                {ads.map(ad => <MyOfferItem ad={ad} setSubmitPopup={setSubmitPopup} />)}
+              </div>
+            }
+            {activeNav === 'favorites' && ads &&
+              <div className="accountPage__offersList">
+                {user.favoritesArr && <AdvertList advertArr={user.favoritesArr} />}
+              </div>
+            }
+            {activeNav === 'settings' && ads &&
+              <div className="accountPage__offersList">
+                <AccountSettings/>
+              </div>
+            }
+          </div>
         </div>
-        <div>
-          <Header>Объявления:</Header>
-          <AdvertList advertArr={ads}></AdvertList>
-        </div>
-      </Container>
+      </div>
+
     )
   }
 
