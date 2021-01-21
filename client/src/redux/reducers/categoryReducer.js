@@ -3,7 +3,7 @@ import { changeSelectedCategory } from '../actions/categoryAction';
 
 
 const initialState = {
-  selectedCategory: 'saleBuy',
+  selectedCategory: 'Продам/куплю',
 };
 
 const categoryReducer = createReducer(initialState, {

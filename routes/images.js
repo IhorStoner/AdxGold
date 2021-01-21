@@ -4,8 +4,13 @@ const { upload } = require('../middlewares/watermark');
 const path = require('path')
 const FILESTORAGE = path.resolve(__dirname, 'path/to/uploadedFiles');
 const ImgRouter = express.Router();
-const ImageModel = require('../models/ImageModel');
 const fs = require('fs')
+var cloudinary = require('cloudinary').v2;
+cloudinary.config({ 
+  cloud_name: 'adx', 
+  api_key: '489216836779361', 
+  api_secret: '4GHw9gNolLC4akm3A0AKPYu6i5w',
+});
 
 ImgRouter.get(
   '/',
@@ -29,13 +34,13 @@ ImgRouter.post(
   '/',
   async (req, res) => {
     try {
-      await formUpload(req, res);
+      await formUpload(req, res)
+      // await cloudinary.uploader.upload(req.file, function(error, result) {console.log(result, error)});
     } catch (err) {
       console.error(err);
       return res.json({ error: 'invalid_file' });
     }
 
-    
     const data = { ...req.body, ...req.files };
     const filesNames = data.slider.map(file => file.filename)
 
@@ -47,55 +52,16 @@ ImgRouter.post(
   }
 );
 
-// get image with id
-// ImgRouter.get('/:id', (req, res, next) => {
-//   const param = req.params.id
-//   ImageModel.findOne({_id: param}, (err, image) => {
-//    if (err) return res.sendStatus(404)
-//    fs.createReadStream(path.resolve(FILESTORAGE, image.filename)).pipe(res)
-//  })
-// })
+ImgRouter.delete('/:imgId',async (req,res) => {
+  const imgId = req.params.imgId
+  fs.unlink(path.resolve(__dirname, `path/to/uploadedFiles/${imgId}`), (err) => {
+    if (err) {
+      console.error(err)
+      return
+    }
+    //file removed
+  })
+  res.sendStatus(200)
+})
 
 module.exports = ImgRouter;
-
-
-
-
-
-
-
-
-
-// const { Router } = require('express');
-// const ImgRouter = Router();
-// const ImageModel = require('../models/ImageModel');
-// const multer = require('multer')
-// const path = require('path')
-// const watermark = require('jimp-watermark');
-// const UPLOAD_PATH = path.resolve(__dirname, 'path/to/uploadedFiles')
-// const fs = require('fs')
-// const upload = multer({
-//      dest: UPLOAD_PATH,
-//      limits: {fileSize: 100000000, files: 5}
-// })
-
-
-// // upload image
-// ImgRouter.post('/', upload.array('image', 5),async (req, res, next) => {
-//   const images = req.files.map((file) => {
-//     // const waterImg = watermark.addWatermark(file.path,`${__dirname}/../assets/logo.png`).then(img => testImg.push(img))
-
-//     return {
-//       filename: file.filename,
-//       originalname: file.originalname
-//     }
-//   })
-//   ImageModel.insertMany(images, (err, result) => {
-//     if (err) return res.sendStatus(404)
-//     res.json(result)
-//   })
-// })
-
-
-
-// module.exports = ImgRouter

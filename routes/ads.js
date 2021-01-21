@@ -9,19 +9,20 @@ adsRouter.get('/', async (req,res) => {
   const city = req.query.city;
   const price = req.query.price;
   const date = req.query.date;
+  const category = req.query.category
 
   let adsGold = [];
   let adsSilver = [];
   let adsCommon = [];
 
   if(city) {
-     adsGold = await AdModel.find({status:'gold',city: city});
-     adsSilver = await AdModel.find({status:'silver',city: city});
-     adsCommon = await AdModel.find({status:'common',city: city}); 
+     adsGold = await AdModel.find({category:category, status:'gold',city: city});
+     adsSilver = await AdModel.find({category:category,status:'silver',city: city});
+     adsCommon = await AdModel.find({category:category,status:'common',city: city}); 
   } else {
-     adsGold = await AdModel.find({status:'gold'});
-     adsSilver = await AdModel.find({status:'silver'});
-     adsCommon = await AdModel.find({status:'common'});
+     adsGold = await AdModel.find({category:category,status:'gold'});
+     adsSilver = await AdModel.find({category:category,status:'silver'});
+     adsCommon = await AdModel.find({category:category,status:'common'});
   }
 
   let goldRev = adsGold.reverse() // реверс для того чтобы показывать новые обьявления сверху

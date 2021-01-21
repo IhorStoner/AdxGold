@@ -3,7 +3,7 @@ import camera from '../../assets/svg/camera.svg'
 import './MyOfferItem.scss'
 import {Link} from 'react-router-dom'
 
-export default function MyOfferItem({ ad,setSubmitPopup }) {
+export default function MyOfferItem({ ad,setSubmitPopup,setEditAdId }) {
 
   return (
     <div className='myOfferItem'>
@@ -30,8 +30,8 @@ export default function MyOfferItem({ ad,setSubmitPopup }) {
       </table>
       <div className="myOfferItem__actions">
         <Link to={`/detailsAd/${ad._id}`} className='myOfferItem__btn myOfferItem__btn--view' >Посмотреть</Link>
-        <button type='button' className='myOfferItem__btn myOfferItem__btn--edit'>Редактировать</button>
-        <button type='button' className='myOfferItem__btn myOfferItem__btn--delete' onClick={() => setSubmitPopup(ad._id)}>Удалить</button>
+        <button type='button' className='myOfferItem__btn myOfferItem__btn--edit' onClick={() => setEditAdId(ad)}>Редактировать</button>
+        <button type='button' className='myOfferItem__btn myOfferItem__btn--delete' onClick={() => setSubmitPopup(ad)}>Удалить</button>
       </div>
       <div className="myOfferItem__views">
         <p>Просмотры: <span className='myOfferItem__viewsCounter'>1</span>(сегодня <span className='myOfferItem__viewsCounter'>2</span>)</p>

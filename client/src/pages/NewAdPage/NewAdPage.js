@@ -118,8 +118,9 @@ export default function NewAdPage() {
       mail: mail,
       status: status,
       services: serviceArr,
+      category: navCategory,
     })
-  }, [section, selectedSubsection, type, selectedRegion, city, price, title, description, name, phone, mail, status, serviceArr, productPrice, imgNames, images])
+  }, [section, selectedSubsection, type, selectedRegion, city, price, title, description, name, phone, mail, status, serviceArr, productPrice, imgNames, images,navCategory])
 
   useEffect(() => {
     dispatch(fetchSharesAds())

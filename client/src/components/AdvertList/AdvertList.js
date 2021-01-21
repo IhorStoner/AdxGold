@@ -13,6 +13,7 @@ import { fetchUser } from '../../redux/actions/userAction'
 import { useAuth } from '../../hooks/useAuth'
 import AlertPopup from '../AlertPopup/AlertPopup';
 import OpenOffer from '../OpenOffer/OpenOffer'
+import { getCategory } from '../../redux/selectors/categorySelector';
 
 export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds }) {
 	const { token, userId } = useAuth()
@@ -25,6 +26,7 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 	const [isAlertOpen, setIsAlertOpen] = useState(false)
 	const dispatch = useDispatch();
 	const match = useRouteMatch();
+	const category = useSelector(getCategory)
 
 	const handleVisitedAd = async (e, adId) => {
 		e.stopPropagation()
@@ -61,13 +63,10 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 							<tr className='adsList__row'>
 								<td className='adsList__tableItem adsList__itemTitle adsList__tableItem--titleMargin'><span className='adsList__tableText'>{ad.title}</span></td>
 								<td className='adsList__tableItem adsList__itemCity'><span className='adsList__tableText'>{ad.city}</span></td>
-								<td className='adsList__tableItem adsList__itemImg adsList__tableItem--imgMargin' onClick={(e) => handleOpenPhoto(e, ad.img)}><span className='adsList__tableImg'>{ad.img[0] && <img src={camera} width='50' height='50' />}</span></td> {/*!ad.img[0] ? camera : `${config.serverUrl}/api/images/${ad.img[0] */}
-								<td className='adsList__tableItem adsList__itemSection adsList__tableItem--wordWrap'><span className='adsList__tableText'>{ad.section}</span></td>
-								<td className='adsList__tableItem adsList__itemType'><span className='adsList__tableText'>{ad.type}</span></td>
-								<td className='adsList__tableItem adsList__itemFloor'><span className='adsList__tableText'>{ad.floor ? ad.floor : '0'}</span></td>
-								<td className='adsList__tableItem adsList__itemRooms'><span className='adsList__tableText'>{ad.rooms ? ad.rooms : '1 комн.'}</span></td>
+								<td className='adsList__tableItem adsList__itemSection adsList__tableItem--wordWrap'><span className='adsList__tableText adsList__tableText--textWrap'>{ad.section}</span></td>
+								<td className='adsList__tableItem adsList__itemType'><span className='adsList__tableText'>{ad.subsection}</span></td>
 								<td className='adsList__tableItem adsList__itemPrice'><span className='adsList__tableText'>{ad.productPrice}руб. </span></td>
-								<td className='adsList__tableItem adsList__itemSquare'><span className='adsList__tableText'>{ad.square ? ad.square : '30 кв.м.'}</span></td>
+								<td className='adsList__tableItem adsList__itemImg adsList__tableItem--imgMargin' onClick={(e) => handleOpenPhoto(e, ad.img)}><span className='adsList__tableImg'>{ad.img[0] && <img src={camera} width='25' height='25' />}</span></td>
 								<td className='adsList__tableItem adsList__itemDate'><span className='adsList__tableText adsList__tableDate' >{ad.date}</span></td>
 								<td >
 									<div className="adsList__tableBtns">

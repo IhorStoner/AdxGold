@@ -62,8 +62,11 @@ export default function HomePage() {
   ]
 
   useEffect(async () => {
-    dispatch(fetchAds({ page: page, city: selectedCity, price: selectedFilteredPrice, date: selectedFilteredDate }))
-  }, [page, selectedCity, selectedFilteredPrice, selectedFilteredDate])
+    if(category !== 'favorites'){
+      dispatch(fetchAds({ page: page, city: selectedCity, price: selectedFilteredPrice, date: selectedFilteredDate, category: category }))
+    }
+
+  }, [page, selectedCity, selectedFilteredPrice, selectedFilteredDate,category])
 
   useEffect(() => {
     if (isAuth) {

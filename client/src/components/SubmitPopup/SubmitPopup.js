@@ -1,7 +1,7 @@
 import React from 'react'
 import './SubmitPopup.scss'
 
-export default function SubmitPopup({text, subtext, btnOkText, btnNoText, setSubmitPopup, btnOkAction, adId}) {
+export default function SubmitPopup({text, subtext, btnOkText, btnNoText, setSubmitPopup, btnOkAction, ad}) {
   return (
     <div className="fixed-overlay">
       <div className='modal'>
@@ -13,7 +13,7 @@ export default function SubmitPopup({text, subtext, btnOkText, btnNoText, setSub
               <button className="submitPopup__btn submitPopup__btn--no" onClick={() => setSubmitPopup('')}>
                 {btnNoText}
               </button>
-              <button className="submitPopup__btn submitPopup__btn--ok" onClick={() => btnOkAction(adId)}>
+              <button className="submitPopup__btn submitPopup__btn--ok" onClick={() => btnOkAction(ad)}>
                 {btnOkText}
               </button>
             </div>

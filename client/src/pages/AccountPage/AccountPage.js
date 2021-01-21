@@ -16,7 +16,7 @@ import MyOfferItem from '../../components/MyOfferItem/MyOfferItem'
 import './AccountPage.scss'
 import SubmitPopup from '../../components/SubmitPopup/SubmitPopup'
 import AccountSettings from '../../components/AccountSettings/AccountSettings'
-
+import EditAd from '../../components/EditAd/EditAd'
 
 export default function AccountPage() {
   const { token, logout, ready } = useAuth()
@@ -38,6 +38,7 @@ export default function AccountPage() {
   const [activeForm, setActiveForm] = useState('auth')
   const [submitPopup, setSubmitPopup] = useState('')
   const [activeNav, setActiveNav] = useState('myOffers')
+  const [editAdId, setEditAdId ] = useState('')
 
   useEffect(() => {
     if (isAuth) {
@@ -76,10 +77,16 @@ export default function AccountPage() {
     await axios.post(`${config.serverUrl}/api/registration`, values).then(res => history.push('/home'))
   }, [])
 
-  const deleteSelectedAd = async (adId) => {
-    const deleteInAdModel = await axios.delete(`${config.serverUrl}/api/offer/${adId}`).then(
+  const deleteSelectedAd = async (ad) => {
+    const promiseImg = ad.img.map(imgName  => {
+      return axios.delete(`${config.serverUrl}/api/images/${imgName}`)
+    })
+    await Promise.resolve(promiseImg)
+    
+    const deleteInAdModel = await axios.delete(`${config.serverUrl}/api/offer/${ad._id}`).then(
       res => res.data)
-    const deleteInUserModel = await axios.put(`${config.serverUrl}/api/users/deleteAd/${user._id}/${adId}`).then(
+
+    const deleteInUserModel = await axios.put(`${config.serverUrl}/api/users/deleteAd/${user._id}/${ad._id}`).then(
       res => {
         setSubmitPopup('')
         dispatch(fetchUser())
@@ -96,7 +103,7 @@ export default function AccountPage() {
             btnNoText='Отменить'
             btnOkText='Удалить'
             setSubmitPopup={setSubmitPopup}
-            adId={submitPopup}
+            ad={submitPopup}
             btnOkAction={deleteSelectedAd}
           />}
         {submitPopup === 'exit' &&
@@ -110,23 +117,27 @@ export default function AccountPage() {
         <HeaderNav />
         <div className="container">
           <div className="accountPage__accountNavbar">
-            <AccountNavbar user={user} isAuth={isAuth} activeNav={activeNav} setActiveNav={setActiveNav} setSubmitPopup={setSubmitPopup} />
+            <AccountNavbar user={user} isAuth={isAuth} activeNav={activeNav} setActiveNav={setActiveNav} setSubmitPopup={setSubmitPopup}  setEditAdId={setEditAdId}/>
           </div>
           <div className="accountPage__content">
-            {activeNav === 'myOffers' && ads &&
+            {!editAdId && activeNav === 'myOffers' && ads &&
               <div className="accountPage__offersList">
-                {ads.map(ad => <MyOfferItem ad={ad} setSubmitPopup={setSubmitPopup} />)}
+                {ads.map(ad => <MyOfferItem ad={ad} setSubmitPopup={setSubmitPopup} setEditAdId={setEditAdId}/>)}
               </div>
             }
-            {activeNav === 'favorites' && ads &&
+            {!editAdId && activeNav === 'favorites' && ads &&
               <div className="accountPage__offersList">
                 {user.favoritesArr && <AdvertList advertArr={user.favoritesArr} />}
               </div>
             }
-            {activeNav === 'settings' && ads &&
+            {!editAdId && activeNav === 'settings' && ads &&
               <div className="accountPage__offersList">
                 <AccountSettings/>
               </div>
+            }
+            {
+              editAdId &&
+              <EditAd ad={editAdId} setEditAdId={setEditAdId}/>
             }
           </div>
         </div>

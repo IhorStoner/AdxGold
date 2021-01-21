@@ -1,8 +1,8 @@
 import React,{useState} from 'react'
 import './MyDropdown.scss'
 
-export default function MyDropdown({arr, placeholder, onChange }) {
-  const [selectedItem, setSelectedItem] = useState('')
+export default function MyDropdown({arr, placeholder, onChange,value = '' }) {
+  const [selectedItem, setSelectedItem] = useState(value)
   const [isOpen, setIsOpen] = useState(false)
 
   const onClickItemList = (e) => {
