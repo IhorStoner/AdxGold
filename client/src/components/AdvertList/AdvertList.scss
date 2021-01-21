@@ -8,7 +8,8 @@
   }
 
   &__itemTitle {
-    width: 399px;
+    width: 380px;
+    
   }
   &__itemCity{
     width: 155px;
@@ -33,6 +34,9 @@
   }
   &__itemSquare {
     width: 60px;
+  }
+  &__itemDate {
+    width: 70px;
   }
 
 
@@ -62,6 +66,7 @@
     overflow: hidden;
     font-size: 0.7rem;
     white-space: nowrap;
+    text-overflow: ellipsis;
 
     &--textWrap {
       white-space: pre-wrap;

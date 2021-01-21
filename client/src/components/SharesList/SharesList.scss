@@ -20,10 +20,9 @@
 
   &__title {
     color: #fff;
-    font-size: 1rem;
+    font-size: 0.8rem;
     font-family: 'Roboto-regular';
     text-align: center;
-    line-height: 23,4px;
   }
 
   &__img {
@@ -33,13 +32,15 @@
   }
 
   &__itemDescription {
-    font-size: 0.8rem;
+    font-size: 0.7rem;
     color: #000;
     font-family: 'Roboto-normal';
     width: 100%;
     overflow: hidden;
     max-width: 50%;
-    max-height: 174px;
+    max-height: 80px;
+    text-overflow: ellipsis;
+    white-space: pre-line;
   }
 
   &__itemTitle {
@@ -65,6 +66,7 @@
     color: #000;
     list-style-type: none;
     padding: 10px 0;
+    padding-right: 2px;
 
     &:first-child {
       border-top-left-radius: 5px;

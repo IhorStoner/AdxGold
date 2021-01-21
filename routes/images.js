@@ -35,7 +35,6 @@ ImgRouter.post(
   async (req, res) => {
     try {
       await formUpload(req, res)
-      // await cloudinary.uploader.upload(req.file, function(error, result) {console.log(result, error)});
     } catch (err) {
       console.error(err);
       return res.json({ error: 'invalid_file' });
@@ -43,7 +42,13 @@ ImgRouter.post(
 
     const data = { ...req.body, ...req.files };
     const filesNames = data.slider.map(file => file.filename)
+    // const imgUrl = []
 
+    // const filesNames = data.slider.map(file => {
+    //   return cloudinary.uploader.upload(file.path, function(error, result) {imgUrl.push(result.secure_url)})
+    // })
+    // const result = await Promise.all(filesNames)
+    
     if (req.header('accept') === 'application/json') {
       res.json(filesNames);
     } else {

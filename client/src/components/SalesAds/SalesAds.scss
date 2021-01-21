@@ -38,15 +38,16 @@
     font-family: Arial;
     font-style: normal;
     font-weight: bold;
-    font-size: 1rem;
-    line-height: 29px;
+    font-size: 0.9rem;
+    max-height: 22px;
+    overflow: hidden;
     color: #000000;
     margin-bottom: 20px;
   }
 
   &__item-description {
     width: 50%;
-    max-height: 140px;
+    max-height: 115px;
     word-wrap: break-word;
     overflow: hidden;
     font-family: "Roboto-normal";
@@ -55,6 +56,7 @@
     font-size: 0.8rem;
     margin-bottom: 0;
     color: #000000;
+    text-overflow: ellipsis;
   }
 
   &__title {

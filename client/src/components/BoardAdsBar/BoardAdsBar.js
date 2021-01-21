@@ -53,11 +53,12 @@ export default function BoardAdsBar() {
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin">
             <DropdownCity />
           </li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
+    
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">Категория</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">Подкатегория</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--floarMargin">Этаж</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--roomsMargin">Комнат</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--squareMargin">Площадь</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>
@@ -73,13 +74,17 @@ export default function BoardAdsBar() {
         <ul className="boardAdsBar__subMenu">
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleMargin">Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin"><DropdownCity /></li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--autoCategory">Категория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--yearOfIssue">Год выпуска</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--brand">Марка</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--model">Модель</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--yearOfIssue">Об.дв.</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--yearOfIssue">Год</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--yearOfIssue">Цвет</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--yearOfIssue">Мощ.дв.</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>
+          
         </ul>
       </li>
       <li className={category === 'Услуги' ? 'boardAdsBar__item boardAdsBar__item--services boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--services'} onClick={() => dispatch(changeSelectedCategory('Услуги'))}>
