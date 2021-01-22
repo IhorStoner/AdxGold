@@ -5,12 +5,9 @@ const path = require('path')
 const FILESTORAGE = path.resolve(__dirname, 'path/to/uploadedFiles');
 const ImgRouter = express.Router();
 const fs = require('fs')
-var cloudinary = require('cloudinary').v2;
-cloudinary.config({ 
-  cloud_name: 'adx', 
-  api_key: '489216836779361', 
-  api_secret: '4GHw9gNolLC4akm3A0AKPYu6i5w',
-});
+const Access_Key_ID = 'AKIAJ7IQ4NLOQSXWP6CA'
+const Secret_Access_Key = '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'
+
 
 ImgRouter.get(
   '/',

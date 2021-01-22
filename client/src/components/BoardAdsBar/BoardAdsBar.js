@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useState,useEffect } from 'react'
 import './BoardAdsBar.scss'
 import Arms from '../../assets/svg/armsIcon.svg'
 import SvgColor from 'react-svg-color'
@@ -9,20 +9,50 @@ import work from '../../assets/svg/work.svg'
 import newIcon from '../../assets/svg/new.svg'
 import favorites from '../../assets/svg/favorites.svg'
 import DropdownCity from '../DropdownCity/DropdownCity'
-import { useDispatch, useSelector } from 'react-redux'
-import { getCategory } from '../../redux/selectors/categorySelector'
-import { changeSelectedCategory } from '../../redux/actions/categoryAction'
-import { Link } from 'react-router-dom'
-
+import { Link,useParams } from 'react-router-dom'
+import NavDropdown from "../NavDropdown/NavDropdown";
+import * as categoryArr from '../../assets/json/category.json'
+import {changeSelectedCategory,changeSelectedSubcategory } from '../../redux/actions/dropdownAction'
 export default function BoardAdsBar() {
-  // const [category, setCategory] = useState('property')
-  const category = useSelector(getCategory)
+  const [category, setCategory ] = useState('');
+  const { nav } = useParams();
 
-  const dispatch = useDispatch()
+  //dropdown section(category)
+  const stateSection = JSON.parse(JSON.stringify(categoryArr.default))
+  const optionsSection = Object.keys(stateSection).map((item, i) => {
+    return { key: i, text: item, value: item }
+  })
+  const [ subsection, setOptionsSubsection ] = useState([])
+  const [ selectedSection, setSelectedSection ] = useState('')
+  useEffect(() => {
+    selectedSection && setOptionsSubsection(stateSection[selectedSection].map((item, i) => {
+      return { key: i, text: item, value: item }
+    }))
+  }, [selectedSection])
+  // end logic dropdown section
+
+  const [selectedSubsection, setSelectedSubsection ] = useState('')
+
+
+  useEffect(() => {
+    if(nav === 'saleBuy') setCategory('Продам/куплю')
+    if(nav === 'property') setCategory('Недвижимость')
+    if(nav === 'auto') setCategory('Авто')
+    if(nav === 'services') setCategory('Услуги')
+    if(nav === 'work') setCategory('Работа')
+    if(nav === 'newAuto') setCategory('Новые авто')
+    if(nav === 'newHouse') setCategory('Новые квартиры')
+    if(nav === 'favorites') setCategory('favorites')
+  }, [nav])
+
+  
+
+ 
+
 
   return (
     <ul className='boardAdsBar boardAdsBar--mt'>
-      <li className={category === 'Продам/куплю' ? 'boardAdsBar__item boardAdsBar__item--active boardAdsBar__item--saleBuy' : 'boardAdsBar__item boardAdsBar__item--saleBuy'} onClick={() => dispatch(changeSelectedCategory('Продам/куплю'))}>
+      <li className={category === 'Продам/куплю' ? 'boardAdsBar__item boardAdsBar__item--active boardAdsBar__item--saleBuy' : 'boardAdsBar__item boardAdsBar__item--saleBuy'}>
         <Link to='/home/saleBuy' style={{ color: '#000' }}>
           <div className="boardAdsBar__categoryContainer">
             <SvgColor svg={Arms} colors={category === 'Продам/куплю' ? ['#fff'] : ['#616C7A']} />
@@ -34,14 +64,18 @@ export default function BoardAdsBar() {
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin">
             <DropdownCity />
           </li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">Категория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">Подкатегория</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">
+            <NavDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Категория' onChange={(e) => setSelectedSection(e.target.innerText)} action={changeSelectedCategory}/>
+          </li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">
+            <NavDropdown placeholder='Подкатегория' arr={selectedSection && subsection} onChange={(e) => setSelectedSubsection(e.target.innerText)} action={changeSelectedSubcategory}/>
+          </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>
         </ul>
       </li>
-      <li className={category === 'Недвижимость' ? 'boardAdsBar__item boardAdsBar__item--property boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--property'} onClick={() => dispatch(changeSelectedCategory('Недвижимость'))}>
+      <li className={category === 'Недвижимость' ? 'boardAdsBar__item boardAdsBar__item--property boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--property'} >
         <Link to='/home/property' style={{ color: '#000' }}>
           <div className="boardAdsBar__categoryContainer">
             <SvgColor svg={House} colors={category === 'Недвижимость' ? ['#fff'] : ['#616C7A']} />
@@ -49,22 +83,23 @@ export default function BoardAdsBar() {
           </div>
         </Link>
         <ul className="boardAdsBar__subMenu">
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleMargin">Заголовок</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleProperty">Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin">
             <DropdownCity />
           </li>
     
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">Категория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">Подкатегория</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryProperty">Категория</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryProperty">Подкатегория</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--squareProperty">Площадь</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--floarMargin">Этаж</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--roomsMargin">Комнат</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--roomsMargin">Тип предложения</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--squareMargin">Площадь</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>
         </ul>
       </li>
-      <li className={category === 'Авто' ? 'boardAdsBar__item boardAdsBar__item--auto boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--auto'} onClick={() => dispatch(changeSelectedCategory('Авто'))}>
+      <li className={category === 'Авто' ? 'boardAdsBar__item boardAdsBar__item--auto boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--auto'}>
         <Link to='/home/auto' style={{ color: '#000' }}>
           <div className="boardAdsBar__categoryContainer">
             <SvgColor svg={CarIcon} colors={category === 'Авто' ? ['#fff'] : ['#616C7A']} />
@@ -72,7 +107,7 @@ export default function BoardAdsBar() {
           </div>
         </Link>
         <ul className="boardAdsBar__subMenu">
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleMargin">Заголовок</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleProperty">Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin"><DropdownCity /></li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--autoCategory">Категория</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--brand">Марка</li>
@@ -87,7 +122,7 @@ export default function BoardAdsBar() {
           
         </ul>
       </li>
-      <li className={category === 'Услуги' ? 'boardAdsBar__item boardAdsBar__item--services boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--services'} onClick={() => dispatch(changeSelectedCategory('Услуги'))}>
+      <li className={category === 'Услуги' ? 'boardAdsBar__item boardAdsBar__item--services boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--services'} >
         <Link to='/home/services' style={{ color: '#000' }}>
           <div className="boardAdsBar__categoryContainer">
             <SvgColor svg={people} colors={category === 'Услуги' ? ['#fff'] : ['#616C7A']} />
@@ -95,20 +130,18 @@ export default function BoardAdsBar() {
           </div>
         </Link>
         <ul className="boardAdsBar__subMenu">
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleMargin">Заголовок</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin">
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleProperty">Заголовок</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityServices">
             <DropdownCity />
           </li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">Категория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">Подкатегория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--floarMargin">Вид</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--roomsMargin">Тип</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryServices">Подкатегория</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>
         </ul>
       </li>
-      <li className={category === 'Работа' ? 'boardAdsBar__item boardAdsBar__item--work boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--work'} onClick={() => dispatch(changeSelectedCategory('Работа'))}>
+      <li className={category === 'Работа' ? 'boardAdsBar__item boardAdsBar__item--work boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--work'}>
         <Link to='/home/work' style={{ color: '#000' }}>
           <div className="boardAdsBar__categoryContainer">
             <SvgColor svg={work} colors={category === 'Работа' ? ['#fff'] : ['#616C7A']} alt="Куплю,продам" />
@@ -120,16 +153,15 @@ export default function BoardAdsBar() {
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin">
             <DropdownCity />
           </li>
+        
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">Тип работы</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">Тип занятости</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">ЗП</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">Категория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">Подкатегория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--floarMargin">Вид</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--roomsMargin">Тип</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>
         </ul>
       </li>
-      <li className={category === 'Новые авто' ? 'boardAdsBar__item boardAdsBar__item--newAuto boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--newAuto'} onClick={() => dispatch(changeSelectedCategory('Новые авто'))}>
+      <li className={category === 'Новые авто' ? 'boardAdsBar__item boardAdsBar__item--newAuto boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--newAuto'}>
         <Link to='/home/newAuto' style={{ color: '#000' }}>
           <div className="boardAdsBar__categoryContainer">
             <SvgColor svg={newIcon} colors={category === 'Новые авто' ? ['#fff'] : ['#616C7A']} />
@@ -139,16 +171,16 @@ export default function BoardAdsBar() {
         <ul className="boardAdsBar__subMenu">
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleMargin">Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin"><DropdownCity /></li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--autoCategory">Категория</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--yearOfIssue">Год выпуска</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--brand">Марка</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--model">Модель</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>
         </ul>
       </li>
-      <li className={category === 'Новые квартиры' ? 'boardAdsBar__item boardAdsBar__item--newHouse boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--newHouse'} onClick={() => dispatch(changeSelectedCategory('Новые квартиры'))}>
+      <li className={category === 'Новые квартиры' ? 'boardAdsBar__item boardAdsBar__item--newHouse boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--newHouse'}>
         <Link to='/home/newHouse' active style={{ color: '#000' }}>
           <div className="boardAdsBar__categoryContainer">
             <SvgColor svg={newIcon} colors={category === 'Новые квартиры' ? ['#fff'] : ['#616C7A']} />
@@ -156,21 +188,22 @@ export default function BoardAdsBar() {
           </div>
         </Link>
         <ul className="boardAdsBar__subMenu">
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleMargin">Заголовок</li>
+        <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleProperty">Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin">
             <DropdownCity />
           </li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">Категория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">Подкатегория</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryProperty">Категория</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryProperty">Подкатегория</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--squareProperty">Площадь</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--floarMargin">Этаж</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--roomsMargin">Комнат</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--roomsMargin">Тип предложения</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--squareMargin">Площадь</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>
         </ul>
       </li>
-      <li className={category === 'favorites' ? 'boardAdsBar__item boardAdsBar__item--favorites boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--favorites'} onClick={() => dispatch(changeSelectedCategory('favorites'))}>
+      <li className={category === 'favorites' ? 'boardAdsBar__item boardAdsBar__item--favorites boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--favorites'} >
         <Link to='/home/favorites' active style={{ color: '#000' }}>
           <div className="boardAdsBar__categoryContainer">
             <img src={category === 'favorites' ? favorites : favorites} alt="Куплю,продам" />
@@ -182,13 +215,10 @@ export default function BoardAdsBar() {
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin">
             <DropdownCity />
           </li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">Категория</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">Подкатегория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--floarMargin">Этаж</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--roomsMargin">Комнат</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--squareMargin">Площадь</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>
         </ul>
       </li>

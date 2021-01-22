@@ -18,12 +18,12 @@ export default function BtnsAccount({ isAuth }) {
   return (
     <div className='btnsAccount'>
       <div className='btnsAccount__btnContainer'>
-        <NavLink to={isAuth ? '/newAd' : '/auth'}>
+        <NavLink to={isAuth ? '/account/newOffer' : '/auth'}>
           <button className='btnsAccount__btnNewAd btnsAccount__btn'>Подать объявление</button>
         </NavLink>
       </div>
       <div className='btnsAccount__btnContainer'>
-        <NavLink to={isAuth ? '/account' : '/auth'}>
+        <NavLink to={isAuth ? '/account/myOffers' : '/auth'}>
           <button className='btnsAccount__btn btnsAccount__btnAccount'>Личный кабинет</button>
         </NavLink>
       </div>

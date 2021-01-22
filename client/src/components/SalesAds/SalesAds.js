@@ -7,7 +7,7 @@ import config from '../../config/default.json'
 export default function SalesAds({ salesArr }) {
   return (
     <div className='sales-ads'>
-      <h2 className='sales-ads__title'>Скидки%</h2>
+      <h2 className='sales-ads__title'>Скидки %</h2>
       <ul className='sales-ads__list'>
         {
           salesArr.map((ad, i) => (

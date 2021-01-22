@@ -18,14 +18,9 @@
     background-repeat: no-repeat;
     // background-position: center;
     background-size: cover;
+    background-image: url('../../assets/png/banner1.png');
 
-    &--banner2 {
-      background-image: url('../../assets/png/banner1.png');
  
-    }
-    &--banner1 {
-      background-image: url('../../assets/png/banner2.png');
-    }
   }
 
   &__list {
@@ -50,12 +45,19 @@
       position: absolute;
       display: inline-block;
       content: "";
-      left: 0;
+      left: 15px;
       top: 50%;
       transform: translateY(-50%);
       -webkit-mask-size: cover;
       mask-size: cover;
       background-color: #F78536;
+    }
+
+    &--board::before {
+      width: 34px;
+      height: 34px;
+      -webkit-mask: url('../../assets/svg/documents.svg') no-repeat 50% 50%;
+      mask: url('../../assets/svg/documents.svg') no-repeat 50% 50%;
     }
 
     &--market::before {

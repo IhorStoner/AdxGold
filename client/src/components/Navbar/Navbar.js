@@ -11,13 +11,13 @@ export default function Navbar() {
         <li className={active === 'board' ? 'navbar__item navbar__item--board navbar__item--active' : 'navbar__item navbar__item--board'} onClick={() => setActive('board')}>
           Доска объявлений
         </li>
-        <li className={active === 'market' ? 'navbar__item navbar__item--market navbar__item--active' : 'navbar__item navbar__item--market'} onClick={() => setActive('market')}> 
+        <li className={active === 'market' ? 'navbar__item navbar__item--market navbar__item--active' : 'navbar__item navbar__item--market'} onClick={() => setActive('board')}> 
           Рынок, Магазины
         </li>
-        <li className={active === 'food' ? 'navbar__item navbar__item--food navbar__item--active' : 'navbar__item navbar__item--food'} onClick={() => setActive('food')}>
+        <li className={active === 'food' ? 'navbar__item navbar__item--food navbar__item--active' : 'navbar__item navbar__item--food'} onClick={() => setActive('board')}>
           Заказ еды/Рестораны
         </li>
-        <li className={active === 'services' ? 'navbar__item navbar__item--services navbar__item--active' : 'navbar__item navbar__item--services'} onClick={() => setActive('services')}>
+        <li className={active === 'services' ? 'navbar__item navbar__item--services navbar__item--active' : 'navbar__item navbar__item--services'} onClick={() => setActive('board')}>
           Услуги профессионалов
         </li>
       </ul>

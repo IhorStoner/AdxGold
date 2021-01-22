@@ -1,28 +1,23 @@
-import React,{useEffect, useState} from 'react'
+import React from 'react'
 import { Redirect, Route, Switch } from "react-router-dom"
 import HomePage from './pages/HomePage/HomePage'
 import AccountPage from './pages/AccountPage/AccountPage'
 import AuthPage from './pages/AuthPage/AuthPage'
-import NewAdPage from './pages/NewAdPage/NewAdPage'
 import DetailsAdPage from './pages/DetailsAdPage/DetailsAdPage'
-import { useAuth } from './hooks/useAuth'
 
 export default function Routes() {
 
   return (
     <Switch>
-      <Route path="/home" >
+      <Route path="/home/:nav" >
         <HomePage />
       </Route>
-      <Route path="/account" exact>
+      <Route path="/account/:accountNav" exact>
         <AccountPage />
-      </Route>
-      <Route path='/newAd'>
-        <NewAdPage/>  
       </Route>
       <Route path='/detailsAd/:adId' component={DetailsAdPage}/>
       <Route path='/auth' component={AuthPage} />
-      <Redirect to='/home' />
+      <Redirect to='/home/saleBuy' />
     </Switch>
   )
 }

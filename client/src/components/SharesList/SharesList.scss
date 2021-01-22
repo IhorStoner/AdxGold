@@ -3,7 +3,7 @@
   min-width: 222px;
   background: linear-gradient(180deg, #F5742C 0%, #F89741 100%);
   border-radius: 5px;
-  padding: 5px;
+  padding: 2px;
 
   &__linkContainer {
     text-align: center;
@@ -20,9 +20,10 @@
 
   &__title {
     color: #fff;
-    font-size: 0.8rem;
+    font-size: 1rem;
     font-family: 'Roboto-regular';
     text-align: center;
+    margin-bottom: 5px;
   }
 
   &__img {

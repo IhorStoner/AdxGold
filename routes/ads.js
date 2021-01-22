@@ -10,17 +10,38 @@ adsRouter.get('/', async (req,res) => {
   const price = req.query.price;
   const date = req.query.date;
   const category = req.query.category
+  const sectionParams = req.query.section
+  const subsectionParams = req.query.subsection
 
   let adsGold = [];
   let adsSilver = [];
   let adsCommon = [];
 
+  //prepare filter obj 
+  // const filterGoldAds = { status: 'gold' }
+  // if(city) filterGoldAds.city = city
+  // if(category) filterGoldAds.category = category
+  // if(sectionParams) filterGoldAds.section = sectionParams
+  // if(subsectionParams) filterGoldAds.subsection = subsectionParams
+  // console.log(filterGoldAds)
+
+
+
+  // filter logic
   if(city) {
-     adsGold = await AdModel.find({category:category, status:'gold',city: city});
+     adsGold = await AdModel.find({category:category, status:'gold', city: city});
      adsSilver = await AdModel.find({category:category,status:'silver',city: city});
      adsCommon = await AdModel.find({category:category,status:'common',city: city}); 
+  } else if(sectionParams) {
+    adsGold = await AdModel.find({section: sectionParams, category:category, status:'gold'});
+    adsSilver = await AdModel.find({section: sectionParams, category:category,status:'silver'});
+    adsCommon = await AdModel.find({section: sectionParams, category:category,status:'common'}); 
+  } else if(subsectionParams) {
+    adsGold = await AdModel.find({subsection: subsectionParams, category:category, status:'gold'});
+    adsSilver = await AdModel.find({subsection: subsectionParams, category:category,status:'silver'});
+    adsCommon = await AdModel.find({subsection: subsectionParams, category:category,status:'common'}); 
   } else {
-     adsGold = await AdModel.find({category:category,status:'gold'});
+     adsGold = await AdModel.find({category:category, status:'gold'});
      adsSilver = await AdModel.find({category:category,status:'silver'});
      adsCommon = await AdModel.find({category:category,status:'common'});
   }
@@ -29,7 +50,8 @@ adsRouter.get('/', async (req,res) => {
   let silverRev = adsSilver.reverse()
   let commonRev = adsCommon.reverse()
   let sortedArr = [...goldRev,...silverRev, ...commonRev] // выстраиваем в порядке голд сильвер обычные
-  
+
+
   if(price === 'low') {
     sortedArr.sort((ad1, ad2) => sortedFunc(Number(ad1.productPrice), Number(ad2.productPrice)))
   } else if(price === 'high') {

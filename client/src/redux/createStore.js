@@ -4,6 +4,6 @@ import rootReducer from './rootReducer';
 export default () => {
   return configureStore({
     reducer: rootReducer,
-    devTools: true,
+    // devTools: true,
   })
 };

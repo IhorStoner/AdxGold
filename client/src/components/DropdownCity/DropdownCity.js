@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import './DropdownCity.scss'
 import * as cityData from '../../assets/json/russian-cities.json'
 import { useDispatch } from 'react-redux'
-import { changeSelectedCity } from '../../redux/actions/dropdownCityAction'
+import { changeSelectedCity } from '../../redux/actions/dropdownAction'
 
 export default function DropdownCity() {
   const dispatch = useDispatch();

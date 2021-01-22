@@ -2,7 +2,7 @@ import { createAsyncThunk } from "@reduxjs/toolkit";
 import axios from 'axios'
 import config from '../../config/default.json'
 
-export const fetchAds = createAsyncThunk('ads/fetchAds', async ({page,city,price,date,category}) => {
+export const fetchAds = createAsyncThunk('ads/fetchAds', async ({page,city,price,date,category,categoryDropdown,subcategoryDropdown}) => {
   let selectedFilterPrice = null;
   if(price === 'По убыванию') {
     selectedFilterPrice = 'low'
@@ -16,7 +16,7 @@ export const fetchAds = createAsyncThunk('ads/fetchAds', async ({page,city,price
     selectedFilterDate = 'high'
   }
 
-  const data = axios.get(`${config.serverUrl}/api/offer?page=${page}&city=${city}&price=${selectedFilterPrice}&date=${selectedFilterDate}&category=${category}`).then(
+  const data = axios.get(`${config.serverUrl}/api/offer?page=${page}&city=${city}&price=${selectedFilterPrice}&date=${selectedFilterDate}&category=${category}&section=${categoryDropdown}&subsection=${subcategoryDropdown}`).then(
     res => res.data)
   return data;
 });

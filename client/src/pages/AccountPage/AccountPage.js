@@ -17,6 +17,8 @@ import './AccountPage.scss'
 import SubmitPopup from '../../components/SubmitPopup/SubmitPopup'
 import AccountSettings from '../../components/AccountSettings/AccountSettings'
 import EditAd from '../../components/EditAd/EditAd'
+import NewOfferForm from '../../components/NewOfferForm/NewOfferForm'
+import {useParams} from 'react-router-dom'
 
 export default function AccountPage() {
   const { token, logout, ready } = useAuth()
@@ -37,9 +39,14 @@ export default function AccountPage() {
   })
   const [activeForm, setActiveForm] = useState('auth')
   const [submitPopup, setSubmitPopup] = useState('')
-  const [activeNav, setActiveNav] = useState('myOffers')
+  const [activeNav, setActiveNav] = useState('')
   const [editAdId, setEditAdId ] = useState('')
+  const { accountNav } = useParams()
 
+  useEffect(() => {
+   setActiveNav(accountNav)
+  }, [accountNav])
+  
   useEffect(() => {
     if (isAuth) {
       dispatch(fetchUser())
@@ -117,9 +124,14 @@ export default function AccountPage() {
         <HeaderNav />
         <div className="container">
           <div className="accountPage__accountNavbar">
-            <AccountNavbar user={user} isAuth={isAuth} activeNav={activeNav} setActiveNav={setActiveNav} setSubmitPopup={setSubmitPopup}  setEditAdId={setEditAdId}/>
+            <AccountNavbar user={user} isAuth={isAuth} activeNav={activeNav} setSubmitPopup={setSubmitPopup}  setEditAdId={setEditAdId}/>
           </div>
           <div className="accountPage__content">
+            {!editAdId && activeNav === 'newOffer' &&
+              <div className="accountPage__newAd">
+                <NewOfferForm/>
+              </div>
+            }
             {!editAdId && activeNav === 'myOffers' && ads &&
               <div className="accountPage__offersList">
                 {ads.map(ad => <MyOfferItem ad={ad} setSubmitPopup={setSubmitPopup} setEditAdId={setEditAdId}/>)}
@@ -137,7 +149,9 @@ export default function AccountPage() {
             }
             {
               editAdId &&
-              <EditAd ad={editAdId} setEditAdId={setEditAdId}/>
+              <div className="accountPage__newAd">
+                <EditAd ad={editAdId} setEditAdId={setEditAdId}/>
+              </div>
             }
           </div>
         </div>

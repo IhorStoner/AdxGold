@@ -4,7 +4,7 @@ import camera from '../../assets/svg/camera.svg'
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import 'reactjs-popup/dist/index.css';
 import './AdvertList.scss'
-import { NavLink,useRouteMatch } from 'react-router-dom'
+import { NavLink,useParams } from 'react-router-dom'
 import RunAd from '../RunAd/RunAd'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';
@@ -13,9 +13,8 @@ import { fetchUser } from '../../redux/actions/userAction'
 import { useAuth } from '../../hooks/useAuth'
 import AlertPopup from '../AlertPopup/AlertPopup';
 import OpenOffer from '../OpenOffer/OpenOffer'
-import { getCategory } from '../../redux/selectors/categorySelector';
 
-export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds }) {
+export default function AdvertList({ advertArr, runAds }) {
 	const { token, userId } = useAuth()
 	const isAuth = !!token;
 	const [isOpenInfo, setIsOpenInfo] = useState('')
@@ -24,9 +23,7 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 	const favoritesId = useSelector(getFavorites)
 	const user = useSelector(getUser)
 	const [isAlertOpen, setIsAlertOpen] = useState(false)
-	const dispatch = useDispatch();
-	const match = useRouteMatch();
-	const category = useSelector(getCategory)
+	const {nav} = useParams();
 
 	const handleVisitedAd = async (e, adId) => {
 		e.stopPropagation()
@@ -35,7 +32,11 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 		if (!ads) {
 			localStorage.setItem('visitedAd', JSON.stringify([adId]))
 		} else {
-			localStorage.setItem('visitedAd', JSON.stringify([...ads, adId]))
+			if(ads.includes(adId)) {
+				return
+			} else {
+				localStorage.setItem('visitedAd', JSON.stringify([...ads, adId]))
+			}
 		}
 	}
 
@@ -44,7 +45,8 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 		if (!userId) {
 			setIsAlertOpen(true)
 		} else {
-			await axios.put(`${config.serverUrl}/api/users/favoritesAd/${user._id}`, [adId]).then(res => dispatch(fetchUser()))
+			await axios.put(`${config.serverUrl}/api/users/favoritesAd/${user._id}`, [adId])
+			e.target.classList.toggle('adsList__btnFavorite--active')
 		}
 	}
 
@@ -52,13 +54,19 @@ export default function AdvertList({ advertArr, recommendedAds, hotsAds, runAds 
 		setImgId(imgs)
 	}
 
+	const handleClickOffer = (e, ad) => {
+		e.currentTarget.style.background = '#FFC8C8'
+		handleVisitedAd(e, ad._id)
+		ad._id === isOpenInfo ? setIsOpenInfo('') : setIsOpenInfo(ad._id)
+	}
+
 	return (
 		<ul className='adsList'>
 			{isAlertOpen && <AlertPopup onClick={(e) => setIsAlertOpen(false)} />}
-			{!advertArr ? <div className='adsList__alertEmpty'>Здесь пока пусто</div> : advertArr.map((ad, i) => (
+			{advertArr && advertArr.map((ad, i) => (
 				<div key={i}>
 					{i === 3 && <RunAd runAds={runAds} />}
-					<li style={visitedAds && visitedAds.includes(ad._id) ? { backgroundColor: '#FFC8C8' } : null} className={`adsList__item ${ad.status}`} onClick={ad._id === isOpenInfo ? () => setIsOpenInfo('') : () => setIsOpenInfo(ad._id)}>
+					<li style={visitedAds && visitedAds.includes(ad._id) ? { backgroundColor: '#FFC8C8' } : null} className={`adsList__item ${ad.status}`} onClick={(e) => handleClickOffer(e,ad)}>
 						<table className='adsList__table'>
 							<tr className='adsList__row'>
 								<td className='adsList__tableItem adsList__itemTitle adsList__tableItem--titleMargin'><span className='adsList__tableText'>{ad.title}</span></td>
