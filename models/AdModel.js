@@ -2,6 +2,8 @@ const mongoose = require('mongoose');
 const moment = require('moment')
 
 const { Schema } = mongoose;
+const Status = ['gold', 'silver', 'common'];
+
 
 const AdSchema = new Schema({
   category: {
@@ -24,11 +26,12 @@ const AdSchema = new Schema({
     default: moment().locale("ru").format('L'),
   },
   backendDate: {
-    type: String,
+    type: Date,
     default: Date.now(),
   },
   status: {
     type: String,
+    enum: Status,
   },
   name: {
     type: String,
@@ -40,7 +43,7 @@ const AdSchema = new Schema({
     type: String,
   },
   productPrice: {
-    type: String,
+    type: Number,
   },
   section: {
     type: String,
@@ -60,6 +63,11 @@ const AdSchema = new Schema({
 });
 
 
-const AdModel = mongoose.model('ads', AdSchema);
+// const AdModel = mongoose.model('ads', AdSchema);
 
-module.exports = AdModel;
+module.exports = {
+  Reference: {
+    Status
+  },
+  AdModel: mongoose.model('ads', AdSchema)
+};

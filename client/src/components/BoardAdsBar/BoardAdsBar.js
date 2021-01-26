@@ -12,11 +12,15 @@ import DropdownCity from '../DropdownCity/DropdownCity'
 import { Link,useParams } from 'react-router-dom'
 import NavDropdown from "../NavDropdown/NavDropdown";
 import * as categoryArr from '../../assets/json/category.json'
-import {changeSelectedCategory,changeSelectedSubcategory } from '../../redux/actions/dropdownAction'
-export default function BoardAdsBar() {
-  const [category, setCategory ] = useState('');
-  const { nav } = useParams();
+import {useDispatch, useSelector} from 'react-redux'
+import {changeSelectedSubcategory,changeSelectedCategory } from '../../redux/actions/dropdownAction'
+import {changeSelectedCategoryNav} from '../../redux/actions/categoryAction'
+import { getCategory } from '../../redux/selectors/categorySelector'
 
+export default function BoardAdsBar() {
+  const category= useSelector(getCategory);
+  const { nav } = useParams();
+  const  dispatch = useDispatch()
   //dropdown section(category)
   const stateSection = JSON.parse(JSON.stringify(categoryArr.default))
   const optionsSection = Object.keys(stateSection).map((item, i) => {
@@ -28,6 +32,7 @@ export default function BoardAdsBar() {
     selectedSection && setOptionsSubsection(stateSection[selectedSection].map((item, i) => {
       return { key: i, text: item, value: item }
     }))
+    console.log(selectedSection)
   }, [selectedSection])
   // end logic dropdown section
 
@@ -35,19 +40,16 @@ export default function BoardAdsBar() {
 
 
   useEffect(() => {
-    if(nav === 'saleBuy') setCategory('Продам/куплю')
-    if(nav === 'property') setCategory('Недвижимость')
-    if(nav === 'auto') setCategory('Авто')
-    if(nav === 'services') setCategory('Услуги')
-    if(nav === 'work') setCategory('Работа')
-    if(nav === 'newAuto') setCategory('Новые авто')
-    if(nav === 'newHouse') setCategory('Новые квартиры')
-    if(nav === 'favorites') setCategory('favorites')
+    if(nav === 'saleBuy') dispatch(changeSelectedCategoryNav('Продам/куплю'))
+    if(nav === 'property') dispatch(changeSelectedCategoryNav('Недвижимость'))
+    if(nav === 'auto') dispatch(changeSelectedCategoryNav('Авто'))
+    if(nav === 'services') dispatch(changeSelectedCategoryNav('Услуги'))
+    if(nav === 'work') dispatch(changeSelectedCategoryNav('Работа'))
+    if(nav === 'newAuto') dispatch(changeSelectedCategoryNav('Новые авто'))
+    if(nav === 'newHouse') dispatch(changeSelectedCategoryNav('Новые квартиры'))
+    if(nav === 'favorites') dispatch(changeSelectedCategoryNav('favorites'))
+    
   }, [nav])
-
-  
-
- 
 
 
   return (
@@ -65,10 +67,10 @@ export default function BoardAdsBar() {
             <DropdownCity />
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">
-            <NavDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Категория' onChange={(e) => setSelectedSection(e.target.innerText)} action={changeSelectedCategory}/>
+            <NavDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Категория' onChange={setSelectedSection} action={changeSelectedCategory}/>
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">
-            <NavDropdown placeholder='Подкатегория' arr={selectedSection && subsection} onChange={(e) => setSelectedSubsection(e.target.innerText)} action={changeSelectedSubcategory}/>
+            <NavDropdown placeholder='Подкатегория' arr={selectedSection && subsection} onChange={setSelectedSubsection} action={changeSelectedSubcategory}/>
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>

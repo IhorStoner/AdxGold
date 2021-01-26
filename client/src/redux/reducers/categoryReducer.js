@@ -1,5 +1,5 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { changeSelectedCategory } from '../actions/categoryAction';
+import { changeSelectedCategoryNav } from '../actions/categoryAction';
 
 
 const initialState = {
@@ -7,7 +7,7 @@ const initialState = {
 };
 
 const categoryReducer = createReducer(initialState, {
-  [changeSelectedCategory.type]: (state,action) => {
+  [changeSelectedCategoryNav.type]: (state,action) => {
     state.selectedCategory = action.payload;
   },
 });

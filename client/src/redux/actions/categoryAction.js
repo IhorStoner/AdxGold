@@ -1,3 +1,3 @@
 import {createAction} from '@reduxjs/toolkit'
 
-export const changeSelectedCategory = createAction('CHANGE_SELECTED_CATEGORY')
+export const changeSelectedCategoryNav = createAction('CHANGE_SELECTED_CATEGORYNAV')

@@ -16,9 +16,6 @@ import Pagination from '../../components/Pagination/Pagination'
 import Footer from '../../components/Footer/Footer'
 import { fetchUser } from '../../redux/actions/userAction'
 import { getUser, getFavoritesArr } from '../../redux/selectors/userSelector'
-// import { getCategory } from '../../redux/selectors/categorySelector'
-import axios from 'axios';
-import config from '../../config/default.json'
 import DimmerLoader from '../../components/DimmerLoader/DimmerLoader'
 
 export default function HomePage() {
@@ -47,13 +44,14 @@ export default function HomePage() {
     setPaginations(paginations.map((n, i) => i === index ? { ...n, currentPage } : n));
     setPage(currentPage)
   }
-  const [category, setCategory] = useState('');
+  const [category, setCategory] = useState('')
+
 
   //filterBySection
   const section = useSelector(getSection)
   const subsection = useSelector(getSubsection)
   
-
+  // categoryNAv
   useEffect(() => {
     if (nav === 'saleBuy') setCategory('Продам/куплю')
     if (nav === 'property') setCategory('Недвижимость')
@@ -77,7 +75,6 @@ export default function HomePage() {
   ]
 
   useEffect(() => {
-    console.log(section)
     if (category !== 'favorites') {
       dispatch(fetchAds({
         page: page,

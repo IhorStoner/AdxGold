@@ -1,6 +1,6 @@
 const { Router } = require('express');
 require('express-async-errors')
-const AdModel = require('../models/AdModel')
+const {AdModel,Reference} = require('../models/AdModel')
 const adsRouter = Router();
 const _ = require('lodash')
 
@@ -12,74 +12,53 @@ adsRouter.get('/', async (req,res) => {
   const category = req.query.category
   const sectionParams = req.query.section
   const subsectionParams = req.query.subsection
+  const page = req.query.page;
+  const pagesize = 25;
 
-  let adsGold = [];
-  let adsSilver = [];
-  let adsCommon = [];
+  const reqQuery = {
+    city: city,
+    category: category,
+    section: sectionParams,
+    subsection: subsectionParams,
+    price: price,
+    date: 'high',
+  };
 
-  //prepare filter obj 
-  // const filterGoldAds = { status: 'gold' }
-  // if(city) filterGoldAds.city = city
-  // if(category) filterGoldAds.category = category
-  // if(sectionParams) filterGoldAds.section = sectionParams
-  // if(subsectionParams) filterGoldAds.subsection = subsectionParams
-  // console.log(filterGoldAds)
-
-
-
-  // filter logic
-  if(city) {
-     adsGold = await AdModel.find({category:category, status:'gold', city: city});
-     adsSilver = await AdModel.find({category:category,status:'silver',city: city});
-     adsCommon = await AdModel.find({category:category,status:'common',city: city}); 
-  } else if(sectionParams) {
-    adsGold = await AdModel.find({section: sectionParams, category:category, status:'gold'});
-    adsSilver = await AdModel.find({section: sectionParams, category:category,status:'silver'});
-    adsCommon = await AdModel.find({section: sectionParams, category:category,status:'common'}); 
-  } else if(subsectionParams) {
-    adsGold = await AdModel.find({subsection: subsectionParams, category:category, status:'gold'});
-    adsSilver = await AdModel.find({subsection: subsectionParams, category:category,status:'silver'});
-    adsCommon = await AdModel.find({subsection: subsectionParams, category:category,status:'common'}); 
-  } else {
-     adsGold = await AdModel.find({category:category, status:'gold'});
-     adsSilver = await AdModel.find({category:category,status:'silver'});
-     adsCommon = await AdModel.find({category:category,status:'common'});
+  const query = [
+    {
+      $match: {category: {$eq: reqQuery.category}},
+    },
+    {
+      $addFields: {
+        __order: { $indexOfArray: [Reference.Status, '$status'] }
+      }
+    },
+    {
+      $sort: {
+        __order: 1,
+        ...(reqQuery.price ? { productPrice: reqQuery.price === 'high' ? -1 : 1 } : {}),
+        ...(reqQuery.date ? { backendDate: reqQuery.date === 'high' ? -1 : 1 } : {}),
+        updatedAt: -1
+      }
+    },
+    // { $skip: ((page || 1) - 1) * pagesize },
+    // { $limit: pagesize }
+  ];
+  if (reqQuery.city) {
+    query[0].$match.city = { $eq: reqQuery.city };
+  }
+  if (reqQuery.section) {
+    query[0].$match.section = { $eq: reqQuery.section };
+  }
+  if (reqQuery.subsection) {
+    query[0].$match.subsection = { $eq: reqQuery.subsection };
   }
 
-  let goldRev = adsGold.reverse() // реверс для того чтобы показывать новые обьявления сверху
-  let silverRev = adsSilver.reverse()
-  let commonRev = adsCommon.reverse()
-  let sortedArr = [...goldRev,...silverRev, ...commonRev] // выстраиваем в порядке голд сильвер обычные
+  const items = await AdModel.aggregate(query);
+  const result = _.chunk(items,pagesize)
 
-
-  if(price === 'low') {
-    sortedArr.sort((ad1, ad2) => sortedFunc(Number(ad1.productPrice), Number(ad2.productPrice)))
-  } else if(price === 'high') {
-    sortedArr.sort((ad1, ad2) => sortedFunc(Number(ad1.productPrice), Number(ad2.productPrice)))
-    sortedArr.reverse()
-  }
-
-  if(date === 'low') {
-    sortedArr.sort((ad1, ad2) => sortedFunc(Number(ad1.backendDate), Number(ad2.backendDate)))
-  } else if (date === 'high'){
-    sortedArr.sort((ad1, ad2) => sortedFunc(Number(ad1.backendDate), Number(ad2.backendDate)))
-    sortedArr.reverse()
-  }
-
-  const page = req.query.page - 1;
-  const result = _.chunk(sortedArr, 25) // сортируем в массивы по 25 элементов и отдаем взависимости от страницы
-  res.json([result[page],result.length]) // отдаю результат первым агрументом, вторым кол-во страниц
+  res.json([result[page-1],result.length])
 })
-
-const sortedFunc = (ad1, ad2) => {
-  if (ad1 < ad2) {
-    return -1;
-  }
-  if (ad1 > ad2) {
-    return 1;
-  }
-  return 0;
-}
 
 // get shares adverts
 adsRouter.get('/sharesAdverts', async (req,res) => {

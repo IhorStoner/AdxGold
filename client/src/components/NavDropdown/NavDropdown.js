@@ -11,12 +11,13 @@ export default function NavDropdown({arr, placeholder, onChange,value = '', acti
   const onClickItemList = (e) => {
     setSelectedItem(e.target.innerText)
     setIsOpen(isOpen ? false : true)
-    onChange(e)
+    onChange(e.target.innerText)
     dispatch(action(e.target.innerText))
   }
 
-  const handleBtnClose = () => {
+  const handleBtnClose = (e) => {
     setSelectedItem('')
+    onChange('')
     dispatch(action(''))
     setIsOpen(false)
   }
