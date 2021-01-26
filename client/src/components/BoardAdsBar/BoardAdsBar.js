@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from 'react'
+import React, { useState,useEffect,useContext } from 'react'
 import './BoardAdsBar.scss'
 import Arms from '../../assets/svg/armsIcon.svg'
 import SvgColor from 'react-svg-color'
@@ -16,10 +16,12 @@ import {useDispatch, useSelector} from 'react-redux'
 import {changeSelectedSubcategory,changeSelectedCategory } from '../../redux/actions/dropdownAction'
 import {changeSelectedCategoryNav} from '../../redux/actions/categoryAction'
 import { getCategory } from '../../redux/selectors/categorySelector'
+import { AuthContext } from '../../context/AuthContext'
 
 export default function BoardAdsBar() {
-  const category= useSelector(getCategory);
+  const category = useSelector(getCategory);
   const { nav } = useParams();
+  const {isAuthenticated} = useContext(AuthContext);
   const  dispatch = useDispatch()
   //dropdown section(category)
   const stateSection = JSON.parse(JSON.stringify(categoryArr.default))
@@ -206,9 +208,9 @@ export default function BoardAdsBar() {
         </ul>
       </li>
       <li className={category === 'favorites' ? 'boardAdsBar__item boardAdsBar__item--favorites boardAdsBar__item--active' : 'boardAdsBar__item boardAdsBar__item--favorites'} >
-        <Link to='/home/favorites' active style={{ color: '#000' }}>
+        <Link to={isAuthenticated ? '/home/favorites' : '/auth'} active style={{ color: '#000' }}>
           <div className="boardAdsBar__categoryContainer">
-            <img src={category === 'favorites' ? favorites : favorites} alt="Куплю,продам" />
+            <img src={category === 'favorites' ? favorites : favorites} alt="Звезда" />
             <span className='boardAdsBar__text' style={category === 'favorites' ? {color: '#fff'} : null}>Избранное</span>
           </div>
         </Link>

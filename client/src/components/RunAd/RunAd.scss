@@ -21,8 +21,8 @@
 }
 
 .b-marquee__text {
-  -webkit-animation: animMarquee 10s linear infinite;
-  animation: animMarquee 10s linear infinite;
+  -webkit-animation: animMarquee 10s linear infinite reverse;
+  animation: animMarquee 10s linear infinite reverse;
 }
 
 @-webkit-keyframes animMarquee {
@@ -38,8 +38,8 @@
 
 @keyframes animMarquee {
   0% {
-    -webkit-transform: translateX(0);
-    transform: translateX(0);
+    -webkit-transform: translateX(-50%);
+    transform: translateX(-50%);
   }
   100% {
     -webkit-transform: translateX(100%);
@@ -53,8 +53,8 @@
 .b-marquee--rtl {}
 
 .b-marquee--rtl .b-marquee__text {
-  -webkit-animation: animMarqueeRtl 10s linear infinite;
-  animation: animMarqueeRtl 10s linear infinite;
+  -webkit-animation: animMarqueeRtl 10s linear reverse;
+  animation: animMarqueeRtl 10s linear reverse;
 }
 
 @-webkit-keyframes animMarqueeRtl {
