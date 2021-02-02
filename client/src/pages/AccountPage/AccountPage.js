@@ -23,21 +23,21 @@ import {useParams} from 'react-router-dom'
 export default function AccountPage() {
   const { token, logout, ready } = useAuth()
   const isAuth = !!token;
-  const [signInSuccess, setSignInSuccess] = useState(false);
-  const [error, setError] = useState('');
-  const auth = useContext(AuthContext);
+  // const [signInSuccess, setSignInSuccess] = useState(false);
+  // const [error, setError] = useState('');
+  // const auth = useContext(AuthContext);
   const dispatch = useDispatch()
   const user = useSelector(getUser)
   const [ads, setAds] = useState([])
   const history = useHistory()
-  const [isOpenForm, setIsOpenForm] = useState(() => {
-    if (isAuth) {
-      return false
-    } else {
-      return true
-    }
-  })
-  const [activeForm, setActiveForm] = useState('auth')
+  // const [isOpenForm, setIsOpenForm] = useState(() => {
+  //   if (isAuth) {
+  //     return false
+  //   } else {
+  //     return true
+  //   }
+  // })
+  // const [activeForm, setActiveForm] = useState('auth')
   const [submitPopup, setSubmitPopup] = useState('')
   const [activeNav, setActiveNav] = useState('')
   const [editAdId, setEditAdId ] = useState('')
@@ -66,19 +66,20 @@ export default function AccountPage() {
     history.push('/home')
   }
 
-  const onSubmitAuth = useCallback(async values => {
-    const result = await axios.post(`${config.serverUrl}/api/auth`, values)
-      .then(res => {
-        auth.login(res.data.token, res.data.id)
-        setSignInSuccess(true)
-        setError('')
-        history.push('/home')
-      })
-      .catch(err => {
-        setError(err.response.data.error)
-        setSignInSuccess(false)
-      })
-  }, [])
+  // const onSubmitAuth = useCallback(async values => {
+  //   const result = await axios.post(`${config.serverUrl}/api/auth`, values)
+  //     .then(res => {
+  //       auth.login(res.data.token, res.data.id)
+  //       setSignInSuccess(true)
+  //       setError('')
+  //       history.push('/home')
+  //       window.location.reload()
+  //     })
+  //     .catch(err => {
+  //       setError(err.response.data.error)
+  //       setSignInSuccess(false)
+  //     })
+  // }, [])
 
   const onSubmitReg = useCallback(async values => {
     await axios.post(`${config.serverUrl}/api/registration`, values).then(res => history.push('/home'))
@@ -162,7 +163,7 @@ export default function AccountPage() {
 
   return (
     <div>
-      <AuthPopup setIsOpenForm={setIsOpenForm} activeForm={activeForm} setActiveForm={setActiveForm} onSubmit={activeForm === 'auth' ? onSubmitAuth : onSubmitReg} />
+      
       <HomePage />
     </div>
   )

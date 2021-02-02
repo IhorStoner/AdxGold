@@ -9,15 +9,19 @@ import RunAd from '../RunAd/RunAd'
 import axios from 'axios'
 import { useDispatch, useSelector } from 'react-redux';
 import { getFavorites, getUser } from '../../redux/selectors/userSelector';
-import { fetchUser } from '../../redux/actions/userAction'
+import {isOpenAd as openAd } from '../../redux/selectors/adsSelector'
+import { setIsOpenAd } from '../../redux/actions/adsAction'
 import { useAuth } from '../../hooks/useAuth'
 import AlertPopup from '../AlertPopup/AlertPopup';
 import OpenOffer from '../OpenOffer/OpenOffer'
+import { fetchUser } from '../../redux/actions/userAction';
 
-export default function AdvertList({ advertArr, runAds }) {
+export default function AdvertList({ advertArr, runAds, recommendedAds }) {
 	const { token, userId } = useAuth()
 	const isAuth = !!token;
-	const [isOpenInfo, setIsOpenInfo] = useState('')
+	// const [isOpenAd, setIsOpenAd] = useState('')
+	const isOpenAd = useSelector(openAd)
+	const dispatch = useDispatch()
 	const [imgId, setImgId] = useState('')
 	const [visitedAds, setVisitedAds] = useState(() => !localStorage.getItem('visitedAd') ? localStorage.setItem('visitedAd', JSON.stringify([])) : localStorage.getItem('visitedAd'))
 	const favoritesId = useSelector(getFavorites)
@@ -45,7 +49,9 @@ export default function AdvertList({ advertArr, runAds }) {
 		if (!userId) {
 			setIsAlertOpen(true)
 		} else {
-			await axios.put(`${config.serverUrl}/api/users/favoritesAd/${user._id}`, [adId])
+			await axios.put(`${config.serverUrl}/api/users/favoritesAd/${user._id}`, [adId]).then(res => {
+				dispatch(fetchUser())
+			})
 			e.target.classList.toggle('adsList__btnFavorite--active')
 		}
 	}
@@ -55,9 +61,10 @@ export default function AdvertList({ advertArr, runAds }) {
 	}
 
 	const handleClickOffer = (e, ad) => {
+		console.log(isOpenAd)
 		e.currentTarget.style.background = '#FFC8C8'
 		handleVisitedAd(e, ad._id)
-		ad._id === isOpenInfo ? setIsOpenInfo('') : setIsOpenInfo(ad._id)
+		ad._id === isOpenAd ? dispatch(setIsOpenAd(false)) : dispatch(setIsOpenAd(ad._id))
 	}
 
 	return (
@@ -86,7 +93,7 @@ export default function AdvertList({ advertArr, runAds }) {
 							</tr>
 						</table>
 					</li>
-					<div className='adsList__info' style={isOpenInfo === ad._id ? { display: 'block' } : { display: 'none' }}>
+					<div className='adsList__info' style={isOpenAd === ad._id ? { display: 'block' } : { display: 'none' }}>
 						<OpenOffer ad={ad} setImgId={setImgId} imgId={imgId}/>
 					</div>
 				</div>

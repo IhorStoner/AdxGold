@@ -16,7 +16,7 @@ export default function Routes() {
         <AccountPage />
       </Route>
       <Route path='/detailsAd/:adId' component={DetailsAdPage}/>
-      <Route path='/auth' component={AuthPage} />
+      {/* <Route path='/auth' component={AuthPage} /> */}
       <Redirect to='/home/saleBuy' />
     </Switch>
   )

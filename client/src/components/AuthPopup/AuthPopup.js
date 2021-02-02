@@ -3,9 +3,10 @@ import Logo from '../Logo/Logo'
 import './AuthPopup.scss'
 import { reduxForm, Field } from 'redux-form'
 import TextField from '../TextField/TextField'
-import { Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
 
-function AuthPopup({ handleSubmit, valid, submitting, activeForm, setActiveForm, successfulReg,setSuccessfulReg }) {
+function AuthPopup({ handleSubmit, valid, submitting, activeForm, setActiveForm, successfulReg,setSuccessfulReg,actionClose }) {
+  const dispatch = useDispatch()
   const handleAuthClick = () => {
     setActiveForm('auth')
     setSuccessfulReg(false)
@@ -15,14 +16,15 @@ function AuthPopup({ handleSubmit, valid, submitting, activeForm, setActiveForm,
     setActiveForm('reg')
     setSuccessfulReg(false)
   }
+  
   return (
     <div className="fixed-overlay">
       <div className='modal'>
         <div className="modal_container">
           <form className="authPopup" onSubmit={handleSubmit}>
-            <Link to='/home'>
-              <button type='button' className="authPopup__btnClose"></button>
-            </Link>
+            <>
+              <button type='button' className="authPopup__btnClose" onClick={() => dispatch(actionClose(false))}></button>
+            </>
             <Logo />
             <div className="authPopup__btns">
               <button type='button' className={`authPopup__btn ${activeForm === 'auth' && 'authPopup__btn--active'}`} onClick={() => handleAuthClick()}>Вход</button>
@@ -45,7 +47,6 @@ function AuthPopup({ handleSubmit, valid, submitting, activeForm, setActiveForm,
                   <p className='authPopup__regText'>Регестрация заверешена успешно!</p>
                 </div>
             }
-
           </form>
         </div>
       </div>

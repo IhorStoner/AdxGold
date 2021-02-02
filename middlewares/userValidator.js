@@ -1,7 +1,7 @@
 module.exports = (req, res, next) => {
   const user = req.body;
 
-  if (user.name && user.surname && user.email && user.password) {
+  if (user.name && user.email && user.password) {
     return next();
   };
   res.status(400).send({

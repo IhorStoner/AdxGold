@@ -1,7 +1,7 @@
 .accountSettings {
   padding: 20px 35px;
   text-align: center;
-  background-color: #F2F2F2;
+  background-color: #f2f2f2;
   border-radius: 5px;
 
   &__item {
@@ -18,10 +18,60 @@
     }
   }
 
+  &__form {
+    padding: 20px;
+    background-color: #fff;
+    max-width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0 auto;
+    margin-bottom: 20px;
+  }
+
+  &__formTitle {
+    font-family: "Roboto-normal";
+    font-style: normal;
+    font-weight: normal;
+    font-size: 1rem;
+    color: #000000;
+  }
+  &__formItem {
+    margin-bottom: 10px;
+  }
+  &__formBtns {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    width: 80%;
+  }
+  &__formBtn {
+    background: #f5742c;
+    border-radius: 5px;
+    font-size: 1rem;
+    padding: 5px 10px;
+    color:#fff;
+    border: none;
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      background-color: rgba(245, 116, 44, 0.8);
+    }
+  }
+
+  &__input {
+    background: linear-gradient(180deg, #e2e2e2 39.06%, rgba(226, 226, 226, 0) 100%);
+    box-shadow: inset 0px 4px 13px rgba(0, 0, 0, 0.25);
+    border-radius: 5px;
+    padding: 3px;
+    font-size: 1rem;
+  }
+
   &__text {
     color: #fff;
     text-transform: uppercase;
-    font-family: 'Roboto-normal';
+    font-family: "Roboto-normal";
     font-size: 1rem;
   }
 }

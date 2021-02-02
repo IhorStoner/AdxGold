@@ -2,7 +2,7 @@ const { Router } = require('express');
 require('express-async-errors')
 const userValidator = require('../middlewares/userValidator');
 const UserModel = require('../models/UserModel')
-const AdModel = require('../models/AdModel')
+const {AdModel} = require('../models/AdModel')
 const usersRouter = Router();
 
 //get all
@@ -37,6 +37,12 @@ usersRouter.put('/:userId',userValidator, async (req,res) => {
   res.status(200).send(updateUser)
 })
 
+//new password
+usersRouter.put('/userAccount/:userId', async (req,res) => {
+  const updateUser = await UserModel.findByIdAndUpdate(req.params.userId, {password: req.body.password})
+  res.status(200).send(updateUser)
+})
+
 //new AD
 usersRouter.put('/newOffer/:userId', async(req,res) => {
   const updateUser = await UserModel.findByIdAndUpdate(req.params.userId,{$set: {ads: req.body}})
@@ -61,6 +67,7 @@ usersRouter.put('/favoritesAd/:userId', async(req,res) => {
   
   res.status(200).send(result)
 })
+
 //delete ad in account
 usersRouter.put('/deleteAd/:userId/:adId', async (req,res) => {
   const userId = req.params.userId

@@ -1,9 +1,9 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useState, useCallback, useContext } from 'react'
 import './HomePage.scss'
-import { useParams } from 'react-router-dom'
+import { useParams,useHistory } from 'react-router-dom'
 import HeaderNav from '../../components/Header/Header'
 import { useAuth } from '../../hooks/useAuth'
-import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds, getPages, getLoading } from '../../redux/selectors/adsSelector';
+import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds, getPages, getLoading,isOpenAd } from '../../redux/selectors/adsSelector';
 import { useDispatch, useSelector } from 'react-redux'
 import AdvertList from '../../components/AdvertList/AdvertList'
 import { fetchAds, fetchSharesAds, fetchSalesAds, fetchRecommendedAds, fetchHotsAds, fetchRunAds } from '../../redux/actions/adsAction'
@@ -11,16 +11,24 @@ import SharesList from '../../components/SharesList/SharesList'
 import SalesAds from '../../components/SalesAds/SalesAds'
 import BtnsAccount from '../../components/BtnsAccount/BtnsAccount'
 import BoardAdsBar from '../../components/BoardAdsBar/BoardAdsBar'
-import { getCity,getSubsection,getSection } from '../../redux/selectors/filterSelector'
+import { getCity, getSubsection, getSection } from '../../redux/selectors/filterSelector'
 import Pagination from '../../components/Pagination/Pagination'
 import Footer from '../../components/Footer/Footer'
 import { fetchUser } from '../../redux/actions/userAction'
 import { getUser, getFavoritesArr } from '../../redux/selectors/userSelector'
 import DimmerLoader from '../../components/DimmerLoader/DimmerLoader'
+import AuthPopup from '../../components/AuthPopup/AuthPopup'
+import axios from 'axios'
+import config from '../../config/default.json'
+import { AuthContext } from '../../context/AuthContext';
+import { isOpenAuthPopup } from '../../redux/selectors/authSelector'
+import { setIsOpenAuthPopup } from '../../redux/actions/authAction'
 
 export default function HomePage() {
   const { nav } = useParams();
-  const { token, userId } = useAuth()
+  const history = useHistory()
+  const dispatch = useDispatch();
+  const { token } = useAuth()
   const isAuth = !!token;
   const user = useSelector(getUser)
   const ads = useSelector(getAds);
@@ -32,26 +40,33 @@ export default function HomePage() {
   const runAds = useSelector(getRunsAds)
   const selectedCity = useSelector(getCity)
   const favoritesArr = useSelector(getFavoritesArr)
-  const dispatch = useDispatch();
+  const isOpenPopup = useSelector(isOpenAuthPopup)
+  
   const [selectedFilteredPrice, setSelectedFilteredPrice] = useState(null);
   const [selectedFilteredDate, setSelectedFilteredDate] = useState(null)
+  const isLoading = useSelector(getLoading)
+
+  //Pagination
   const [page, setPage] = useState(1)
   const [paginations, setPaginations] = useState([
-    { totalPages: pages, currentPage: 1 }
+    { totalPages: pages, currentPage: page }
   ]);
-  const isLoading = useSelector(getLoading)
   const updatePaginations = (index, currentPage) => {
     setPaginations(paginations.map((n, i) => i === index ? { ...n, currentPage } : n));
     setPage(currentPage)
   }
-  const [category, setCategory] = useState('')
 
-
+  //popUp
+  const [activeForm, setActiveForm] = useState('auth')
+  const auth = useContext(AuthContext);
+  const [signInSuccess, setSignInSuccess] = useState(false);
+  const [successfulReg, setSuccessfulReg] = useState(false)
   //filterBySection
   const section = useSelector(getSection)
   const subsection = useSelector(getSubsection)
-  
-  // categoryNAv
+
+  // change eng nav to rus
+  const [category, setCategory] = useState('')
   useEffect(() => {
     if (nav === 'saleBuy') setCategory('Продам/куплю')
     if (nav === 'property') setCategory('Недвижимость')
@@ -63,6 +78,23 @@ export default function HomePage() {
     if (nav === 'favorites') setCategory('favorites')
   }, [nav])
 
+  const onSubmitAuth = useCallback(async values => {
+    const result = await axios.post(`${config.serverUrl}/api/auth`, values)
+      .then(res => {
+        auth.login(res.data.token, res.data.id)
+        setSignInSuccess(true)
+        dispatch(setIsOpenAuthPopup(false))
+        history.push('/account/myOffers')
+      })
+      .catch(err => {
+        setSignInSuccess(false)
+      })
+  }, [])
+
+  const onSubmitReg = useCallback(async values => {
+    await axios.post(`${config.serverUrl}/api/registration`, values).then(res => setSuccessfulReg(true))
+  }, [])
+
   const optionFilterPrice = [
     { key: 1, text: 'По возрастанию', value: 'high' },
     { key: 2, text: 'По убыванию', value: 'low' },
@@ -73,6 +105,13 @@ export default function HomePage() {
     { key: 2, text: 'Сначала старые', value: 'low' },
     { key: 3, text: 'Сбросить', value: '' }
   ]
+
+  //load adsList
+  useEffect(() => {
+    console.log(category,page)
+    setPage(1)
+    setPaginations([{ totalPages: pages, currentPage: 1 }])
+  }, [category])
 
   useEffect(() => {
     if (category !== 'favorites') {
@@ -86,7 +125,7 @@ export default function HomePage() {
         subcategoryDropdown: subsection,
       }))
     }
-  }, [page, selectedCity, selectedFilteredPrice, selectedFilteredDate, category, section,subsection ])
+  }, [page, selectedCity, selectedFilteredPrice, selectedFilteredDate, category, section, subsection])
 
   useEffect(() => {
     if (isAuth) {
@@ -94,22 +133,23 @@ export default function HomePage() {
     }
   }, [isAuth])
 
+  //load recommended ads for open offer
+  const idOpenAd = useSelector(isOpenAd)
+  useEffect(() => {
+    if(idOpenAd) dispatch(fetchRecommendedAds())
+  }, [idOpenAd])
+
   useEffect(() => {
     dispatch(fetchSharesAds())
     dispatch(fetchSalesAds())
-    dispatch(fetchRecommendedAds())
     dispatch(fetchHotsAds())
     dispatch(fetchRunAds())
   }, []);
 
 
-
-  // useEffect(async () => {
-  //   await axios.get(`${config.serverUrl}/api/offer/${adId}`).then(res => setAd(res.data))
-  // }, [adId])
-
   return (
     <div className='homePage'>
+      {isOpenPopup && <AuthPopup actionClose={setIsOpenAuthPopup} successfulReg={successfulReg} setSuccessfulReg={setSuccessfulReg} activeForm={activeForm} setActiveForm={setActiveForm} onSubmit={activeForm === 'auth' ? onSubmitAuth : onSubmitReg} />}
       <HeaderNav />
       <div className="container">
         <div className='homePage__content'>
@@ -121,14 +161,8 @@ export default function HomePage() {
             <SharesList sharesArr={sharesAds} />
           </div>
           <div className="ads__list">
-            {/* <div className='filter'>
-              <Header as='h3'>Фильтр</Header>
-              <Dropdown placeholder='Город' clearable search selection options={cityDataArr} onChange={(e) => setSelectedCity(e.target.innerText)} />
-              <Dropdown placeholder='Цена' search selection options={optionFilterPrice} onChange={(e) => setSelectedFilteredPrice(e.target.innerText)} />  // filters
-              <Dropdown placeholder='По дате' search selection options={optionFilterDate} onChange={(e) => setSelectedFilteredDate(e.target.innerText)} />
-            </div> */}
             {isLoading && <DimmerLoader />}
-            {nav !== 'favorites' && <AdvertList advertArr={ads} runAds={runAds} visitedAds={user.visitedAds} />}
+            {nav !== 'favorites' && <AdvertList advertArr={ads} runAds={runAds} visitedAds={user.visitedAds} recommendedAds={recommendedAds} />}
             {nav === 'favorites' && <AdvertList advertArr={favoritesArr} visitedAds={user.visitedAds} />}
             {category !== 'favorites' && paginations.map((n, i) => (
               <Pagination
@@ -147,3 +181,10 @@ export default function HomePage() {
     </div>
   )
 }
+
+/* <div className='filter'>
+  { <Header as='h3'>Фильтр</Header>
+  <Dropdown placeholder='Город' clearable search selection options={cityDataArr} onChange={(e) => setSelectedCity(e.target.innerText)} />
+  <Dropdown placeholder='Цена' search selection options={optionFilterPrice} onChange={(e) => setSelectedFilteredPrice(e.target.innerText)} />  // filters
+  <Dropdown p}laceholder='По дате' search selection options={optionFilterDate} onChange={(e) => setSelectedFilteredDate(e.target.innerText)} />
+</div> */

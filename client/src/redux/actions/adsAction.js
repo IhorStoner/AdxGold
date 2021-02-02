@@ -1,6 +1,8 @@
-import { createAsyncThunk } from "@reduxjs/toolkit";
+import { createAsyncThunk,createAction } from "@reduxjs/toolkit";
 import axios from 'axios'
 import config from '../../config/default.json'
+
+export const setIsOpenAd = createAction('SET_IS_OPEN_AD')
 
 export const fetchAds = createAsyncThunk('ads/fetchAds', async ({page,city,price,date,category,categoryDropdown,subcategoryDropdown}) => {
   let selectedFilterPrice = null;
@@ -50,3 +52,4 @@ export const fetchRunAds = createAsyncThunk('offer/fetchRunAds', async () => {
     res => res.data)
   return data;
 });
+

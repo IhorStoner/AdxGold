@@ -37,6 +37,7 @@ async function start() {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
+      useCreateIndex: true
     })
     app.listen(PORT, () => {
       console.log(`Server is running on ${PORT} port`)
