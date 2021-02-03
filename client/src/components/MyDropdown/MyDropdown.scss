@@ -2,13 +2,49 @@
   background-color: transparent;
   color: #000;
   position: relative;
-  max-width: 200px;
+  width: 100%;
   outline: none;
   cursor: pointer;
-  padding: 2px 5px;
+  padding: 2px 13px 2px 2px;
   font-family: 'Roboto-bold',serif;
   font-size: 1rem;
   margin-bottom: 10px;
+
+  &__btnReset {
+    position: absolute;
+    right: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    display: block;
+    background-image: url('../../assets/svg/btnClose.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+  }
+
+  &__arrow {
+    position: absolute;
+    right: 0px;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 10px;
+    height: 10px;
+    display: block;
+    background-image: url('../../assets/svg/arrow.svg');
+    background-repeat: no-repeat;
+    background-position: center;
+    background-size: contain;
+    background-color: transparent;
+    border: none;
+    cursor: pointer;
+    outline: none;
+  }
 
   &__list {
     padding: 0 2px;

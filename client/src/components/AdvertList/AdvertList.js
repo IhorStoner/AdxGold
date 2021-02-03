@@ -40,6 +40,7 @@ export default function AdvertList({ advertArr, runAds, recommendedAds }) {
 				return
 			} else {
 				localStorage.setItem('visitedAd', JSON.stringify([...ads, adId]))
+				const viewsAd = await axios.put(`${config.serverUrl}/api/offer/views/${adId}`,adId)
 			}
 		}
 	}
@@ -76,9 +77,9 @@ export default function AdvertList({ advertArr, runAds, recommendedAds }) {
 					<li style={visitedAds && visitedAds.includes(ad._id) ? { backgroundColor: '#FFC8C8' } : null} className={`adsList__item ${ad.status}`} onClick={(e) => handleClickOffer(e,ad)}>
 						<table className='adsList__table'>
 							<tr className='adsList__row'>
-								<td className='adsList__tableItem adsList__itemTitle adsList__tableItem--titleMargin'><span className='adsList__tableText'>{ad.title}</span></td>
-								<td className='adsList__tableItem adsList__itemCity'><span className='adsList__tableText'>{ad.city}</span></td>
-								<td className='adsList__tableItem adsList__itemSection adsList__tableItem--wordWrap'><span className='adsList__tableText adsList__tableText--textWrap'>{ad.section}</span></td>
+								<td className={`adsList__tableItem adsList__itemTitle ${nav === 'saleBuy' && 'adsList__tableItem--titleMargin' || nav === 'property' && 'adsList__tableItem--propertyTitle'}`}><span className='adsList__tableText'>{ad.title}</span></td>
+								<td className={`adsList__tableItem adsList__itemCity`}><span className='adsList__tableText'>{ad.city}</span></td>
+								<td className={`adsList__tableItem adsList__itemSection adsList__tableItem--wordWrap ${nav === 'property' &&  'adsList__tableItem--categoryProperty'}`}><span className='adsList__tableText adsList__tableText--textWrap'>{ad.section}</span></td>
 								<td className='adsList__tableItem adsList__itemType'><span className='adsList__tableText'>{ad.subsection}</span></td>
 								<td className='adsList__tableItem adsList__itemPrice'><span className='adsList__tableText'>{ad.productPrice}руб. </span></td>
 								<td className='adsList__tableItem adsList__itemImg adsList__tableItem--imgMargin' onClick={(e) => handleOpenPhoto(e, ad.img)}><span className='adsList__tableImg'>{ad.img[0] && <img src={camera} width='25' height='25' />}</span></td>

@@ -51,6 +51,10 @@
     &--titleMargin {
       margin-right: 15px;
     }
+    &--propertyTitle {
+      width: 200px;
+      margin-right: 5px;
+    }
 
     &--imgMargin {
       margin-right: 15px;
@@ -59,6 +63,9 @@
     &--wordWrap {
       word-wrap: break-word;
       margin-right: 10px;
+    }
+    &--categoryProperty {
+      max-width: 78px;
     }
   }
 

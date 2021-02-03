@@ -59,7 +59,22 @@ const AdSchema = new Schema({
   },
   mail: {
     type: String,
-  }
+  },
+  viewsAll: {
+    type: Number,
+    default: 0,
+  },
+  viewsToday: {
+    type: Number,
+    default: 0
+  },
+  lastViewDate: {
+    type: Date,
+    default: new Date()
+  },
+  fields: {
+    type: Object
+  },
 });
 
 

@@ -31,7 +31,7 @@ export default function MyOfferItem({ ad, setSubmitPopup, setEditAdId }) {
         <button type='button' className='myOfferItem__btn myOfferItem__btn--delete' onClick={() => setSubmitPopup(ad)}>Удалить</button>
       </div>
       <div className="myOfferItem__views">
-        <p>Просмотры: <span className='myOfferItem__viewsCounter'>1</span>(сегодня <span className='myOfferItem__viewsCounter'>2</span>)</p>
+        <p>Просмотры: <span className='myOfferItem__viewsCounter'>{ad.viewsAll}</span>(сегодня <span className='myOfferItem__viewsCounter'>{ad.viewsToday}</span>)</p>
       </div>
     </div>
 

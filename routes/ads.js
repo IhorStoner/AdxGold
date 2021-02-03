@@ -156,6 +156,20 @@ adsRouter.get('/:adId', async (req, res) => {
   }
 })
 
+//changeViews By Id
+adsRouter.put('/views/:adId', async (req,res) => {
+  const ad = await AdModel.findById(req.params.adId)
+  const lastView = ad.lastViewDate
+  
+  const dateNow = new Date()
+  const dayNow = dateNow.getDate()
+  const monthNow = dateNow.getMonth()
+  const yearNow = dateNow.getYear()
+
+  const updateAd = await AdModel.findByIdAndUpdate(req.params.adId, {$set: {viewsAll: ad.viewsAll+1, viewsToday: lastView.getDate() >= dayNow && lastView.getMonth() >= monthNow && lastView.getYear() >= yearNow ? ad.viewsToday+1 : 1, lastViewDay: dateNow}})
+  res.status(200).send(updateAd)
+})
+
 //changeById
 adsRouter.put('/:adId', async (req, res) => {
   const updateAd = await AdModel.findByIdAndUpdate(req.params.adId, req.body)
