@@ -5,6 +5,10 @@
   position: relative;
   padding-bottom: 35px;
 
+  &__autoCity {
+    width: 150px !important;
+  }
+
   &__icon {
     display: block;
 
@@ -42,25 +46,39 @@
     border-bottom-right-radius: 5px;
   }
 
+  &__dropCategory {
+    width: 120px !important;
+
+    &--auto {
+      width: 110px;
+    }
+  }
+  &__dropSubcategory {
+    width: 120px !important;
+  }
+
   &__subMenuItem {
     font-size: 0.8rem;
     font-family: "Roboto-regular";
 
     &--titleProperty {
-      margin-right: 145px;
+      margin-right: 55px;
     }
     &--brand {
-      margin-right: 10px;
+      margin-right: 5px;
     }
     &--model {
-      margin-right: 15px;
+      margin-right: 5px;
     }
 
     &--autoCategory {
-      margin-right: 45px;
+      margin-right: 5px;
     }
 
     &--yearOfIssue {
+      margin-right: 5px;
+    }
+    &--enginePower {
       margin-right: 25px;
     }
 
@@ -103,7 +121,7 @@
     }
 
     &--categoryProperty {
-      margin-right: 25px;
+      margin-right: 5px;
     }
 
     &--subcategoryProperty {

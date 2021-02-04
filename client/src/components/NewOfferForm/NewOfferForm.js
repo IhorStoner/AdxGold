@@ -59,6 +59,11 @@ export default function NewOfferForm() {
     { key: 6, text: 'Новые авто', value: 'Новые авто' },
     { key: 7, text: 'Новые квартиры', value: 'Новые квартиры' },
   ]
+  const optionsPropertyType = [
+    { key: 1, text: 'От застройщика', value: 'От застройщика' },
+    { key: 2, text: 'От собственника', value: 'От собственника' },
+    { key: 3, text: 'От посредника', value: 'От посредника' },
+  ]
 
   //в зависимости от раздела выбираем объект категорий
   useEffect(() => {
@@ -151,6 +156,7 @@ export default function NewOfferForm() {
     let json;
     try {
       json = await cb(formData);
+      console.log(json)
     } catch (err) {
       console.error(err);
     }
@@ -161,14 +167,8 @@ export default function NewOfferForm() {
 
 
   function getFormData() {
-    const formEl = document.getElementById('exampleForm');
-    const formData = new FormData(formEl);
-    for (const key of formData.keys()) {
-      const val = formData.get(key);
-      if (val === undefined || val === null || (typeof val === 'string' && !/\S/.test(val))) {
-        formData.delete(key);
-      }
-    }
+    const formData = new FormData();
+    [...images].map(img => formData.append('slider',img))
 
     return formData;
   }
@@ -176,7 +176,7 @@ export default function NewOfferForm() {
   async function submitAxios(ev) {
 
     return wrap(ev, async (formData) => {
-
+      
       const { data } = await axios.post(
         `${config.serverUrl}/api/images`,
         formData,
@@ -324,6 +324,7 @@ export default function NewOfferForm() {
                   {
                     selectedSection === 'Недвижимость' &&
                     <div>
+                       <MyDropdown placeholder='Тип предложения' arr={optionsPropertyType} onChange={(e) => setFields({ ...fields, type: e.target.innerText })} />
                       <p className='offerForm__inputContainer'>Этаж<span className='offerForm__star'>*</span><input className='offerForm__itemInput' type="text" value={fields.floor} onChange={(e) => setFields({ ...fields, floor: e.target.value })} /></p>
                       <p className='offerForm__inputContainer'>Комнат<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.rooms} onChange={(e) => setFields({ ...fields, rooms: e.target.value })} /></p>
                       <p className='offerForm__inputContainer'>Площадь<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.square} onChange={(e) => setFields({ ...fields, square: e.target.value })} /></p>
@@ -366,7 +367,7 @@ export default function NewOfferForm() {
               <h2 className='offerForm__title'>Фотографии</h2>
               <div className="offerForm__itemContent offerForm__images">
                 <label className='offerForm__labelFile offerForm__imgItem' for="uploadImg">Добавить<br />Фото</label>
-                <input type="file" name="slider" ref={images} onChange={(e) => setImages(e.target.files)} class="offerForm__inputFile" id="uploadImg" accept="image/jpeg,image/png,image/jpg" multiple />
+                <input type="file" name="slider" onChange={(e) => setImages(e.target.files)} class="offerForm__inputFile" id="uploadImg" accept="image/jpeg,image/png,image/jpg" multiple />
                 {[...images].map((file, i) => (
                   <div className="offerForm__imgContainer">
                     <button type='button' className="offerForm__btnDelImg" onClick={() => handleDeleteImage(file)}/>

@@ -4,7 +4,7 @@ import config from '../../config/default.json'
 
 export const setIsOpenAd = createAction('SET_IS_OPEN_AD')
 
-export const fetchAds = createAsyncThunk('ads/fetchAds', async ({page,city,price,date,category,categoryDropdown,subcategoryDropdown}) => {
+export const fetchAds = createAsyncThunk('ads/fetchAds', async ({page,city,price,date,category,categoryDropdown,subcategoryDropdown,model}) => {
   let selectedFilterPrice = null;
   if(price === 'По убыванию') {
     selectedFilterPrice = 'low'
@@ -18,7 +18,7 @@ export const fetchAds = createAsyncThunk('ads/fetchAds', async ({page,city,price
     selectedFilterDate = 'high'
   }
 
-  const data = axios.get(`${config.serverUrl}/api/offer?page=${page}&city=${city}&price=${selectedFilterPrice}&date=${selectedFilterDate}&category=${category}&section=${categoryDropdown}&subsection=${subcategoryDropdown}`).then(
+  const data = axios.get(`${config.serverUrl}/api/offer?page=${page}&city=${city}&price=${selectedFilterPrice}&date=${selectedFilterDate}&category=${category}&section=${categoryDropdown}&subsection=${subcategoryDropdown}&model=${model}`).then(
     res => res.data)
   return data;
 });

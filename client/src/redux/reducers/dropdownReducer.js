@@ -1,11 +1,12 @@
 import { createReducer } from "@reduxjs/toolkit";
-import { changeSelectedCity,changeSelectedCategory,changeSelectedSubcategory } from '../actions/dropdownAction';
+import { changeSelectedCity,changeSelectedCategory,changeSelectedSubcategory,changeSelectedModel } from '../actions/dropdownAction';
 
 
 const initialState = {
   selectedCity: '',
   selectedCategory: '',
   selectedSubcategory: '',
+  selectedModel: '',
 };
 
 const dropdownReducer = createReducer(initialState, {
@@ -17,6 +18,9 @@ const dropdownReducer = createReducer(initialState, {
   },
   [changeSelectedSubcategory.type]: (state,action) => {
     state.selectedSubcategory = action.payload;
+  },
+  [changeSelectedModel.type]: (state,action) => {
+    state.selectedModel = action.payload;
   }
 });
 

@@ -162,9 +162,8 @@ const storage = new WatermarkInterceptorStorage({
     cb(null, dirname);
   },
   filename: (req, file, cb) => {
-    const filename = file.originalname || `${file.fieldname}.${file.mimetype.split('/')[1]}`;
-    const parsed = path.parse(filename);
-    cb(null, `${parsed.name}${parsed.ext.toLocaleLowerCase()}`);
+    const filename = Date.now() || file.originalname || `${file.fieldname}.${file.mimetype.split('/')[1]}`;
+    cb(null, `${filename}`);
   },
   watermark: {
     path: `${process.cwd()}/logo-ru.png`,

@@ -5,7 +5,7 @@ import { setIsOpenAd,fetchAds,fetchSharesAds,fetchSalesAds,fetchRecommendedAds,f
 const initialState = {
   loading: false,
   data: [],
-  pages: [],
+  pages: 0,
   sharesAds: [],
   salesAds: [],
   recommendedAds: [],
@@ -21,12 +21,14 @@ const adsReducer = createReducer(initialState, {
   },
   [fetchAds.pending]: (state) => {
     state.loading = true;
+    state.pages = 1;
     state.error = null
   },
   [fetchAds.fulfilled]: (state, action) => {
     state.data = action.payload[0];
     state.pages = action.payload[1];
     state.loading = false;
+
   },
   [fetchAds.rejected]: (state, action) => {
     state.loading = false;

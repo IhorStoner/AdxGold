@@ -11,9 +11,11 @@ import favorites from '../../assets/svg/favorites.svg'
 import DropdownCity from '../DropdownCity/DropdownCity'
 import { Link,useParams } from 'react-router-dom'
 import NavDropdown from "../NavDropdown/NavDropdown";
-import * as categoryArr from '../../assets/json/category.json'
+import categoryArr from '../../assets/json/category.json'
+import property from '../../assets/json/property.json'
+import auto from '../../assets/json/auto.json'
 import {useDispatch, useSelector} from 'react-redux'
-import {changeSelectedSubcategory,changeSelectedCategory } from '../../redux/actions/dropdownAction'
+import {changeSelectedSubcategory,changeSelectedCategory, changeSelectedModel } from '../../redux/actions/dropdownAction'
 import {changeSelectedCategoryNav} from '../../redux/actions/categoryAction'
 import { getCategory } from '../../redux/selectors/categorySelector'
 import { AuthContext } from '../../context/AuthContext'
@@ -24,21 +26,45 @@ export default function BoardAdsBar() {
   const {isAuthenticated} = useContext(AuthContext);
   const  dispatch = useDispatch()
   //dropdown section(category)
-  const stateSection = JSON.parse(JSON.stringify(categoryArr.default))
-  const optionsSection = Object.keys(stateSection).map((item, i) => {
+  const stateSection = (nav ==='saleBuy' && categoryArr) || (nav === 'property' && property) || (nav === 'auto' && auto)
+  const [optionsModel,setOptionsModel] = useState([]) // for auto
+  const [selectedModel,setSelectedModel] = useState('')
+  const optionsSection = Object.keys(stateSection).map((item, i) => { // опции категории
     return { key: i, text: item, value: item }
   })
-  const [ subsection, setOptionsSubsection ] = useState([])
-  const [ selectedSection, setSelectedSection ] = useState('')
-  useEffect(() => {
-    selectedSection && setOptionsSubsection(stateSection[selectedSection].map((item, i) => {
-      return { key: i, text: item, value: item }
-    }))
-    console.log(selectedSection)
-  }, [selectedSection])
-  // end logic dropdown section
-
+  const [ selectedSection, setSelectedSection ] = useState('') // категория
   const [selectedSubsection, setSelectedSubsection ] = useState('')
+
+  const [ optionsSubsection, setOptionsSubsection ] = useState([]) // опции выбора подкатегории
+  
+
+
+
+  //optionsSubsection
+  useEffect(() => {
+    if(nav === 'auto') {
+      selectedSection && setOptionsSubsection(Object.keys(stateSection[selectedSection]).map((item, i) => {
+        return { key: i, text: item, value: item }
+      }))
+    } else {
+      selectedSection && setOptionsSubsection(stateSection[selectedSection].map((item, i) => {
+        return { key: i, text: item, value: item }
+      }))
+    }
+
+  }, [selectedSection])
+
+  //options model
+  useEffect(() => {
+    if(nav === 'auto' && selectedSubsection) {
+      const optionsArr =  auto[selectedSection][selectedSubsection].map((item,i) => {
+        return { key: i, text: item, value: item }
+      })
+      setOptionsModel(optionsArr)
+    } 
+  }, [selectedSubsection])
+
+ 
 
 
   useEffect(() => {
@@ -50,7 +76,10 @@ export default function BoardAdsBar() {
     if(nav === 'newAuto') dispatch(changeSelectedCategoryNav('Новые авто'))
     if(nav === 'newHouse') dispatch(changeSelectedCategoryNav('Новые квартиры'))
     if(nav === 'favorites') dispatch(changeSelectedCategoryNav('favorites'))
-    
+    dispatch(changeSelectedCategory(''))
+    dispatch(changeSelectedSubcategory(''))
+    setSelectedSection('')
+    setSelectedSubsection('')
   }, [nav])
 
 
@@ -72,7 +101,7 @@ export default function BoardAdsBar() {
             <NavDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Категория' onChange={setSelectedSection} action={changeSelectedCategory}/>
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">
-            <NavDropdown placeholder='Подкатегория' arr={selectedSection && subsection} onChange={setSelectedSubsection} action={changeSelectedSubcategory}/>
+            <NavDropdown placeholder='Подкатегория' arr={selectedSection && optionsSubsection} onChange={setSelectedSubsection} action={changeSelectedSubcategory}/>
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
@@ -89,11 +118,15 @@ export default function BoardAdsBar() {
         <ul className="boardAdsBar__subMenu">
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleProperty">Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin">
-            <DropdownCity />
+            <DropdownCity className='boardAdsBar__dropPropertyCity'/>
           </li>
     
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryProperty">Категория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryProperty">Подкатегория</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryProperty">
+            <NavDropdown className='boardAdsBar__dropCategory' arr={optionsSection} placeholder='Категория' onChange={setSelectedSection} action={changeSelectedCategory}/>
+          </li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryProperty">
+            <NavDropdown className='boardAdsBar__dropSubcategory' placeholder='Подкатегория' arr={selectedSection && optionsSubsection} onChange={setSelectedSubsection} action={changeSelectedSubcategory}/>
+          </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--squareProperty">Площадь</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--floarMargin">Этаж</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--roomsMargin">Комнат</li>
@@ -112,14 +145,14 @@ export default function BoardAdsBar() {
         </Link>
         <ul className="boardAdsBar__subMenu">
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleProperty">Заголовок</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin"><DropdownCity /></li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--autoCategory">Категория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--brand">Марка</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--model">Модель</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin"><DropdownCity className='boardAdsBar__autoCity'/></li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--autoCategory"><NavDropdown className={'boardAdsBar__dropCategory boardAdsBar__dropCategory--auto'} arr={optionsSection} placeholder='Категория' onChange={setSelectedSection} action={changeSelectedCategory}/></li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--brand"><NavDropdown className='boardAdsBar__dropSubcategory' placeholder={`${!selectedSection ? 'Выберите категорию' : ''}  ${selectedSection === 'Запчасти' ? 'Тип' : 'Марка'}`} arr={selectedSection && optionsSubsection} onChange={setSelectedSubsection} action={changeSelectedSubcategory}/></li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--model"><NavDropdown className='boardAdsBar__dropSubcategory' placeholder={`${!selectedSubsection ? 'Выберите подкатегорию' : ''} ${selectedSection === 'Запчасти' ? 'Принадлежность' : 'Модель'}`} arr={selectedSubsection ? optionsModel : []} onChange={setSelectedModel} action={changeSelectedModel}/></li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--yearOfIssue">Об.дв.</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--yearOfIssue">Год</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--yearOfIssue">Цвет</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--yearOfIssue">Мощ.дв.</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--enginePower">Мощ.дв.</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>

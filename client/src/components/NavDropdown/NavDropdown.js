@@ -3,7 +3,7 @@ import './NavDropdown.scss'
 import {useDispatch} from 'react-redux'
 
 
-export default function NavDropdown({arr, placeholder, onChange,value = '', action}) {
+export default function NavDropdown({arr, placeholder, onChange,value = '', action, className}) {
   const [selectedItem, setSelectedItem] = useState(value)
   const [isOpen, setIsOpen] = useState(false)
   const dispatch = useDispatch()
@@ -24,7 +24,7 @@ export default function NavDropdown({arr, placeholder, onChange,value = '', acti
 
 
   return (
-    <div className='NavDropdown' tabIndex="0" onBlur={() => setIsOpen(false)}>
+    <div className={`NavDropdown ${className}`} tabIndex="0" onBlur={() => setIsOpen(false)}>
       {selectedItem && <button onClick={() => handleBtnClose()} className='NavDropdown__btnReset'></button>}
       {!selectedItem && <span className='NavDropdown__arrow'></span>}
       <div className="NavDropdown__selected" onClick={() => setIsOpen(isOpen ? false : true)}>

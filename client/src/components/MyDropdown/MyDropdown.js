@@ -1,7 +1,7 @@
 import React,{useState} from 'react'
 import './MyDropdown.scss'
 
-export default function MyDropdown({arr, placeholder, onChange,value = '',handleBtnReset }) {
+export default function MyDropdown({arr, placeholder, onChange,value = '',handleBtnReset, className }) {
   const [selectedItem, setSelectedItem] = useState(value)
   const [isOpen, setIsOpen] = useState(false)
 
@@ -20,7 +20,7 @@ export default function MyDropdown({arr, placeholder, onChange,value = '',handle
   }
 
   return (
-    <div className='myDropdown' tabIndex="0" onBlur={() => setIsOpen(false)}>
+    <div className={`myDropdown ${className}`} tabIndex="0" onBlur={() => setIsOpen(false)}>
       {selectedItem && <button onClick={(e) => handleBtnClose(e)} value='' className='myDropdown__btnReset'></button>}
       {!selectedItem && <span className='myDropdown__arrow'></span>}
       <div className="myDropdown__selected" onClick={() => setIsOpen(isOpen ? false : true)}>

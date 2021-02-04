@@ -13,6 +13,7 @@ adsRouter.get('/', async (req, res) => {
   const sectionParams = req.query.section
   const subsectionParams = req.query.subsection
   const page = req.query.page;
+  const model = req.query.model;
   const pagesize = 25;
 
   const reqQuery = {
@@ -21,12 +22,15 @@ adsRouter.get('/', async (req, res) => {
     section: sectionParams,
     subsection: subsectionParams,
     price: price,
+    model: model,
     date: 'high',
   };
 
   const query = [
     {
-      $match: { category: { $eq: reqQuery.category } },
+      $match: { 
+        category: { $eq: reqQuery.category },
+      },
     },
     {
       $addFields: {
@@ -51,13 +55,21 @@ adsRouter.get('/', async (req, res) => {
   if (reqQuery.subsection) {
     query[0].$match.subsection = { $eq: reqQuery.subsection };
   }
+  if (reqQuery.model) {
+    query[0].$match.fields.mark = { $eq: {mark: reqQuery.model} };
+  }
 
+  let result = []
+  let pages;
   const items = await AdModel.aggregate([...query, { $skip: ((page || 1) - 1) * pagesize },{ $limit: pagesize }])
-  const countAds = await AdModel.aggregate([...query,{$count:'ads'}])
 
-  const pages = Math.ceil((Number(countAds[0].ads)/Number(pagesize)))
-
-  res.json([items, pages])
+  if(items.length) {
+    const countAds = await AdModel.aggregate([...query,{$count:'ads'}])
+    pages = Math.ceil((Number(countAds[0].ads)/Number(pagesize)))
+    result = items
+  } 
+  
+  res.json([result, pages])
 })
 
 // get shares adverts

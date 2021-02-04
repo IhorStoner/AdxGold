@@ -4,7 +4,7 @@ import * as cityData from '../../assets/json/russian-cities.json'
 import { useDispatch } from 'react-redux'
 import { changeSelectedCity } from '../../redux/actions/dropdownAction'
 
-export default function DropdownCity() {
+export default function DropdownCity({className}) {
   const dispatch = useDispatch();
   // options for city filter
   const [cityDataArr, setCityDataArr] = useState(() => {
@@ -32,7 +32,7 @@ export default function DropdownCity() {
   }
 
   return (
-    <div className='dropdown' tabIndex="0" onBlur={() => setIsOpen(false)}>
+    <div className={`dropdown ${className}`} tabIndex="0" onBlur={() => setIsOpen(false)}>
       {selectedItem && <button onClick={() => handleBtnClose()} className='dropdown__btnReset'></button>}
       {!selectedItem && <span className='dropdown__arrow'></span>}
       <div className="dropdown__selected" onClick={() => setIsOpen(isOpen ? false : true)}>

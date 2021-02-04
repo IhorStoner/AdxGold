@@ -14,3 +14,8 @@ export const getSubsection = createSelector(
   state => state.filter.selectedSubcategory,
   subsection => subsection
 );
+
+export const getModel = createSelector(
+  state => state.filter.selectedModel,
+  model => model
+);

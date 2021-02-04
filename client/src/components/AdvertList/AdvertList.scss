@@ -1,5 +1,40 @@
 .adsList {
   width: 100%;
+  &__model {
+    width: 120px;
+    margin-right: 5px !important;
+  }
+  &__engine {
+    width: 20px;
+    margin-right: 5px !important;
+  }
+  &__year {
+    width: 30px;
+    margin-right: 5px !important;
+  }
+  &__color {
+    width: 50px;
+    margin-right: 5px !important;
+  }
+  &__enginePower {
+    width: 43px;
+    margin-right: 5px !important;
+  }
+  &__adSquare {
+    width: 45px;
+  }
+  &__floor {
+    width: 25px;
+  }
+  &__rooms {
+    width: 25px;
+  }
+  &__type {
+    width: 105px;
+  }
+  &__walls {
+    width: 70px;
+  }
 
   &__alertEmpty {
     text-align: center;
@@ -13,6 +48,9 @@
   }
   &__itemCity{
     width: 155px;
+    &--property {
+      width: 120px;
+    }
   }
   &__itemImg {
     width: 27px;
@@ -20,8 +58,12 @@
   &__itemSection {
     width: 179px;
   }
-  &__itemType{
+  &__itemSubsection{
     width: 175px;
+    &--property {
+      width: 120px;
+      margin-right: 5px !important;
+    }
   }
   &__itemFloor {
     width: 20px;
@@ -46,14 +88,30 @@
     margin-right: 17px;
     display: flex;
     align-items: center;
+    height: 26px;
     padding: 0;
+
+    &--autoCategory {
+      width: 130px;
+    }
+    &--autoSubcategory {
+      width: 100px;
+    }
 
     &--titleMargin {
       margin-right: 15px;
     }
     &--propertyTitle {
-      width: 200px;
+      width: 180px;
       margin-right: 5px;
+    }
+    &--autoTitle {
+      width: 125px;
+      margin-right: 5px;
+    }
+    &--autoCity {
+      width: 145px;
+      margin-right: 10px;
     }
 
     &--imgMargin {
@@ -65,15 +123,20 @@
       margin-right: 10px;
     }
     &--categoryProperty {
-      max-width: 78px;
+      max-width: 105px;
     }
   }
-
+  
   &__tableText {
     overflow: hidden;
     font-size: 0.7rem;
     white-space: nowrap;
     text-overflow: ellipsis;
+
+    &--property {
+      white-space: pre-wrap;
+      line-height: 0.7rem;
+    }
 
     &--textWrap {
       white-space: pre-wrap;

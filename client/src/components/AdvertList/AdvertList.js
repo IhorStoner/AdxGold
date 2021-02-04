@@ -77,11 +77,20 @@ export default function AdvertList({ advertArr, runAds, recommendedAds }) {
 					<li style={visitedAds && visitedAds.includes(ad._id) ? { backgroundColor: '#FFC8C8' } : null} className={`adsList__item ${ad.status}`} onClick={(e) => handleClickOffer(e,ad)}>
 						<table className='adsList__table'>
 							<tr className='adsList__row'>
-								<td className={`adsList__tableItem adsList__itemTitle ${nav === 'saleBuy' && 'adsList__tableItem--titleMargin' || nav === 'property' && 'adsList__tableItem--propertyTitle'}`}><span className='adsList__tableText'>{ad.title}</span></td>
-								<td className={`adsList__tableItem adsList__itemCity`}><span className='adsList__tableText'>{ad.city}</span></td>
-								<td className={`adsList__tableItem adsList__itemSection adsList__tableItem--wordWrap ${nav === 'property' &&  'adsList__tableItem--categoryProperty'}`}><span className='adsList__tableText adsList__tableText--textWrap'>{ad.section}</span></td>
-								<td className='adsList__tableItem adsList__itemType'><span className='adsList__tableText'>{ad.subsection}</span></td>
-								<td className='adsList__tableItem adsList__itemPrice'><span className='adsList__tableText'>{ad.productPrice}руб. </span></td>
+								<td className={`adsList__tableItem adsList__itemTitle ${nav === 'saleBuy' && 'adsList__tableItem--titleMargin' || nav === 'property' && 'adsList__tableItem--propertyTitle' || nav === 'auto' && 'adsList__tableItem--autoTitle'}`}><span className='adsList__tableText'>{ad.title}</span></td>
+								<td className={`adsList__tableItem adsList__itemCity  ${nav==='property' && 'adsList__itemCity--property'|| nav === 'auto' && 'adsList__tableItem--autoCity'}`}><span className='adsList__tableText'>{ad.city}</span></td>
+								<td className={`adsList__tableItem adsList__itemSection adsList__tableItem--wordWrap ${nav === 'property' &&  'adsList__tableItem--categoryProperty' || nav === 'auto' && 'adsList__tableItem--autoCategory'}`}><span className='adsList__tableText adsList__tableText--textWrap'>{ad.section}</span></td>
+								<td className={`adsList__tableItem adsList__itemSubsection ${nav==='property' && 'adsList__itemSubsection--property' || nav === 'auto' && 'adsList__tableItem--autoSubcategory'}`}><span className={`adsList__tableText ${nav==='property' && 'adsList__tableText--property'}`}>{ad.subsection}</span></td>
+								{nav === 'property' && <td className='adsList__tableItem adsList__adSquare'><span className='adsList__tableText'>{ad.fields && ad.fields.square}</span></td>}
+								{nav === 'property' && <td className='adsList__tableItem adsList__floor'><span className='adsList__tableText'>{ad.fields && ad.fields.floor}</span></td>}
+								{nav === 'property' && <td className='adsList__tableItem adsList__rooms'><span className='adsList__tableText'>{ad.fields && ad.fields.rooms}</span></td>}
+								{nav === 'property' && <td className='adsList__tableItem adsList__type'><span className='adsList__tableText'>{ad.fields && ad.fields.type}</span></td>}
+								{nav === 'auto' && <td className='adsList__tableItem adsList__model'><span className='adsList__tableText'>{ad.fields && ad.fields.mark}</span></td>}
+								{nav === 'auto' && <td className='adsList__tableItem adsList__engine'><span className='adsList__tableText'>{ad.fields && ad.fields.engine}</span></td>}
+								{nav === 'auto' && <td className='adsList__tableItem adsList__year'><span className='adsList__tableText'>{ad.fields && ad.fields.year}</span></td>}
+								{nav === 'auto' && <td className='adsList__tableItem adsList__color'><span className='adsList__tableText'>{ad.fields && ad.fields.color}</span></td>}
+								{nav === 'auto' && <td className='adsList__tableItem adsList__enginePower'><span className='adsList__tableText'>{ad.fields && ad.fields.enginePower}</span></td>}
+								<td className='adsList__tableItem adsList__itemPrice'><span className='adsList__tableText'>{ad.productPrice ? `${ad.productPrice}руб.` : 'Не указана'}</span></td>
 								<td className='adsList__tableItem adsList__itemImg adsList__tableItem--imgMargin' onClick={(e) => handleOpenPhoto(e, ad.img)}><span className='adsList__tableImg'>{ad.img[0] && <img src={camera} width='25' height='25' />}</span></td>
 								<td className='adsList__tableItem adsList__itemDate'><span className='adsList__tableText adsList__tableDate' >{ad.date}</span></td>
 								<td >

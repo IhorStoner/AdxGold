@@ -8,7 +8,6 @@ const fs = require('fs')
 const Access_Key_ID = 'AKIAJ7IQ4NLOQSXWP6CA'
 const Secret_Access_Key = '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'
 
-
 ImgRouter.get(
   '/',
   async (req, res) => {
@@ -27,6 +26,7 @@ const formUpload = promisify(
 
 ImgRouter.use('/', express.static(FILESTORAGE))
 
+
 ImgRouter.post(
   '/',
   async (req, res) => {
@@ -39,12 +39,6 @@ ImgRouter.post(
 
     const data = { ...req.body, ...req.files };
     const filesNames = data.slider.map(file => file.filename)
-    // const imgUrl = []
-
-    // const filesNames = data.slider.map(file => {
-    //   return cloudinary.uploader.upload(file.path, function(error, result) {imgUrl.push(result.secure_url)})
-    // })
-    // const result = await Promise.all(filesNames)
     
     if (req.header('accept') === 'application/json') {
       res.json(filesNames);
