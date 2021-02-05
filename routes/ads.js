@@ -4,6 +4,7 @@ const { AdModel, Reference } = require('../models/AdModel')
 const adsRouter = Router();
 const _ = require('lodash')
 
+
 //get all sort by status and date
 adsRouter.get('/', async (req, res) => {
   const city = req.query.city;
@@ -40,7 +41,7 @@ adsRouter.get('/', async (req, res) => {
     {
       $sort: {
         __order: 1,
-        ...(reqQuery.price ? { productPrice: reqQuery.price === 'high' ? -1 : 1 } : {}),
+        // ...(reqQuery.price ? { productPrice: reqQuery.price === 'high' ? -1 : 1 } : {}),
         ...(reqQuery.date ? { backendDate: reqQuery.date === 'high' ? -1 : 1 } : {}),
         updatedAt: -1
       }
@@ -56,11 +57,11 @@ adsRouter.get('/', async (req, res) => {
     query[0].$match.subsection = { $eq: reqQuery.subsection };
   }
   if (reqQuery.model) {
-    query[0].$match.fields.mark = { $eq: {mark: reqQuery.model} };
+    query[0].$match['fields.mark'] = { $eq:  reqQuery.model } /// не срабатывает
   }
 
   let result = []
-  let pages;
+  let pages = 'not found';
   const items = await AdModel.aggregate([...query, { $skip: ((page || 1) - 1) * pagesize },{ $limit: pagesize }])
 
   if(items.length) {

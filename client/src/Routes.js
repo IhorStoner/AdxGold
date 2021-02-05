@@ -2,7 +2,6 @@ import React from 'react'
 import { Redirect, Route, Switch } from "react-router-dom"
 import HomePage from './pages/HomePage/HomePage'
 import AccountPage from './pages/AccountPage/AccountPage'
-import AuthPage from './pages/AuthPage/AuthPage'
 import DetailsAdPage from './pages/DetailsAdPage/DetailsAdPage'
 
 export default function Routes() {
@@ -16,7 +15,6 @@ export default function Routes() {
         <AccountPage />
       </Route>
       <Route path='/detailsAd/:adId' component={DetailsAdPage}/>
-      {/* <Route path='/auth' component={AuthPage} /> */}
       <Redirect to='/home/saleBuy' />
     </Switch>
   )

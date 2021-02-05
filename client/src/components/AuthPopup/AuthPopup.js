@@ -5,16 +5,18 @@ import { reduxForm, Field } from 'redux-form'
 import TextField from '../TextField/TextField'
 import { useDispatch } from 'react-redux'
 
-function AuthPopup({ handleSubmit, valid, submitting, activeForm, setActiveForm, successfulReg,setSuccessfulReg,actionClose }) {
+function AuthPopup({ handleSubmit, valid,setAuthError, submitting,authError, activeForm, setActiveForm, successfulReg,setSuccessfulReg,actionClose }) {
   const dispatch = useDispatch()
   const handleAuthClick = () => {
     setActiveForm('auth')
     setSuccessfulReg(false)
+    setAuthError(false)
   }
 
   const handleRegClick = () => {
     setActiveForm('reg')
     setSuccessfulReg(false)
+    setAuthError(false)
   }
   
   return (
@@ -38,6 +40,10 @@ function AuthPopup({ handleSubmit, valid, submitting, activeForm, setActiveForm,
                     <Field className='authPopup__input authPopup__input--email' name='email' component={TextField} placeholder='E-mail'></Field>
                     <Field className='authPopup__input authPopup__input--password' name='password' component={TextField} placeholder='Пароль'></Field>
                   </div>
+                  {
+                    activeForm === 'reg' && authError && <div className='authPopup__warning'>Такая почта уже занята</div>               
+                  }
+                  { activeForm === 'auth' && authError && <div className='authPopup__warning'>Не правильное имя или пароль</div>}
                   <div className="authPopup__submitContainer">
                     <button type='submit' className='authPopup__btnSubmit'>{activeForm === 'auth' ? 'Войти' : 'Регистрация'}</button>
                   </div>
@@ -57,7 +63,4 @@ function AuthPopup({ handleSubmit, valid, submitting, activeForm, setActiveForm,
 
 export default reduxForm({
   form: "auth",
-  // validate,
-  // asyncValidate,
-  // asyncBlurFields: ['email']
 })(AuthPopup);

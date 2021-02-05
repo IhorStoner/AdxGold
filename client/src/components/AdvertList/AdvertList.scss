@@ -21,13 +21,14 @@
     margin-right: 5px !important;
   }
   &__adSquare {
-    width: 45px;
+    width: 50px;
   }
   &__floor {
-    width: 25px;
+    width: 30px;
   }
   &__rooms {
     width: 25px;
+    margin-right: 5px !important;
   }
   &__type {
     width: 105px;
@@ -47,7 +48,7 @@
     
   }
   &__itemCity{
-    width: 155px;
+    width: 125px;
     &--property {
       width: 120px;
     }
@@ -56,7 +57,7 @@
     width: 27px;
   }
   &__itemSection {
-    width: 179px;
+    width: 170px;
   }
   &__itemSubsection{
     width: 175px;
@@ -72,7 +73,7 @@
     width: 60px;
   }
   &__itemPrice {
-    width: 70px;
+    width: 71px;
   }
   &__itemSquare {
     width: 60px;
@@ -102,7 +103,11 @@
       margin-right: 15px;
     }
     &--propertyTitle {
-      width: 180px;
+      width: 170px;
+      margin-right: 5px;
+    }
+    &--newPropertyTitle {
+      width: 130px;
       margin-right: 5px;
     }
     &--autoTitle {

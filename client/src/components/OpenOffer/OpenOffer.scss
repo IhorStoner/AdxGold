@@ -1,6 +1,10 @@
 .openOffer {
   background-color: #ececec;
   padding: 10px;
+  
+  &__dataColumn {
+    width: 49%;
+  }
 
   &__showNumber {
     font-size: 1rem;
@@ -86,7 +90,7 @@
     font-size: 1rem;
     border-radius: 5px;
     padding: 0 3px;
-    margin-left: 5px;
+    margin-left: 1px;
   }
 
   &__infoContainer {
@@ -112,9 +116,17 @@
     border-top-left-radius: 5px;
     border-top-right-radius: 5px;
   }
+  
+  &__dataInfo {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+  }
 
   &__dataContainer {
     padding: 5px 10px;
+
+
     &--padding {
       padding: 5px 50px;
     }

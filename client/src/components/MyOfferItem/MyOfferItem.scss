@@ -1,5 +1,18 @@
 .myOfferItem {
   margin-bottom: 10px;
+
+  &__item {
+    width: 200px;
+  }
+  &__price {
+    width: 100px;
+  }
+  &__date {
+    width: 100px;
+  }
+  &__photo {
+    width: 50px;
+  }
   
   &:last-child {
     margin-bottom: 0;

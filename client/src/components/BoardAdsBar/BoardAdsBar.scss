@@ -5,6 +5,21 @@
   position: relative;
   padding-bottom: 35px;
 
+  &__dropPropertyCity {
+    width: 120px !important; 
+  }
+
+  &__favorites {
+    height: 35px;
+  }
+
+  &__cityFavorites {
+    margin-right: 115px !important;
+  }
+  &__categoryFavorites {
+    margin-right: 100px !important;
+  }
+
   &__autoCity {
     width: 150px !important;
   }
@@ -47,7 +62,7 @@
   }
 
   &__dropCategory {
-    width: 120px !important;
+    width: 105px !important;
 
     &--auto {
       width: 110px;
@@ -62,7 +77,10 @@
     font-family: "Roboto-regular";
 
     &--titleProperty {
-      margin-right: 55px;
+      margin-right: 65px;
+    }
+    &--titlePropertyMargin {
+      margin-right: 105px;
     }
     &--brand {
       margin-right: 5px;
@@ -88,14 +106,15 @@
 
     &--priceMargin {
       margin-right: 35px;
+      margin-left: 17px;
     }
 
     &--roomsMargin {
-      margin-right: 10px;
+      margin-right: 5px;
     }
 
     &--floarMargin {
-      margin-right: 18px;
+      margin-right: 5px;
     }
 
     &--subcategoryMargin {

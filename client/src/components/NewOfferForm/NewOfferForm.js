@@ -74,7 +74,7 @@ export default function NewOfferForm() {
     if (selectedSection === 'Недвижимость' || selectedSection === 'Новые квартиры') setOptionsCategory(Object.keys(property).map((item, i) => {
       return { key: i, text: item, value: item }
     }))
-    if (selectedSection === 'Авто' || selectedSection === 'Новые Авто') setOptionsCategory(Object.keys(auto).map((item, i) => {
+    if (selectedSection === 'Авто' || selectedSection === 'Новые авто') setOptionsCategory(Object.keys(auto).map((item, i) => {
       return { key: i, text: item, value: item }
     }))
     if (selectedSection === 'Услуги') setOptionsCategory(Object.keys(services).map((item, i) => {
@@ -94,20 +94,20 @@ export default function NewOfferForm() {
     if (selectedSection === 'Недвижимость' || selectedSection === 'Новые квартиры') selectedCategory && setOptionsSubcategory(property[selectedCategory].map((item, i) => {
       return { key: i, text: item, value: item }
     }))
-    if (selectedSection === 'Авто' || selectedSection === 'Новые Авто') selectedCategory && setOptionsSubcategory(Object.keys(auto[selectedCategory]).map((item, i) => {
+    if (selectedSection === 'Авто' || selectedSection === 'Новые авто') selectedCategory && setOptionsSubcategory(Object.keys(auto[selectedCategory]).map((item, i) => {
       return { key: i, text: item, value: item }
     }))
     if (selectedSection === 'Услуги') setOptionsSubcategory(Object.keys(services[selectedCategory]).map((item, i) => {
       return { key: i, text: item, value: item }
     }))
-    if (selectedSection === 'Работа') setOptionsSubcategory(Object.keys(work[selectedCategory]).map((item, i) => {
+    if (selectedSection === 'Работа') setOptionsSubcategory(work[selectedCategory].map((item, i) => {
       return { key: i, text: item, value: item }
     }))
   }, [selectedCategory])
 
   //марка Авто или запчасти
   useEffect(() => {
-    if (selectedSection === 'Авто') {
+    if (selectedSection === 'Авто' || selectedSection === 'Новые авто') {
       selectedSubcategory && setOptionsMark(auto[selectedCategory][selectedSubcategory].map((item, i) => {
       return { key: i, text: item, value: item }}))
     } else {
@@ -141,7 +141,8 @@ export default function NewOfferForm() {
       status: status,
       services: serviceArr,
       category: selectedSection,
-      fields: fields
+      fields: fields,
+      days: days,
     })
   }, [selectedCategory, selectedSubcategory, city, price, title, description, name, phone, mail, status, serviceArr, productPrice, imgNames, images, selectedSection, fields])
 
@@ -305,26 +306,38 @@ export default function NewOfferForm() {
               <h2 className='offerForm__title'>Данные объявления</h2>
               <div className="offerForm__itemContent offerForm__itemInfo">
                 <div className="offerForm__itemColumn">
-                  <MyDropdown className='offerForm__dropdown' handleBtnReset={handleResetSection} arr={categoryArr} placeholder='Раздел' onChange={(e) => setSelectedSection(e.target.innerText)} />
+                  <MyDropdown className='offerForm__dropdown' handleBtnReset={handleResetSection} arr={categoryArr} placeholder='Раздел' value={selectedSection} onChange={(e) => setSelectedSection(e.target.innerText)} />
                   
                   {selectedSection && 
-                  <MyDropdown className='offerForm__dropdown' handleBtnReset={handleResetCategory} arr={selectedSection && optionsCategory} placeholder='Категория' onChange={(e) => selectedSection ? setSelectedCategory(e.target.innerText) : setSelectedCategory('')} />
+                  <MyDropdown className='offerForm__dropdown' handleBtnReset={handleResetCategory} arr={selectedSection && optionsCategory} value={selectedCategory} placeholder='Категория' onChange={(e) => selectedSection ? setSelectedCategory(e.target.innerText) : setSelectedCategory('')} />
                   }
                   
                   {selectedSection && selectedCategory && 
-                  <MyDropdown handleBtnReset={handleResetSubCategory} placeholder={selectedSection === 'Авто' && selectedCategory === 'Легковые' || selectedCategory === 'Мото' ? 'Марка' : 'Подкатегория'} arr={selectedCategory && optionsSubcategory} onChange={(e) => setSelectedSubcategory(e.target.innerText)} />
+                  <MyDropdown handleBtnReset={handleResetSubCategory} placeholder={selectedSection === 'Авто' && selectedCategory === 'Легковые' || selectedCategory === 'Мото' ? 'Марка' : 'Подкатегория'} value={selectedSubcategory} arr={selectedCategory && optionsSubcategory} onChange={(e) => setSelectedSubcategory(e.target.innerText)} />
                   }
 
                   {selectedSection === 'Авто' && selectedSubcategory &&
-                  <MyDropdown placeholder={selectedSubcategory === 'Запчасти' ? 'Принадлежность' : 'Модель'} arr={selectedSubcategory ? optionsMark : []} onChange={(e) => setFields({ ...fields, mark: e.target.innerText })} />
+                  <MyDropdown placeholder={selectedSubcategory === 'Запчасти' ? 'Принадлежность' : 'Модель'} arr={selectedSubcategory ? optionsMark : []} value={fields.mark} onChange={(e) => setFields({ ...fields, mark: e.target.innerText })} />
+                  }
+                  {
+                    selectedSection === 'Новые авто' && selectedSubcategory &&
+                    <MyDropdown placeholder={selectedSubcategory === 'Запчасти' ? 'Принадлежность' : 'Модель'} arr={selectedSubcategory ? optionsMark : []} value={fields.mark} onChange={(e) => setFields({ ...fields, mark: e.target.innerText })} />
                   }
 
                   <MyDropdown placeholder='Город' arr={optionsCity} onChange={(e) => setCity(e.target.innerText)} />
-
                   {
                     selectedSection === 'Недвижимость' &&
                     <div>
-                       <MyDropdown placeholder='Тип предложения' arr={optionsPropertyType} onChange={(e) => setFields({ ...fields, type: e.target.innerText })} />
+                      <MyDropdown placeholder='Тип предложения' arr={optionsPropertyType} onChange={(e) => setFields({ ...fields, type: e.target.innerText })} />
+                      <p className='offerForm__inputContainer'>Этаж<span className='offerForm__star'>*</span><input className='offerForm__itemInput' type="text" value={fields.floor} onChange={(e) => setFields({ ...fields, floor: e.target.value })} /></p>
+                      <p className='offerForm__inputContainer'>Комнат<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.rooms} onChange={(e) => setFields({ ...fields, rooms: e.target.value })} /></p>
+                      <p className='offerForm__inputContainer'>Площадь<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.square} onChange={(e) => setFields({ ...fields, square: e.target.value })} /></p>
+                    </div>
+                  }
+                  {
+                    selectedSection === 'Новые квартиры' &&
+                    <div>
+                      <MyDropdown placeholder='Тип предложения' arr={optionsPropertyType} onChange={(e) => setFields({ ...fields, type: e.target.innerText })} />
                       <p className='offerForm__inputContainer'>Этаж<span className='offerForm__star'>*</span><input className='offerForm__itemInput' type="text" value={fields.floor} onChange={(e) => setFields({ ...fields, floor: e.target.value })} /></p>
                       <p className='offerForm__inputContainer'>Комнат<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.rooms} onChange={(e) => setFields({ ...fields, rooms: e.target.value })} /></p>
                       <p className='offerForm__inputContainer'>Площадь<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.square} onChange={(e) => setFields({ ...fields, square: e.target.value })} /></p>
@@ -338,9 +351,17 @@ export default function NewOfferForm() {
                       <p className='offerForm__inputContainer'>Цвет<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.color} onChange={(e) => setFields({ ...fields, color: e.target.value })} /></p>
                     </div>
                   }
+                  {
+                    selectedSection === 'Новые авто' && selectedCategory &&  selectedCategory !== 'Запчасти' &&
+                    <div>
+                      <p className='offerForm__inputContainer'>Объем двигателя<span className='offerForm__star'>*</span><input className='offerForm__itemInput' type="text" value={fields.engine} onChange={(e) => setFields({ ...fields, engine: e.target.value })} /></p>
+                      <p className='offerForm__inputContainer'>Год выпуска<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.year} onChange={(e) => setFields({ ...fields, year: e.target.value })} /></p>
+                      <p className='offerForm__inputContainer'>Цвет<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.color} onChange={(e) => setFields({ ...fields, color: e.target.value })} /></p>
+                    </div>
+                  }
                 </div>
                 {
-                  selectedSection === 'Недвижимость' &&
+                  selectedSection === 'Недвижимость'  &&
                   <div className="offerForm__itemColumn">
                     <p className='offerForm__inputContainer'>Инфраструктура <input className='offerForm__itemInput' type="text" value={fields.infrastructure} onChange={(e) => setFields({ ...fields, infrastructure: e.target.value })} /></p>
                     <p className='offerForm__inputContainer'>Остановки рядом <input className='offerForm__itemInput' type="text" value={fields.stopping} onChange={(e) => setFields({ ...fields, stopping: e.target.value })} /></p>
@@ -351,7 +372,18 @@ export default function NewOfferForm() {
                   </div>
                 }
                 {
-                    selectedSection === 'Авто' && selectedCategory &&  selectedCategory !== 'Запчасти' &&
+                  selectedSection === 'Новые квартиры' &&
+                  <div className="offerForm__itemColumn">
+                    <p className='offerForm__inputContainer'>Инфраструктура <input className='offerForm__itemInput' type="text" value={fields.infrastructure} onChange={(e) => setFields({ ...fields, infrastructure: e.target.value })} /></p>
+                    <p className='offerForm__inputContainer'>Остановки рядом <input className='offerForm__itemInput' type="text" value={fields.stopping} onChange={(e) => setFields({ ...fields, stopping: e.target.value })} /></p>
+                    <p className='offerForm__inputContainer'>Станция <input className='offerForm__itemInput' type="text" value={fields.station} onChange={(e) => setFields({ ...fields, station: e.target.value })} /></p>
+                    <p className='offerForm__inputContainer'>Метро <input className='offerForm__itemInput' type="text" value={fields.metro} onChange={(e) => setFields({ ...fields, metro: e.target.value })} /></p>
+                    <p className='offerForm__inputContainer'>Наличие балкона<input className='offerForm__itemInput' type="text" value={fields.balcony} onChange={(e) => setFields({ ...fields, balcony: e.target.value })} /></p>
+                    <p className='offerForm__inputContainer'>Тип стен <input className='offerForm__itemInput' type="text" value={fields.walls} onChange={(e) => setFields({ ...fields, walls: e.target.value })} /></p>
+                  </div>
+                }
+                {
+                    selectedSection === 'Авто'  && selectedCategory &&  selectedCategory !== 'Запчасти' &&
                     <div className="offerForm__itemColumn">
                       <p className='offerForm__inputContainer'>Пробег<input className='offerForm__itemInput' type="text" value={fields.milage} onChange={(e) => setFields({ ...fields, milage: e.target.value })} /></p>
                       <p className='offerForm__inputContainer'>Мощность двигателя<input className='offerForm__itemInput' type="text" value={fields.enginePower} onChange={(e) => setFields({ ...fields, enginePower: e.target.value })} /></p>
@@ -360,6 +392,16 @@ export default function NewOfferForm() {
                       <p className='offerForm__inputContainer'>Состояние<input className='offerForm__itemInput' type="text" value={fields.carState} onChange={(e) => setFields({ ...fields, carState: e.target.value })} /></p>
                     </div>
                   }
+                {
+                  selectedSection === 'Новые авто' && selectedCategory &&  selectedCategory !== 'Запчасти' &&
+                  <div className="offerForm__itemColumn">
+                    <p className='offerForm__inputContainer'>Пробег<input className='offerForm__itemInput' type="text"  onChange={(e) => setFields({ ...fields, milage: e.target.value })} /></p>
+                    <p className='offerForm__inputContainer'>Мощность двигателя<input className='offerForm__itemInput' type="text"  onChange={(e) => setFields({ ...fields, enginePower: e.target.value })} /></p>
+                    {selectedCategory !== 'Мото' && <p className='offerForm__inputContainer'>Кол-во дверей<input className='offerForm__itemInput' type="text" value={fields.countDoors} onChange={(e) => setFields({ ...fields, countDoors: e.target.value })} /></p>}
+                    <p className='offerForm__inputContainer'>Коробка передач<input className='offerForm__itemInput' type="text"  value={fields.transmission} onChange={(e) => setFields({ ...fields, transmission: e.target.value })} /></p>
+                    <p className='offerForm__inputContainer'>Состояние<input className='offerForm__itemInput' type="text" value={fields.carState} onChange={(e) => setFields({ ...fields, carState: e.target.value })} /></p>
+                  </div>
+                }
               </div>
             </div>
 

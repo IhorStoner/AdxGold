@@ -73,12 +73,9 @@ const AdSchema = new Schema({
     default: new Date()
   },
   fields: {
-    type: Object
+    type: Object,
   },
 });
-
-
-// const AdModel = mongoose.model('ads', AdSchema);
 
 module.exports = {
   Reference: {

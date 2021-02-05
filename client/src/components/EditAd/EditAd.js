@@ -1,6 +1,10 @@
-import React,{useState,useEffect,useCallback} from 'react'
-import * as category from '../../assets/json/category.json'
-import * as cityData from '../../assets/json/russian-cities.json'
+import React, { useState, useEffect, useCallback } from 'react'
+import category from '../../assets/json/category.json'
+import property from '../../assets/json/property.json'
+import work from '../../assets/json/work.json'
+import services from '../../assets/json/services.json'
+import auto from '../../assets/json/auto.json'
+import cityDataArr from '../../assets/json/russian-cities.json'
 import config from '../../config/default.json'
 import axios from 'axios'
 import MyDropdown from '../MyDropdown/MyDropdown'
@@ -8,34 +12,21 @@ import { useDispatch, useSelector } from 'react-redux'
 import { getSharesAds } from '../../redux/selectors/adsSelector'
 import { fetchSharesAds } from '../../redux/actions/adsAction'
 import DimmerLoader from '../../components/DimmerLoader/DimmerLoader'
-import {useHistory} from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 
 import './EditAd.scss'
 
-export default function EditAd({ad,setEditAdId}) {
-  const [section, setSection] = useState(ad.section)
-  const [stateSection, setStateSection] = useState(() => JSON.parse(JSON.stringify(category.default)))
-  const [cityDataArr, setCityDataArr] = useState(() => JSON.parse(JSON.stringify(cityData.default)))
-  const [uniqueSubject, setUniqueSubject] = useState(() => {
-    const popularCity = [];
-    cityDataArr.map(item => {
-      if (item.population >= 500000) {
-        popularCity.push(item)
-      }
-    })
-    const dataUnique = new Map();
-    popularCity.map((item) => dataUnique.set(item.subject, item.subject));
-    const uniqueArr = [];
-    dataUnique.forEach((item, i) => {
-      uniqueArr.push({ key: i, text: item, value: item })
-    })
-    return uniqueArr
-  })
-  const [selectedRegion, setSelectedRegion] = useState('')
-  const [subsection, setSubsection] = useState([])
-  const [cityArr, setCityArr] = useState([])
-  const [selectedSubsection, setSelectedSubsection] = useState('')
-  const [type, setType] = useState(ad.type)
+export default function EditAd({ ad, setEditAdId }) {
+
+  const [selectedSection, setSelectedSection] = useState(ad.category) //выбраный раздел куплю/продам...
+  const [selectedCategory, setSelectedCategory] = useState(ad.section) // выбранная категория 
+  const [selectedSubcategory, setSelectedSubcategory] = useState(ad.subsection)
+
+  const [optionsCategory, setOptionsCategory] = useState([]) // опции выбора категории
+  const [optionsSubcategory, setOptionsSubcategory] = useState([]) // опции выбора подкатегорий
+  const [optionsMark, setOptionsMark] = useState([]) //опции выбора Авто
+  const [optionsCity, setOptionsCity] = useState([])// 
+
   const [city, setCity] = useState(ad.city)
   const [productPrice, setProductPrice] = useState(ad.productPrice)
   const [price, setPrice] = useState(Number(ad.priceAd))
@@ -50,16 +41,10 @@ export default function EditAd({ad,setEditAdId}) {
   const [images, setImages] = useState([])
   const [imgNames, setImgNames] = useState(ad.img)
   const [days, setDays] = useState(Number(ad.days))
-  const [navCategory, setNavCategory] = useState(ad.category)
+  const [fields, setFields] = useState(ad.fields ? ad.fields : {})
   const [isLodaing, setIsLoading] = useState(false)
   const history = useHistory();
   const dispatch = useDispatch()
-
-  const typeAdConfig = [
-    { key: 1, text: 'Покупка', value: 'Покупка' },
-    { key: 2, text: 'Продажа', value: 'Продажа' },
-    { key: 3, text: 'Аренда', value: 'Аренда' }
-  ]
 
   const categoryArr = [
     { key: 1, text: 'Продам/куплю', value: 'Продам/куплю' },
@@ -70,16 +55,64 @@ export default function EditAd({ad,setEditAdId}) {
     { key: 6, text: 'Новые авто', value: 'Новые авто' },
     { key: 7, text: 'Новые квартиры', value: 'Новые квартиры' },
   ]
+  const optionsPropertyType = [
+    { key: 1, text: 'От застройщика', value: 'От застройщика' },
+    { key: 2, text: 'От собственника', value: 'От собственника' },
+    { key: 3, text: 'От посредника', value: 'От посредника' },
+  ]
 
-  const optionsSection = Object.keys(stateSection).map((item, i) => {
-    return { key: i, text: item, value: item }
-  })
-
+  //в зависимости от раздела выбираем объект категорий
   useEffect(() => {
-    section && setSubsection(stateSection[section].map((item, i) => {
+    console.log(ad)
+    if (!selectedSection) setOptionsCategory([])
+    if (selectedSection === 'Продам/куплю') setOptionsCategory(Object.keys(category).map((item, i) => {
       return { key: i, text: item, value: item }
     }))
-  }, [section])
+    if (selectedSection === 'Недвижимость' || selectedSection === 'Новые квартиры') setOptionsCategory(Object.keys(property).map((item, i) => {
+      return { key: i, text: item, value: item }
+    }))
+    if (selectedSection === 'Авто' || selectedSection === 'Новые авто') setOptionsCategory(Object.keys(auto).map((item, i) => {
+      return { key: i, text: item, value: item }
+    }))
+    if (selectedSection === 'Услуги') setOptionsCategory(Object.keys(services).map((item, i) => {
+      return { key: i, text: item, value: item }
+    }))
+    if (selectedSection === 'Работа') setOptionsCategory(Object.keys(work).map((item, i) => {
+      return { key: i, text: item, value: item }
+    }))
+  }, [selectedSection, selectedCategory])
+
+  // опции выбора подкатегории
+  useEffect(() => {
+    if (!selectedSection) setOptionsSubcategory([])
+    if (selectedSection === 'Продам/куплю') selectedCategory && setOptionsSubcategory(category[selectedCategory].map((item, i) => {
+      return { key: i, text: item, value: item }
+    }))
+    if (selectedSection === 'Недвижимость' || selectedSection === 'Новые квартиры') selectedCategory && setOptionsSubcategory(property[selectedCategory].map((item, i) => {
+      return { key: i, text: item, value: item }
+    }))
+    if (selectedSection === 'Авто' || selectedSection === 'Новые авто') selectedCategory && setOptionsSubcategory(Object.keys(auto[selectedCategory]).map((item, i) => {
+      return { key: i, text: item, value: item }
+    }))
+    if (selectedSection === 'Услуги') setOptionsSubcategory(Object.keys(services[selectedCategory]).map((item, i) => {
+      return { key: i, text: item, value: item }
+    }))
+    if (selectedSection === 'Работа') setOptionsSubcategory(work[selectedCategory].map((item, i) => {
+      return { key: i, text: item, value: item }
+    }))
+  }, [selectedCategory])
+
+  //марка Авто или запчасти
+  useEffect(() => {
+    if (selectedSection === 'Авто' || selectedSection === 'Новые авто') {
+      selectedSubcategory && setOptionsMark(auto[selectedCategory][selectedSubcategory].map((item, i) => {
+        return { key: i, text: item, value: item }
+      }))
+    } else {
+      setOptionsMark([])
+    }
+
+  }, [selectedSubcategory])
 
   //Город
   useEffect(() => {
@@ -87,17 +120,14 @@ export default function EditAd({ad,setEditAdId}) {
     const optionsCity = filteredCity.map((item, i) => {
       return { key: i, text: item.name, value: item.name }
     })
-    setCityArr(optionsCity)
-  }, [selectedRegion])
+    setOptionsCity(optionsCity)
+  }, [])
 
   // подготовка данных формы для отправки
   useEffect(() => {
     setResult({
-      section: section,
-      subsection: selectedSubsection,
-      type: type,
-      category: navCategory,
-      // region: selectedRegion,
+      section: selectedCategory,
+      subsection: selectedSubcategory,
       city: city,
       productPrice: productPrice,
       priceAd: price,
@@ -108,9 +138,10 @@ export default function EditAd({ad,setEditAdId}) {
       mail: mail,
       status: status,
       services: serviceArr,
-      days: days,
+      category: selectedSection,
+      fields: fields,
     })
-  }, [section, selectedSubsection, type, selectedRegion, city, price, title, description, name, phone, mail, status, serviceArr, productPrice, imgNames, images,navCategory,days])
+  }, [selectedCategory, selectedSubcategory, city, price, title, description, name, phone, mail, status, serviceArr, productPrice, imgNames, images, selectedSection, fields])
 
   useEffect(() => {
     dispatch(fetchSharesAds())
@@ -136,17 +167,12 @@ export default function EditAd({ad,setEditAdId}) {
 
 
   function getFormData() {
-    const formEl = document.getElementById('exampleForm');
-    const formData = new FormData(formEl);
-    for (const key of formData.keys()) {
-      const val = formData.get(key);
-      if (val === undefined || val === null || (typeof val === 'string' && !/\S/.test(val))) {
-        formData.delete(key);
-      }
-    }
+    const formData = new FormData();
+    [...images].map(img => formData.append('slider', img))
 
     return formData;
   }
+
   /// сохранение картинок
   async function submitAxios(ev) {
 
@@ -236,18 +262,137 @@ export default function EditAd({ad,setEditAdId}) {
 
   }, [result])
 
+  //нажатие на крестик категории
+  const handleResetSection = () => {
+    setSelectedSection('')
+    setSelectedCategory('')
+    setSelectedSubcategory('')
+    setOptionsCategory([])
+    setOptionsSubcategory([])
+    setOptionsMark([])
+    setFields({})
+  }
+  const handleResetCategory = () => {
+    setSelectedCategory('')
+    setSelectedSubcategory('')
+    setOptionsSubcategory([])
+    setOptionsMark([])
+    setFields({})
+  }
+  const handleResetSubCategory = () => {
+    setSelectedSubcategory('')
+    setOptionsMark([])
+    setFields({})
+  }
+  //deleteImage
+  const handleDeleteImage = (file) => {
+    setImages([...images].filter(img => img.name !== file.name))
+  }
+
 
   return (
     <form className="offerForm" method="post" enctype="multipart/form-data" id='exampleForm'>
       <div className="offerForm__content">
         <div className="offerForm__info offerForm__item">
           <h2 className='offerForm__title'>Данные объявления</h2>
-          <div className="offerForm__itemContent">
-            <MyDropdown className='offerForm__dropdown' arr={categoryArr} value={navCategory} placeholder='Раздел' onChange={(e) => setNavCategory(e.target.innerText)} />
-            <MyDropdown className='offerForm__dropdown' arr={optionsSection} value={ad.section} placeholder='Категория' onChange={(e) => setSection(e.target.innerText)} />
-            <MyDropdown placeholder='Подкатегория' arr={subsection} value={ad.subsection} onChange={(e) => setSelectedSubsection(e.target.innerText)} />
-            {/* <MyDropdown placeholder='Тип' arr={typeAdConfig} onChange={(e) => setType(e.target.innerText)} /> */}
-            <MyDropdown clearable placeholder='Город' arr={cityArr} value={city} onChange={(e) => setCity(e.target.innerText)} />
+          <div className="offerForm__itemContent offerForm__itemInfo">
+            <div className="offerForm__itemColumn">
+              <MyDropdown className='offerForm__dropdown' handleBtnReset={handleResetSection} value={ad.category} arr={categoryArr} placeholder='Раздел' onChange={(e) => setSelectedSection(e.target.innerText)} />
+
+              {selectedSection &&
+                <MyDropdown className='offerForm__dropdown' handleBtnReset={handleResetCategory} value={ad.section} arr={selectedSection && optionsCategory} placeholder='Категория' onChange={(e) => selectedSection ? setSelectedCategory(e.target.innerText) : setSelectedCategory('')} />
+              }
+
+              {selectedSection && selectedCategory &&
+                <MyDropdown handleBtnReset={handleResetSubCategory} value={ad.subsection} placeholder={selectedSection === 'Авто'  && selectedCategory === 'Легковые' || selectedCategory === 'Мото' ? 'Марка' : 'Подкатегория'} arr={selectedCategory && optionsSubcategory} onChange={(e) => setSelectedSubcategory(e.target.innerText)} />
+              }
+
+              {selectedSection === 'Авто' && selectedSubcategory &&
+                <MyDropdown placeholder={selectedSubcategory === 'Запчасти' ? 'Принадлежность' : 'Модель'} value={ad.mark} arr={selectedSubcategory ? optionsMark : []} onChange={(e) => setFields({ ...fields, mark: e.target.innerText })} />
+              }
+              {
+                selectedSection === 'Новые авто' && selectedSubcategory &&
+                <MyDropdown placeholder={selectedSubcategory === 'Запчасти' ? 'Принадлежность' : 'Модель'} value={ad.mark} arr={selectedSubcategory ? optionsMark : []} onChange={(e) => setFields({ ...fields, mark: e.target.innerText })} />
+              }
+
+              <MyDropdown placeholder='Город' value={ad.city} arr={optionsCity} onChange={(e) => setCity(e.target.innerText)} />
+              {
+                selectedSection === 'Недвижимость' &&
+                <div>
+                  <MyDropdown placeholder='Тип предложения' arr={optionsPropertyType} onChange={(e) => setFields({ ...fields, type: e.target.innerText })} />
+                  <p className='offerForm__inputContainer'>Этаж<span className='offerForm__star'>*</span><input className='offerForm__itemInput' type="text" value={fields.floor} onChange={(e) => setFields({ ...fields, floor: e.target.value })} /></p>
+                  <p className='offerForm__inputContainer'>Комнат<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.rooms} onChange={(e) => setFields({ ...fields, rooms: e.target.value })} /></p>
+                  <p className='offerForm__inputContainer'>Площадь<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.square} onChange={(e) => setFields({ ...fields, square: e.target.value })} /></p>
+                </div>
+              }
+              {
+                selectedSection === 'Новые квартиры' &&
+                <div>
+                  <MyDropdown placeholder='Тип предложения' arr={optionsPropertyType} onChange={(e) => setFields({ ...fields, type: e.target.innerText })} />
+                  <p className='offerForm__inputContainer'>Этаж<span className='offerForm__star'>*</span><input className='offerForm__itemInput' type="text" value={fields.floor} onChange={(e) => setFields({ ...fields, floor: e.target.value })} /></p>
+                  <p className='offerForm__inputContainer'>Комнат<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.rooms} onChange={(e) => setFields({ ...fields, rooms: e.target.value })} /></p>
+                  <p className='offerForm__inputContainer'>Площадь<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.square} onChange={(e) => setFields({ ...fields, square: e.target.value })} /></p>
+                </div>
+              }
+              {
+                selectedSection === 'Авто' && selectedCategory && selectedCategory !== 'Запчасти' &&
+                <div>
+                  <p className='offerForm__inputContainer'>Объем двигателя<span className='offerForm__star'>*</span><input className='offerForm__itemInput' type="text" value={fields.engine} onChange={(e) => setFields({ ...fields, engine: e.target.value })} /></p>
+                  <p className='offerForm__inputContainer'>Год выпуска<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.year} onChange={(e) => setFields({ ...fields, year: e.target.value })} /></p>
+                  <p className='offerForm__inputContainer'>Цвет<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.color} onChange={(e) => setFields({ ...fields, color: e.target.value })} /></p>
+                </div>
+              }
+              {
+                selectedSection === 'Новые авто' && selectedCategory && selectedCategory !== 'Запчасти' &&
+                <div>
+                  <p className='offerForm__inputContainer'>Объем двигателя<span className='offerForm__star'>*</span><input className='offerForm__itemInput' type="text" value={fields.engine} onChange={(e) => setFields({ ...fields, engine: e.target.value })} /></p>
+                  <p className='offerForm__inputContainer'>Год выпуска<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.year} onChange={(e) => setFields({ ...fields, year: e.target.value })} /></p>
+                  <p className='offerForm__inputContainer'>Цвет<span className='offerForm__star'>*</span> <input className='offerForm__itemInput' type="text" value={fields.color}  onChange={(e) => setFields({ ...fields, color: e.target.value })} /></p>
+                </div>
+              }
+            </div>
+            {
+              selectedSection === 'Недвижимость' &&
+              <div className="offerForm__itemColumn">
+                <p className='offerForm__inputContainer'>Инфраструктура <input className='offerForm__itemInput' type="text" value={fields.infrastructure} onChange={(e) => setFields({ ...fields, infrastructure: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Остановки рядом <input className='offerForm__itemInput' type="text" value={fields.stopping} onChange={(e) => setFields({ ...fields, stopping: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Станция <input className='offerForm__itemInput' type="text" value={fields.station} onChange={(e) => setFields({ ...fields, station: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Метро <input className='offerForm__itemInput' type="text" value={fields.metro} onChange={(e) => setFields({ ...fields, metro: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Наличие балкона<input className='offerForm__itemInput' type="text" value={fields.balcony} onChange={(e) => setFields({ ...fields, balcony: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Тип стен <input className='offerForm__itemInput' type="text" value={fields.walls} onChange={(e) => setFields({ ...fields, walls: e.target.value })} /></p>
+              </div>
+            }
+            {
+              selectedSection === 'Новые квартиры' &&
+              <div className="offerForm__itemColumn">
+                <p className='offerForm__inputContainer'>Инфраструктура <input className='offerForm__itemInput' type="text" value={fields.infrastructure} onChange={(e) => setFields({ ...fields, infrastructure: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Остановки рядом <input className='offerForm__itemInput' type="text" value={fields.stopping} onChange={(e) => setFields({ ...fields, stopping: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Станция <input className='offerForm__itemInput' type="text" value={fields.station} onChange={(e) => setFields({ ...fields, station: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Метро <input className='offerForm__itemInput' type="text" value={fields.metro} onChange={(e) => setFields({ ...fields, metro: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Наличие балкона<input className='offerForm__itemInput' type="text" value={fields.balcony} onChange={(e) => setFields({ ...fields, balcony: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Тип стен <input className='offerForm__itemInput' type="text" value={fields.walls} onChange={(e) => setFields({ ...fields, walls: e.target.value })} /></p>
+              </div>
+            }
+            {
+              selectedSection === 'Авто' && selectedCategory && selectedCategory !== 'Запчасти' &&
+              <div className="offerForm__itemColumn">
+                <p className='offerForm__inputContainer'>Пробег<input className='offerForm__itemInput' type="text" value={fields.milage} onChange={(e) => setFields({ ...fields, milage: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Мощность двигателя<input className='offerForm__itemInput' type="text" value={fields.enginePower} onChange={(e) => setFields({ ...fields, enginePower: e.target.value })} /></p>
+                {selectedCategory !== 'Мото' && <p className='offerForm__inputContainer'>Кол-во дверей<input className='offerForm__itemInput' type="text" value={fields.countDoors} onChange={(e) => setFields({ ...fields, countDoors: e.target.value })} /></p>}
+                <p className='offerForm__inputContainer'>Коробка передач<input className='offerForm__itemInput' type="text" value={fields.transmission} onChange={(e) => setFields({ ...fields, transmission: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Состояние<input className='offerForm__itemInput' type="text" value={fields.carState} onChange={(e) => setFields({ ...fields, carState: e.target.value })} /></p>
+              </div>
+            }
+            {
+              selectedSection === 'Новые авто' && selectedCategory && selectedCategory !== 'Запчасти' &&
+              <div className="offerForm__itemColumn">
+                <p className='offerForm__inputContainer'>Пробег<input className='offerForm__itemInput' type="text" value={fields.milage} onChange={(e) => setFields({ ...fields, milage: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Мощность двигателя<input className='offerForm__itemInput' type="text" value={fields.enginePower} onChange={(e) => setFields({ ...fields, enginePower: e.target.value })} /></p>
+                {selectedCategory !== 'Мото' && <p className='offerForm__inputContainer'>Кол-во дверей<input className='offerForm__itemInput'  type="text" value={fields.countDoors} onChange={(e) => setFields({ ...fields, countDoors: e.target.value })} /></p>}
+                <p className='offerForm__inputContainer'>Коробка передач<input className='offerForm__itemInput' type="text" value={fields.transmission} onChange={(e) => setFields({ ...fields, transmission: e.target.value })} /></p>
+                <p className='offerForm__inputContainer'>Состояние<input className='offerForm__itemInput' type="text" value={fields.carState} onChange={(e) => setFields({ ...fields, carState: e.target.value })} /></p>
+              </div>
+            }
           </div>
         </div>
 
@@ -257,9 +402,12 @@ export default function EditAd({ad,setEditAdId}) {
             <label className='offerForm__labelFile offerForm__imgItem' for="uploadImg">Добавить<br />Фото</label>
             <input type="file" name="slider" onChange={(e) => setImages(e.target.files)} class="offerForm__inputFile" id="uploadImg" accept="image/jpeg,image/png,image/jpg" multiple />
             {images && [...images].map((file, i) => (
-              <img src={URL.createObjectURL(file)} className='offerForm__imgItem' width='150' height='150'></img>
+              <div className="offerForm__imgContainer">
+                <button type='button' className="offerForm__btnDelImg" onClick={() => handleDeleteImage(file)} />
+                <img src={URL.createObjectURL(file)} className='offerForm__imgItem' width='150' height='150'></img>
+              </div>
             ))}
-            {imgNames && images.length === 0  && imgNames.map(imgName => (
+            {imgNames && images.length === 0 && imgNames.map(imgName => (
               <img src={`${config.serverUrl}/api/images/${imgName}`} className='offerForm__imgItem' width='150' height='150'></img>
             ))}
           </div>
@@ -412,7 +560,7 @@ export default function EditAd({ad,setEditAdId}) {
       </button>
       <button type='button' className='offerForm__btnSubmit' onClick={(ev) => setEditAdId('')}>
         Отменить
-      </button>    
+      </button>
       {/* <Liqpay price={price} /> */}
     </form>
   )

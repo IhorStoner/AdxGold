@@ -1,9 +1,9 @@
 import React, { useEffect, useState, useCallback, useContext } from 'react'
 import './HomePage.scss'
-import { useParams,useHistory } from 'react-router-dom'
+import { useParams, useHistory } from 'react-router-dom'
 import HeaderNav from '../../components/Header/Header'
 import { useAuth } from '../../hooks/useAuth'
-import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds, getPages, getLoading,isOpenAd } from '../../redux/selectors/adsSelector';
+import { getAds, getSharesAds, getSalesAds, getRecommendedAds, getHotsAds, getRunsAds, getPages, getLoading, isOpenAd } from '../../redux/selectors/adsSelector';
 import { useDispatch, useSelector } from 'react-redux'
 import AdvertList from '../../components/AdvertList/AdvertList'
 import { fetchAds, fetchSharesAds, fetchSalesAds, fetchRecommendedAds, fetchHotsAds, fetchRunAds } from '../../redux/actions/adsAction'
@@ -11,7 +11,7 @@ import SharesList from '../../components/SharesList/SharesList'
 import SalesAds from '../../components/SalesAds/SalesAds'
 import BtnsAccount from '../../components/BtnsAccount/BtnsAccount'
 import BoardAdsBar from '../../components/BoardAdsBar/BoardAdsBar'
-import { getCity, getSubsection, getSection,getModel } from '../../redux/selectors/filterSelector'
+import { getCity, getSubsection, getSection, getModel } from '../../redux/selectors/filterSelector'
 import Pagination from '../../components/Pagination/Pagination'
 import Footer from '../../components/Footer/Footer'
 import { fetchUser } from '../../redux/actions/userAction'
@@ -43,7 +43,7 @@ export default function HomePage() {
   const favoritesArr = useSelector(getFavoritesArr)
   const isOpenPopup = useSelector(isOpenAuthPopup)
   const selectedModel = useSelector(getModel)
-  
+  const [authError,setAuthError] = useState(false)
   const [selectedFilteredPrice, setSelectedFilteredPrice] = useState(null);
   const [selectedFilteredDate, setSelectedFilteredDate] = useState(null)
   const isLoading = useSelector(getLoading)
@@ -90,11 +90,13 @@ export default function HomePage() {
       })
       .catch(err => {
         setSignInSuccess(false)
+        setAuthError(true)
       })
   }, [])
 
   const onSubmitReg = useCallback(async values => {
-    await axios.post(`${config.serverUrl}/api/registration`, values).then(res => setSuccessfulReg(true))
+    await axios.post(`${config.serverUrl}/api/registration`, values).then(res => setSuccessfulReg(true)).catch(err => setAuthError(true))
+
   }, [])
 
   const optionFilterPrice = [
@@ -127,7 +129,7 @@ export default function HomePage() {
         model: selectedModel,
       }))
     }
-  }, [page, selectedCity, selectedFilteredPrice, selectedFilteredDate, category, section, subsection,selectedModel])
+  }, [page, selectedCity, selectedFilteredPrice, selectedFilteredDate, category, section, subsection, selectedModel])
 
   useEffect(() => {
     if (isAuth) {
@@ -138,20 +140,20 @@ export default function HomePage() {
   //load recommended ads for open offer
   const idOpenAd = useSelector(isOpenAd)
   useEffect(() => {
-    if(idOpenAd) dispatch(fetchRecommendedAds())
+    if (idOpenAd) dispatch(fetchRecommendedAds())
   }, [idOpenAd])
 
   useEffect(() => {
     dispatch(fetchSharesAds())
     dispatch(fetchSalesAds())
-    dispatch(fetchHotsAds())
+    dispatch(fetchRecommendedAds())
     dispatch(fetchRunAds())
   }, []);
 
 
   return (
     <div className='homePage'>
-      {isOpenPopup && <AuthPopup actionClose={setIsOpenAuthPopup} successfulReg={successfulReg} setSuccessfulReg={setSuccessfulReg} activeForm={activeForm} setActiveForm={setActiveForm} onSubmit={activeForm === 'auth' ? onSubmitAuth : onSubmitReg} />}
+      {isOpenPopup && <AuthPopup actionClose={setIsOpenAuthPopup} setAuthError={setAuthError} successfulReg={successfulReg} authError={authError} setSuccessfulReg={setSuccessfulReg} activeForm={activeForm} setActiveForm={setActiveForm} onSubmit={activeForm === 'auth' ? onSubmitAuth : onSubmitReg} />}
       <HeaderNav />
       <div className="container">
         <div className='homePage__content'>
@@ -164,14 +166,20 @@ export default function HomePage() {
           </div>
           <div className="ads__list">
             {isLoading && <DimmerLoader />}
-            {nav !== 'favorites' && 
-              pages !== null ?
-              <AdvertList advertArr={ads} runAds={runAds} visitedAds={user.visitedAds} recommendedAds={recommendedAds} />
-              : <div>По запросу ничего не найдено</div>
+            {nav !== 'favorites' &&
+              <div>
+                {
+                  pages === 'not found' ?
+                    <div>По запросу ничего не найдено</div>
+                    :
+                    <AdvertList advertArr={ads} runAds={runAds} visitedAds={user.visitedAds} recommendedAds={recommendedAds} />
+                }
+              </div>
+
             }
             {nav === 'favorites' && <AdvertList advertArr={favoritesArr} visitedAds={user.visitedAds} />}
             {category !== 'favorites' && pages !== null && paginations.map((n, i) => (
-               <Pagination
+              <Pagination
                 {...n}
                 totalPages={pages}
                 onChange={page => updatePaginations(i, page)}

@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useCallback, useContext } from 'react'
+import React, { useEffect, useState} from 'react'
 import { useHistory } from "react-router-dom"
 import { useAuth } from '../../hooks/useAuth'
 import axios from 'axios'
@@ -7,9 +7,7 @@ import AdvertList from '../../components/AdvertList/AdvertList'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUser } from '../../redux/actions/userAction'
 import { getUser } from '../../redux/selectors/userSelector'
-import AuthPopup from '../../components/AuthPopup/AuthPopup'
 import HomePage from '../HomePage/HomePage'
-import { AuthContext } from '../../context/AuthContext';
 import HeaderNav from '../../components/Header/Header'
 import AccountNavbar from '../../components/AccountNavbar/AccountNavbar'
 import MyOfferItem from '../../components/MyOfferItem/MyOfferItem'
@@ -21,23 +19,13 @@ import NewOfferForm from '../../components/NewOfferForm/NewOfferForm'
 import {useParams} from 'react-router-dom'
 
 export default function AccountPage() {
-  const { token, logout, ready } = useAuth()
+  const { token, logout } = useAuth()
   const isAuth = !!token;
-  // const [signInSuccess, setSignInSuccess] = useState(false);
-  // const [error, setError] = useState('');
-  // const auth = useContext(AuthContext);
   const dispatch = useDispatch()
   const user = useSelector(getUser)
   const [ads, setAds] = useState([])
   const history = useHistory()
-  // const [isOpenForm, setIsOpenForm] = useState(() => {
-  //   if (isAuth) {
-  //     return false
-  //   } else {
-  //     return true
-  //   }
-  // })
-  // const [activeForm, setActiveForm] = useState('auth')
+
   const [submitPopup, setSubmitPopup] = useState('')
   const [activeNav, setActiveNav] = useState('')
   const [editAdId, setEditAdId ] = useState('')
@@ -64,26 +52,8 @@ export default function AccountPage() {
   const handleLogout = () => {
     logout()
     history.push('/home')
+    window.location.reload()
   }
-
-  // const onSubmitAuth = useCallback(async values => {
-  //   const result = await axios.post(`${config.serverUrl}/api/auth`, values)
-  //     .then(res => {
-  //       auth.login(res.data.token, res.data.id)
-  //       setSignInSuccess(true)
-  //       setError('')
-  //       history.push('/home')
-  //       window.location.reload()
-  //     })
-  //     .catch(err => {
-  //       setError(err.response.data.error)
-  //       setSignInSuccess(false)
-  //     })
-  // }, [])
-
-  const onSubmitReg = useCallback(async values => {
-    await axios.post(`${config.serverUrl}/api/registration`, values).then(res => history.push('/home'))
-  }, [])
 
   const deleteSelectedAd = async (ad) => {
     const promiseImg = ad.img.map(imgName  => {
