@@ -97,10 +97,10 @@ export default function NewOfferForm() {
     if (selectedSection === 'Авто' || selectedSection === 'Новые авто') selectedCategory && setOptionsSubcategory(Object.keys(auto[selectedCategory]).map((item, i) => {
       return { key: i, text: item, value: item }
     }))
-    if (selectedSection === 'Услуги') setOptionsSubcategory(Object.keys(services[selectedCategory]).map((item, i) => {
+    if (selectedSection === 'Услуги' && selectedCategory) setOptionsSubcategory(Object.keys(services[selectedCategory]).map((item, i) => {
       return { key: i, text: item, value: item }
     }))
-    if (selectedSection === 'Работа') setOptionsSubcategory(work[selectedCategory].map((item, i) => {
+    if (selectedSection === 'Работа' && selectedCategory) setOptionsSubcategory(work[selectedCategory].map((item, i) => {
       return { key: i, text: item, value: item }
     }))
   }, [selectedCategory])
@@ -297,6 +297,33 @@ export default function NewOfferForm() {
     setFields({})
   }
 
+  //phoneValidation
+  const [phoneValid,setPhoneValid] = useState(true)
+  const handleChangePhone = (e) => {
+    const val = e.target.value
+    const regex = /^(\+7|7|8)?[\s\-]?\(?[489][0-9]{2}\)?[\s\-]?[0-9]{3}[\s\-]?[0-9]{2}[\s\-]?[0-9]{2}$/;
+    if(!regex.test(val)) {
+      setPhoneValid(false)
+    } else {
+      setPhoneValid(true)
+      setPhone(val)
+    }
+
+  }
+
+  //emailValidation
+  const [emailValid,setEmailValid] = useState(true)
+  const handleChangeEmail = (e) => {
+    const val = e.target.value
+    const regex = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    if(!regex.test(val)) {
+      setEmailValid(false)
+    } else {
+      setEmailValid(true)
+      setMail(val)
+    }
+  }
+
   return (
     <div className='newAd'>
       <div className='newAd__content'>
@@ -442,12 +469,20 @@ export default function NewOfferForm() {
                 </div>
                 <div className='offerForm__contactsContainer'>
                   <p className='offerForm__text'>Телефон</p>
-                  <input type="text" className='offerForm__input offerForm__contactInput' placeholder='Укажите телефон' onChange={(e) => setPhone(e.target.value)} />
+                  <input type="text" className='offerForm__input offerForm__contactInput' placeholder='Укажите телефон' onChange={(e) => handleChangePhone(e)} />
                 </div>
+                {!phoneValid && 
+                <p className="offerForm__validWarning">
+                  Номер телефона не валидный
+                </p>}
                 <div className='offerForm__contactsContainer'>
                   <p className='offerForm__text'>Эл.почта</p>
-                  <input type="text" className='offerForm__input offerForm__contactInput' placeholder='Укажите почту' onChange={(e) => setMail(e.target.value)} />
+                  <input type="text" className='offerForm__input offerForm__contactInput' placeholder='Укажите почту' onChange={(e) => handleChangeEmail(e)} />
                 </div>
+                {!emailValid && 
+                <p className="offerForm__validWarning">
+                  Не валидная почта
+                </p>}
               </div>
             </div>
           </div>
@@ -459,7 +494,6 @@ export default function NewOfferForm() {
                 <div className='offerForm__servicesBtns'>
                   <button type='button'
                     style={status === 'gold' ? { backgroundColor: '#ecff18' } : { backgroundColor: '#ecff18' }}
-                    onMouseDown={(e) => console.log(e)}
                     className={status === 'gold' ? 'offerForm__btn--gold offerForm__btn offerForm__btn--active' : 'offerForm__btn--gold offerForm__btn'}
                     onClick={(ev) => onChangeGold(ev)}
                   >
@@ -566,7 +600,7 @@ export default function NewOfferForm() {
               {isLodaing && <DimmerLoader />}
           </button>
 
-          {/* <Liqpay price={price} /> */}
+          <Liqpay price={price} style={{display: 'none'}}/>
         </form>
       </div>
     </div >

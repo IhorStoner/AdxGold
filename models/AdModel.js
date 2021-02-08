@@ -26,7 +26,7 @@ const AdSchema = new Schema({
     default: moment().locale("ru").format('L'),
   },
   backendDate: {
-    type: Number,
+    type: Date,
     default: Date.now(),
   },
   status: {

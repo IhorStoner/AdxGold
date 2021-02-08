@@ -1,7 +1,8 @@
 .openOffer {
   background-color: #ececec;
   padding: 10px;
-  
+  animation: showBlock 1s linear;
+
   &__dataColumn {
     width: 49%;
   }
@@ -181,5 +182,15 @@
     border-radius: 5px;
     min-height: 200px;
     padding: 3px 5px;
+  }
+}
+
+
+@keyframes showBlock {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
   }
 }

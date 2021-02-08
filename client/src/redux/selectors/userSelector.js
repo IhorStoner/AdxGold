@@ -14,3 +14,8 @@ export const getFavoritesArr = createSelector(
   getUser,
   user => user.favoritesArr,
 )
+
+export const getUserLoading = createSelector(
+  getUser,
+  user => user.loading,
+)

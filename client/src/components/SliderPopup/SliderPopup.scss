@@ -70,9 +70,32 @@
     vertical-align: middle;
     cursor: pointer;
     object-fit: 'contain'; 
+    position: relative;
+    z-index: 1000;
 
     &:last-child {
       margin-right: 0;
+    }
+  }
+}
+
+.embla {
+  &__button {
+    background-size: contain;
+    background-position: center;
+    background-repeat: no-repeat;
+    
+    &__svg {
+      display: none;
+    }
+    &--next {
+      right: -30px !important;
+      background-image: url('../../assets/svg/arrownext.svg');
+     
+    }
+    &--prev {
+      left: -30px !important;
+      background-image: url('../../assets/svg/arrowprev.svg');
     }
   }
 }

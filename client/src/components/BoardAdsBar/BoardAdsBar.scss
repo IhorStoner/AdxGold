@@ -5,8 +5,18 @@
   position: relative;
   padding-bottom: 35px;
 
+
+
+  &__dropdownSaleBuy {
+    width: 175px !important;
+  }
+  &__salebuySubcategory {
+    width: 170px !important;
+    margin-right: 7px;
+  }
+
   &__dropPropertyCity {
-    width: 120px !important; 
+    width: 125px !important; 
   }
 
   &__favorites {
@@ -14,10 +24,16 @@
   }
 
   &__cityFavorites {
-    margin-right: 115px !important;
+    margin-right: 103px !important;
   }
   &__categoryFavorites {
+    margin-right: 120px !important;
+  }
+  &__subcategoryFavorites {
     margin-right: 100px !important;
+  }
+  &__priceFavorites {
+    margin-right: 40px !important;
   }
 
   &__autoCity {
@@ -69,12 +85,20 @@
     }
   }
   &__dropSubcategory {
-    width: 120px !important;
+    width: 105px !important;
   }
 
   &__subMenuItem {
     font-size: 0.8rem;
     font-family: "Roboto-regular";
+
+    &--favoriteTitle {
+      margin-right: 258px;
+    }
+
+    &--autoTitle {
+      margin-right: 83px;
+    }
 
     &--titleProperty {
       margin-right: 65px;
@@ -94,10 +118,10 @@
     }
 
     &--yearOfIssue {
-      margin-right: 5px;
+      margin-right: 13px;
     }
     &--enginePower {
-      margin-right: 25px;
+      margin-right: 2px;
     }
 
     &--squareProperty {
@@ -105,12 +129,11 @@
     }
 
     &--priceMargin {
-      margin-right: 35px;
-      margin-left: 17px;
+      margin-right: 50px;
     }
 
     &--roomsMargin {
-      margin-right: 5px;
+      margin-right: 15px;
     }
 
     &--floarMargin {
@@ -131,7 +154,7 @@
     }
 
     &--titleMargin {
-      margin-right: 286px;
+      margin-right: 245px;
       color: #F78536;
     }
 
@@ -186,5 +209,15 @@
         display: flex;
       }
     }
+  }
+  &__servicesTitle {
+    margin-right: 256px;
+  }
+
+  &__servicesCity {
+    width: 135px !important;
+  }
+  &__servicesCategory {
+    width: 168px !important;
   }
 }

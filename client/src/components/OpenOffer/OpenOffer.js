@@ -10,12 +10,15 @@ import WarningPopup from '../WarningPopup/WarningPopup'
 import avatarIcon from '../../assets/svg/avatar.svg'
 import RecommendedAds from '../RecommendedAds/RecommendedAds'
 import { useParams } from 'react-router-dom'
+import {isOpenAd} from '../../redux/selectors/adsSelector'
+import {useSelector} from 'react-redux'
 
 export default function OpenOffer({ ad, setImgId, imgId }) {
   const [isWarningOpen, setIsWarningOpen] = useState(false) // false
   const [isShowNumber, setIsShowNumber] = useState(false)
   const [mailText, setMailText] = useState('')
-  const { nav } = useParams()
+  const { nav,adId } = useParams()
+  const openAd = useSelector(isOpenAd)
   return (
     <div className='openOffer'>
       {isWarningOpen && <WarningPopup setIsOpenWarning={setIsWarningOpen} />}
@@ -32,12 +35,15 @@ export default function OpenOffer({ ad, setImgId, imgId }) {
           <div className="openOffer__photoContainer">
             <h3 className='openOffer__dataTitle'>Фотографии <img className='openOffer__icon' src={photos} alt="mailIcon" /></h3>
             <div className="openOffer__sliderContainer">
-              <div className='openOffer__slider' >
-                <Slider onClickPhotos={() => setImgId(ad.img)} imgArr={ad.img} />
-              </div>
-              {
-                imgId && <SliderPopup onClickPhoto={() => setImgId()} imgArr={ad.img} />
-              }
+                
+                <div>
+                  <div className='openOffer__slider' >
+                  {adId === ad._id || openAd === ad._id ? <Slider onClickPhotos={() => setImgId(ad.img)} imgArr={ad.img} /> : null}
+                  </div>
+                  {imgId && (adId === ad._id || openAd === ad._id) ? <SliderPopup onClickPhoto={() => setImgId()} imgArr={ad.img} /> : null}
+                </div>
+              
+
             </div>
           </div>
         </div>
@@ -49,7 +55,7 @@ export default function OpenOffer({ ad, setImgId, imgId }) {
                 <p className='openOffer__mainInfo'>Город: {ad.city}</p>
                 <p className='openOffer__mainInfo'>Категория: <span className="openOffer__moreInfoText">{ad.section}</span></p>
                 <p className='openOffer__mainInfo'>Подкатегория: <span className="openOffer__moreInfoText">{ad.subsection}</span></p>
-                
+
                 {/* Недвижимость */}
                 {
                   nav === 'property' &&

@@ -18,6 +18,10 @@
   padding: 15px 5px 50px 5px;
   border-radius: 5px;
 
+  &__validWarning {
+    color: #ff0000;
+  }
+
   &__imgContainer {
     position: relative;
   }
@@ -81,6 +85,10 @@
     display: block;
     margin: 0 auto;
     text-transform: uppercase;
+
+    &--mb {
+      margin-bottom: 5px;
+    }
 
     &:hover {
       background: #e25400;

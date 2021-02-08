@@ -135,10 +135,10 @@ export default function BoardAdsBar() {
             <DropdownCity />
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">
-            <NavDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Категория' onChange={setSelectedSection} action={changeSelectedCategory} />
+            <NavDropdown className='offerForm__dropdown boardAdsBar__dropdownSaleBuy' arr={optionsSection} placeholder='Категория' onChange={setSelectedSection} action={changeSelectedCategory} />
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">
-            <NavDropdown placeholder='Подкатегория' arr={selectedSection && optionsSubsection} onChange={setSelectedSubsection} action={changeSelectedSubcategory} />
+            <NavDropdown className='boardAdsBar__salebuySubcategory' placeholder='Подкатегория' arr={selectedSection && optionsSubsection} onChange={setSelectedSubsection} action={changeSelectedSubcategory} />
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
@@ -219,7 +219,7 @@ export default function BoardAdsBar() {
           </div>
         </Link>
         <ul className="boardAdsBar__subMenu">
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleProperty">Заголовок</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--autoTitle">Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin"><DropdownCity className='boardAdsBar__autoCity' /></li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--autoCategory"><NavDropdown className={'boardAdsBar__dropCategory boardAdsBar__dropCategory--auto'} arr={optionsSection} placeholder='Категория' onChange={setSelectedSection} action={changeSelectedCategory} /></li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--brand"><NavDropdown className='boardAdsBar__dropSubcategory' placeholder={`${!selectedSection ? 'Выберите категорию' : ''}  ${selectedSection === 'Запчасти' ? 'Тип' : 'Марка'}`} arr={selectedSection && optionsSubsection} onChange={setSelectedSubsection} action={changeSelectedSubcategory} /></li>
@@ -258,15 +258,15 @@ export default function BoardAdsBar() {
           </div>
         </Link>
         <ul className="boardAdsBar__subMenu">
-        <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleMargin" >Заголовок</li>
+        <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleMargin boardAdsBar__servicesTitle" >Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin">
-            <DropdownCity />
+            <DropdownCity className='boardAdsBar__servicesCity'/>
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin">
-            <NavDropdown className='offerForm__dropdown' arr={optionsSection} placeholder='Категория' onChange={setSelectedSection} action={changeSelectedCategory} />
+            <NavDropdown className='offerForm__dropdown boardAdsBar__servicesCategory' arr={optionsSection} placeholder='Категория' onChange={setSelectedSection} action={changeSelectedCategory} />
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">
-            <NavDropdown placeholder='Подкатегория' arr={selectedSection ? optionsSubsection : []} onChange={setSelectedSubsection} action={changeSelectedSubcategory} />
+            <NavDropdown placeholder='Подкатегория' className='boardAdsBar__servicesCategory' arr={selectedSection ? optionsSubsection : []} onChange={setSelectedSubsection} action={changeSelectedSubcategory} />
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
@@ -343,7 +343,7 @@ export default function BoardAdsBar() {
           </div>
         </Link>
         <ul className="boardAdsBar__subMenu">
-        <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleProperty">Заголовок</li>
+        <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--autoTitle">Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin"><DropdownCity className='boardAdsBar__autoCity' /></li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--autoCategory"><NavDropdown className={'boardAdsBar__dropCategory boardAdsBar__dropCategory--auto'} arr={optionsSection} placeholder='Категория' onChange={setSelectedSection} action={changeSelectedCategory} /></li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--brand"><NavDropdown className='boardAdsBar__dropSubcategory' placeholder={`${!selectedSection ? 'Выберите категорию' : ''}  ${selectedSection === 'Запчасти' ? 'Тип' : 'Марка'}`} arr={selectedSection && optionsSubsection} onChange={setSelectedSubsection} action={changeSelectedSubcategory} /></li>
@@ -384,7 +384,7 @@ export default function BoardAdsBar() {
           </div>
         </Link>
         <ul className="boardAdsBar__subMenu">
-        <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleProperty">Заголовок</li>
+        <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleProperty  boardAdsBar__subMenuItem--titlePropertyMargin">Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin">
             <DropdownCity className='boardAdsBar__dropPropertyCity' />
           </li>
@@ -417,13 +417,13 @@ export default function BoardAdsBar() {
           </div>
         </Link>
         <ul className="boardAdsBar__subMenu boardAdsBar__favorites">
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--titleMargin">Заголовок</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--favoriteTitle">Заголовок</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--cityMargin boardAdsBar__cityFavorites">
             Город
           </li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--categoryMargin boardAdsBar__categoryFavorites">Категория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin">Подкатегория</li>
-          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin">Цена</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--subcategoryMargin boardAdsBar__subcategoryFavorites">Подкатегория</li>
+          <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--priceMargin boardAdsBar__priceFavorites">Цена</li>
           <li className="boardAdsBar__subMenuItem boardAdsBar__subMenuItem--photoMargin">Фото</li>
           <li className="boardAdsBar__subMenuItem">Дата</li>
         </ul>

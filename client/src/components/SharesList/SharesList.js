@@ -3,8 +3,12 @@ import './SharesList.scss'
 import { Link } from 'react-router-dom'
 import config from '../../config/default.json'
 import logo from '../../assets/png/logo.png'
+import {useDispatch} from 'react-redux'
+import {setIsOpenAd} from '../../redux/actions/adsAction'
 
 export default function SharesList({ sharesArr }) {
+  const  dispatch = useDispatch()
+  
   return (
     <div className='sharesAds sharesAds'>
       <h2 className='sharesAds__title'>Акции %</h2>
@@ -17,7 +21,7 @@ export default function SharesList({ sharesArr }) {
               <p className='sharesAds__itemDescription'>{ad.description}</p>
             </div>
             <div className="sharesAds__linkContainer">
-              <Link  to={`/detailsAd/${ad._id}`}><span className='sharesAds__link'>Подробнее</span></Link>
+              <Link  to={`/detailsAd/${ad._id}`} onClick={() => dispatch(setIsOpenAd(ad._id))}><span className='sharesAds__link'>Подробнее</span></Link>
             </div> 
           </li>
         ))}

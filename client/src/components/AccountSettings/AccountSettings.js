@@ -14,20 +14,20 @@ export default function AccountSettings() {
   const user = useSelector(getUser)
 
   const handleChangePassword = async () => {
-    await axios.put(`${config.serverUrl}/api/users/userAccount/${user._id}`, { password: valueForm })
+    await axios.put(`${config.serverUrl}/api/users/userPassword/${user._id}`, { password: valueForm })
   }
 
   const handleChangeName = async () => {
-    await axios.put(`${config.serverUrl}/api/users/userAccount/${user._id}`, { name: valueForm })
+    await axios.put(`${config.serverUrl}/api/users/userName/${user._id}`, { name: valueForm })
   }
   const handleChangePhone = async () => {
-    
+    await axios.put(`${config.serverUrl}/api/users/userPhone/${user._id}`, { phone: valueForm })
   }
   const handleChangeEmail = async () => {
-
+    await axios.put(`${config.serverUrl}/api/users/userEmail/${user._id}`, { email: valueForm })
   }
   const handleDeleteAccount = async () => {
-
+    await axios.delete(`${config.serverUrl}/api/users/${user._id}`, { email: valueForm })
   }
 
   const handleBtnReset = () => {
@@ -75,7 +75,7 @@ export default function AccountSettings() {
         <p className="accountSettings__text" onClick={() => handleChangeActiveForm('delete')}>Удалить учетную запись</p>
       </div>
       {activeItem === 'delete' &&
-        <FormItem text='Вы точно хотите удалить?' handleBtnSubmit={handleDeleteAccount} handleBtnReset={handleBtnReset} valueForm={valueForm} setValueForm={setValueForm}/>
+        <FormItem text='Вы точно хотите удалить?' handleBtnSubmit={handleDeleteAccount} handleBtnReset={handleBtnReset} valueForm={valueForm} setValueForm={setValueForm} btnOkText='Удалить' isInput={false}/>
       }
     </div>
   )

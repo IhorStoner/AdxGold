@@ -1,0 +1,17 @@
+.editForm {
+  &__title {
+    font-family: 'Roboto';
+    font-style: normal;
+    font-weight: bold;
+    font-size: 1.2rem;
+    color: #f5742c;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: uppercase;
+  }
+  &__titleImg {
+    margin-left: 5px;
+  }
+}

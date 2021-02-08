@@ -15,8 +15,9 @@ import { useAuth } from '../../hooks/useAuth'
 import AlertPopup from '../AlertPopup/AlertPopup';
 import OpenOffer from '../OpenOffer/OpenOffer'
 import { fetchUser } from '../../redux/actions/userAction';
+import { setIsOpenAuthPopup } from '../../redux/actions/authAction'
 
-export default function AdvertList({ advertArr, runAds, recommendedAds }) {
+export default function AdvertList({ advertArr, runAds }) {
 	const { token, userId } = useAuth()
 	const isAuth = !!token;
 	// const [isOpenAd, setIsOpenAd] = useState('')
@@ -48,7 +49,7 @@ export default function AdvertList({ advertArr, runAds, recommendedAds }) {
 	const handleFavoritesAd = async (e, adId) => {
 		e.stopPropagation()
 		if (!userId) {
-			setIsAlertOpen(true)
+			dispatch(setIsOpenAuthPopup(true))
 		} else {
 			await axios.put(`${config.serverUrl}/api/users/favoritesAd/${user._id}`, [adId]).then(res => {
 				dispatch(fetchUser())
@@ -112,7 +113,7 @@ export default function AdvertList({ advertArr, runAds, recommendedAds }) {
 						</table>
 					</li>
 					<div className='adsList__info' style={isOpenAd === ad._id ? { display: 'block' } : { display: 'none' }}>
-						<OpenOffer ad={ad} setImgId={setImgId} imgId={imgId}/>
+						<OpenOffer ad={ad} setImgId={setImgId} imgId={imgId} isOpen={isOpenAd}/>
 					</div>
 				</div>
 			))}

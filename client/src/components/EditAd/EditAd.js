@@ -9,12 +9,12 @@ import config from '../../config/default.json'
 import axios from 'axios'
 import MyDropdown from '../MyDropdown/MyDropdown'
 import { useDispatch, useSelector } from 'react-redux'
-import { getSharesAds } from '../../redux/selectors/adsSelector'
+import iconEdit from '../../assets/svg/iconEdit.svg'
 import { fetchSharesAds } from '../../redux/actions/adsAction'
 import DimmerLoader from '../../components/DimmerLoader/DimmerLoader'
 import { useHistory } from 'react-router-dom'
-
 import './EditAd.scss'
+
 
 export default function EditAd({ ad, setEditAdId }) {
 
@@ -63,7 +63,6 @@ export default function EditAd({ ad, setEditAdId }) {
 
   //в зависимости от раздела выбираем объект категорий
   useEffect(() => {
-    console.log(ad)
     if (!selectedSection) setOptionsCategory([])
     if (selectedSection === 'Продам/куплю') setOptionsCategory(Object.keys(category).map((item, i) => {
       return { key: i, text: item, value: item }
@@ -186,7 +185,7 @@ export default function EditAd({ ad, setEditAdId }) {
             'Accept': 'application/json'
           }
         }
-      )//.then(res => setImgNames(res.data))
+      )
 
       return data;
     });
@@ -291,7 +290,10 @@ export default function EditAd({ ad, setEditAdId }) {
 
 
   return (
-    <form className="offerForm" method="post" enctype="multipart/form-data" id='exampleForm'>
+    <form className="offerForm editForm" method="post" enctype="multipart/form-data" id='exampleForm'>
+      <h2 className='editForm__title'>
+        Редактирование объявления <img className='editForm__titleImg' src={iconEdit} alt=""/>
+      </h2>
       <div className="offerForm__content">
         <div className="offerForm__info offerForm__item">
           <h2 className='offerForm__title'>Данные объявления</h2>
@@ -553,14 +555,15 @@ export default function EditAd({ ad, setEditAdId }) {
         </div>
         <p className='offerForm__totalPrice'>Общая сумма: {price}руб.</p>
       </div>
-
+      <button type='button' className='offerForm__btnSubmit offerForm__btnSubmit--mb' onClick={(ev) => setEditAdId('')}>
+        Отменить
+      </button>
+      
       <button type='button' className='offerForm__btnSubmit' onClick={(ev) => onSubmit(ev)}>
         ОПЛАТИТЬ И ОПУБЛИКОВАТЬ
         {isLodaing && <DimmerLoader />}
       </button>
-      <button type='button' className='offerForm__btnSubmit' onClick={(ev) => setEditAdId('')}>
-        Отменить
-      </button>
+
       {/* <Liqpay price={price} /> */}
     </form>
   )

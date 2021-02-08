@@ -38,8 +38,18 @@ usersRouter.put('/:userId',userValidator, async (req,res) => {
 })
 
 //new password
-usersRouter.put('/userAccount/:userId', async (req,res) => {
+usersRouter.put('/userPassword/:userId', async (req,res) => {
   const updateUser = await UserModel.findByIdAndUpdate(req.params.userId, {password: req.body.password})
+  res.status(200).send(updateUser)
+})
+
+usersRouter.put('/userPhone/:userId', async (req,res) => {
+  const updateUser = await UserModel.findByIdAndUpdate(req.params.userId, {phone: req.body.phone})
+  res.status(200).send(updateUser)
+})
+
+usersRouter.put('/userEmail/:userId', async (req,res) => {
+  const updateUser = await UserModel.findByIdAndUpdate(req.params.userId, {email: req.body.email})
   res.status(200).send(updateUser)
 })
 

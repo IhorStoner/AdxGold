@@ -6,7 +6,7 @@ import config from '../../config/default.json'
 import AdvertList from '../../components/AdvertList/AdvertList'
 import { useDispatch, useSelector } from 'react-redux'
 import { fetchUser } from '../../redux/actions/userAction'
-import { getUser } from '../../redux/selectors/userSelector'
+import { getUser, getUserLoading } from '../../redux/selectors/userSelector'
 import HomePage from '../HomePage/HomePage'
 import HeaderNav from '../../components/Header/Header'
 import AccountNavbar from '../../components/AccountNavbar/AccountNavbar'
@@ -17,14 +17,17 @@ import AccountSettings from '../../components/AccountSettings/AccountSettings'
 import EditAd from '../../components/EditAd/EditAd'
 import NewOfferForm from '../../components/NewOfferForm/NewOfferForm'
 import {useParams} from 'react-router-dom'
+import DimmerLoader from '../../components/DimmerLoader/DimmerLoader'
 
 export default function AccountPage() {
   const { token, logout } = useAuth()
   const isAuth = !!token;
   const dispatch = useDispatch()
-  const user = useSelector(getUser)
-  const [ads, setAds] = useState([])
   const history = useHistory()
+  const user = useSelector(getUser)
+  const [isLoading,setIsLoading] = useState(true)
+  // useSelector(getUserLoading)
+  const [ads, setAds] = useState([])
 
   const [submitPopup, setSubmitPopup] = useState('')
   const [activeNav, setActiveNav] = useState('')
@@ -45,7 +48,10 @@ export default function AccountPage() {
   // обьявления
   useEffect(() => {
     if (isAuth) {
-      const result = user.ads && axios.post(`${config.serverUrl}/api/offer/getAdverts`, user.ads).then(res => setAds(res.data))
+      const result = user.ads && axios.post(`${config.serverUrl}/api/offer/getAdverts`, user.ads).then(res => {
+        setIsLoading(false)
+        setAds(res.data)
+      })
     }
   }, [user])
 
@@ -103,8 +109,10 @@ export default function AccountPage() {
                 <NewOfferForm/>
               </div>
             }
+         
             {!editAdId && activeNav === 'myOffers' && ads &&
               <div className="accountPage__offersList">
+                {isLoading && <DimmerLoader />}
                 {ads.map(ad => <MyOfferItem ad={ad} setSubmitPopup={setSubmitPopup} setEditAdId={setEditAdId}/>)}
               </div>
             }
@@ -132,8 +140,7 @@ export default function AccountPage() {
   }
 
   return (
-    <div>
-      
+    <div> 
       <HomePage />
     </div>
   )

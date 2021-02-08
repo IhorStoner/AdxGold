@@ -71,7 +71,7 @@ export default function SliderPopup({ imgArr, onClickPhoto }) {
                       <div className="embla__slide" key={index}>
                         <div className="embla__slide__inner">
                           <img
-                            className="embla__slide__img"
+                            className="embla__slide__img sliderPopup__img"
                             src={`${config.serverUrl}/api/images/${img}`}
                             alt="sliderImg"
                             style={{ width: "100%", height: '100%', objectFit: 'contain' }}
@@ -100,34 +100,7 @@ export default function SliderPopup({ imgArr, onClickPhoto }) {
                   </div>
                 </div>
               </div>
-              {/* <div style={viewportCss} ref={emblaRef}>
-                <div style={containerCss}>
-                  {imgArr.map((img, i) => (
-                    <div style={slideCss}><img key={i} src={`${config.serverUrl}/api/images/${img}`} style={{ width: "100%" }} /></div>
-                  ))}
-                </div>
-              </div> */}
-              {/* <Swiper // первый слайдер
-                controller={{ control: controlledSwiper }}
-                navigation
-                slidesPerView={1}
-                onActiveIndexChange={2}
-              >
-
-              </Swiper> */}
-              {/* <Swiper  // сделал как в документации, но не работатет
-                onSwiper={setControlledSwiper}
-              >
-                {imgArr.map((img, i) => (
-                  <SwiperSlide key={`thumb-${i}`}><img className='sliderPopup__img' key={i} src={`${config.serverUrl}/api/images/${img}`} style={{ width: "240px" }}></img></SwiperSlide>
-                ))}
-              </Swiper> */}
-            </div>
-            <div className='sliderPopup__imgContainer' //свой вариант
-            >
-              {/* {imgArr.map((img, i) => (
-                <img className='sliderPopup__img' key={i} src={`${config.serverUrl}/api/images/${img}`} style={{ width: "240px" }}></img>
-              ))} */}
+            
             </div>
           </div>
         </div>

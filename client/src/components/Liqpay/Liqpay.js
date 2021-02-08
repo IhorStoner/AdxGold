@@ -1,7 +1,9 @@
 import React from 'react'
-import { LiqPayPay, LiqPaySubscribe } from "react-liqpay";
+import { LiqPayPay } from "react-liqpay";
+import config from '../../config/default.json'
 
-
+const publicKey = 'sandbox_i40704831909'
+const privateKey ='sandbox_I5Vc22b5lsbvzpOpcwITLPEcs4JTkxjiQKysNnX0'
 
 export default function Liqpay({price = 0 }) {
   const payInfo = {
@@ -27,42 +29,17 @@ export default function Liqpay({price = 0 }) {
   return (
     <div style={{ display: "flex" }}>
       <LiqPayPay
-        publicKey={process.env.REACT_APP_PUBLIC_KEY}
-        privateKey={process.env.REACT_APP_PRIVATE_KEY}
+        publicKey={publicKey}
+        privateKey={privateKey}
         amount={price}
         description="Payment for product"
         currency="RUB"
         orderId={Math.floor(1 + Math.random() * 900000000)}
-        result_url="http://domain.com/user/account"
-        server_url="http://server.domain.com/liqpay"
-        product_description="Online courses"
+        result_url={`http://localhost:3000`}
+        server_url={`${config.serverUrl}/api/liqpay`}
+        product_description="new ad"
         style={{ margin: "8px" }}
         disabled={false}
-      />
-      <LiqPaySubscribe
-        publicKey={process.env.REACT_APP_PUBLIC_KEY}
-        privateKey={process.env.REACT_APP_PRIVATE_KEY}
-        amount={price}
-        subscribePeriodicity="month"
-        description="Payment for subscription"
-        currency="RUB"
-        orderId={Math.floor(1 + Math.random() * 900000000)}
-        result_url="http://domain.com/user/account"
-        server_url="http://server.domain.com/liqpay"
-        product_description="Online courses"
-        style={{ margin: "8px" }}
-        disabled={false}
-      />
-      <LiqPayPay
-        publicKey={process.env.REACT_APP_PUBLIC_KEY}
-        privateKey={process.env.REACT_APP_PRIVATE_KEY}
-        description="Payment for product"
-        orderId={Math.floor(1 + Math.random() * 900000000)}
-        result_url="http://domain.com/user/account"
-        server_url="http://server.domain.com/liqpay"
-        product_description="Online courses"
-        style={{ margin: "8px" }}
-        extra={[<ButtonComponent key="1" />]}
       />
     </div>
   )

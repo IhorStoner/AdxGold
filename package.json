@@ -14,6 +14,7 @@
   "author": "Ihor_S",
   "license": "ISC",
   "dependencies": {
+    "JSON2": "^0.1.0",
     "bcrypt": "^5.0.0",
     "body-parser": "^1.19.0",
     "cloudinary": "^1.23.0",
@@ -32,11 +33,13 @@
     "isomorphic-fetch": "^3.0.0",
     "jimp-watermark": "^1.1.0",
     "jsonwebtoken": "^8.5.1",
+    "liqpay": "0.0.1",
     "lodash": "^4.17.20",
     "moment": "^2.29.1",
     "mongoose": "^5.11.8",
     "multer": "^1.4.2",
     "nodemon": "^2.0.6",
-    "path": "^0.12.7"
+    "path": "^0.12.7",
+    "request": "^2.88.2"
   }
 }
