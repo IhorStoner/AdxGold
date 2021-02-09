@@ -17,6 +17,7 @@ export default function SharesList({ sharesArr }) {
           <li key={ad._id} className='sharesAds__item'>
             <h2 className="sharesAds__itemTitle">{ad.title}</h2>
             <div className="sharesAds__contentContainer">
+              {/* div.shares */}
               <img className='sharesAds__img' src={!ad.img[0] ? logo : `${config.serverUrl}/api/images/${ad.img[0]}`} alt={ad.title} />
               <p className='sharesAds__itemDescription'>{ad.description}</p>
             </div>

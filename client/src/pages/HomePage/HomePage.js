@@ -178,7 +178,7 @@ export default function HomePage() {
 
             }
             {nav === 'favorites' && <AdvertList advertArr={favoritesArr} visitedAds={user.visitedAds} />}
-            {category !== 'favorites' && pages !== null && paginations.map((n, i) => (
+            {category !== 'favorites' && pages !== null && pages !== 1 && paginations.map((n, i) => (
               <Pagination
                 {...n}
                 totalPages={pages}

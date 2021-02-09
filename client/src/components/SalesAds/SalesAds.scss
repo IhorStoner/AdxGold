@@ -29,9 +29,10 @@
   &__item-content {
     display: flex;
     justify-content: space-between;
-    align-items: flex-start;
+    align-items: center;
     height: 140px;
     margin-bottom: 5px;
+
   }
 
   &__item-title {
@@ -69,8 +70,13 @@
   }
 
   &__item-img {
+    width: 100%;
+    max-height: 140px;
+  }
+
+  &__imgContainer {
     width: 50%;
-    height: 115px;
+ 
   }
 
   &__item {

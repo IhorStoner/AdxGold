@@ -21,7 +21,9 @@ export default function SalesAds({ salesArr }) {
                 <p className="sales-ads__item-description">
                   {ad.description}
                 </p>
-                <img className="sales-ads__item-img" src={!ad.img[0] ? logo : `${config.serverUrl}/api/images/${ad.img[0]}`} />
+                <div className="sales-ads__imgContainer">
+                  <img className="sales-ads__item-img" src={!ad.img[0] ? logo : `${config.serverUrl}/api/images/${ad.img[0]}`} />
+                </div>
               </div>
               <div className="sales-ads__item-link">
                 <Link to={`/detailsAd/${ad._id}`} onClick={() => dispatch(setIsOpenAd(ad._id))}><span className="sales-ads__link-text" >Подробнее</span></Link>

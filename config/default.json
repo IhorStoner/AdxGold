@@ -1,4 +1,5 @@
 {
     "port": 5000,
-    "mongoUri": "mongodb+srv://Ihor_S:123456789q@cluster01.hfdor.mongodb.net/usersAuth"
+    "mongoUri": "mongodb+srv://Ihor_S:123456789q@cluster01.hfdor.mongodb.net/usersAuth",
+    "serverUrl": "http://localhost:5000"
 }

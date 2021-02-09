@@ -5,10 +5,11 @@ const private_key ='sandbox_I5Vc22b5lsbvzpOpcwITLPEcs4JTkxjiQKysNnX0'
 
 const liqpayRouter = Router();
 
-liqpayRouter.post('/', async (req,res) => {
+liqpayRouter.post('/', async (req,res,cb) => {
 	var liqpay = new LiqPay(public_key, private_key);
 	var sign = liqpay.str_to_sign(`${private_key + req.body.data + private_key}`);
-	console.log(req.body.data)
+	console.log(req.body)
+	res.send(200)
 })
 
 module.exports = liqpayRouter;
