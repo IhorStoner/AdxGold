@@ -14,7 +14,7 @@ export default function Routes() {
       <Route path="/account/:accountNav" exact>
         <AccountPage />
       </Route>
-      <Route path='/detailsAd/:adId' component={DetailsAdPage}/>
+      <Route path='/detailsAd/:adId' component={DetailsAdPage} />
       <Redirect to='/home/saleBuy' />
     </Switch>
   )
