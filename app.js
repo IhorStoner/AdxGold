@@ -8,10 +8,11 @@ const config = require('config');
 const mongoose = require('mongoose');
 
 const app = express();
+const server = require('http').createServer(app);
+
 app.use(cors());
 app.use(bodyParser.urlencoded({ extended: true }));
-app.use(bodyParser.json());
-// app.use(express.json());
+app.use(express.json());
 app.use('/api', apiRouter);
 
 
@@ -30,7 +31,7 @@ app.use((err, req, res, next) => {
 });
 
 
-const PORT = process.env.PORT || 5010
+const PORT = 5020
 
 async function start() {
   try {
@@ -40,7 +41,7 @@ async function start() {
       useFindAndModify: false,
       useCreateIndex: true
     })
-    app.listen(PORT, () => {
+    server.listen(PORT, () => {
       console.log(`Server is running on ${PORT} port`)
     });
   }
