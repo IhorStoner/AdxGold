@@ -1,5 +1,5 @@
 {
-    "port": 5000,
+    "port": 5010,
     "mongoUri": "mongodb+srv://Ihor_S:123456789q@cluster01.hfdor.mongodb.net/usersAuth",
     "serverUrl": "https://adx.gold"
 }
