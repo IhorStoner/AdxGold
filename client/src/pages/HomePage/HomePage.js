@@ -23,7 +23,6 @@ import config from '../../config/default.json'
 import { AuthContext } from '../../context/AuthContext';
 import { isOpenAuthPopup } from '../../redux/selectors/authSelector'
 import { setIsOpenAuthPopup } from '../../redux/actions/authAction'
-import { model } from 'mongoose'
 
 export default function HomePage() {
   const { nav } = useParams();
