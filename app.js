@@ -37,7 +37,7 @@ const PORT = process.env.PORT || 5020
 
 async function start() {
   try {
-    await mongoose.connect(config.get('mongoUrl'), {
+    await mongoose.connect(config.get('mongoUri'), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
