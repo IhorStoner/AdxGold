@@ -3,16 +3,18 @@ const cors = require('cors');
 const path = require('path');
 const bodyParser = require('body-parser');
 require('express-async-errors');
-const apiRouter = require('./routes');
+const apiRouter = require('./routes')
+const https = require('https')
+const http = require('http')
 const config = require('config');
 const mongoose = require('mongoose');
 
 const app = express();
-const server = require('http').createServer(app);
 
 app.use(cors());
-app.use(bodyParser.urlencoded({ extended: true }));
-app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.json());
+
 app.use('/api', apiRouter);
 
 
@@ -30,18 +32,18 @@ app.use((err, req, res, next) => {
     .send({ error: err.message })
 });
 
+const PORT = process.env.PORT || 5020
 
-const PORT = 5020
 
 async function start() {
   try {
-    await mongoose.connect(config.get('mongoUri'), {
+    await mongoose.connect(config.get('mongoUrl'), {
       useNewUrlParser: true,
       useUnifiedTopology: true,
       useFindAndModify: false,
       useCreateIndex: true
     })
-    server.listen(PORT, () => {
+    http.createServer(app).listen(PORT, () => {
       console.log(`Server is running on ${PORT} port`)
     });
   }
