@@ -8,7 +8,7 @@ const https = require('https')
 const http = require('http')
 const config = require('config');
 const mongoose = require('mongoose');
-
+const fs = require('fs')
 const app = express();
 
 app.use(cors());
@@ -16,6 +16,11 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
 
 app.use('/api', apiRouter);
+
+
+app.get('/.well-known/pki-validation/ECE8ABB792E38403281CC6943CDB4D35.txt', async (req, res) => {
+  res.sendFile(path.join(__dirname, '.well-known', 'pki-validation', 'ECE8ABB792E38403281CC6943CDB4D35.txt'))
+})
 
 
 if (process.env.NODE_ENV === 'production') {
